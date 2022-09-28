@@ -32,9 +32,9 @@ func main() {
 	r := mux.NewRouter()
 	r.HandleFunc("/movies", getMovies).Methods("GET")
 	r.HandleFunc("/movies/{id}", getMovie).Methods("GET")
-	r.HandleFunc("/movies", getMovies).Methods("POST")
-	r.HandleFunc("/movies/{id}", getMovies).Methods("PUT")
-	r.HandleFunc("/movies/{id}", getMovies).Methods("DELETE")
+	r.HandleFunc("/movies", postMovies).Methods("POST")
+	r.HandleFunc("/movies/{id}", putMovies).Methods("PUT")
+	r.HandleFunc("/movies/{id}", deleteMovies).Methods("DELETE")
 	fmt.Printf("Starting server at port 8089\n")
 	log.Fatal((http.ListenAndServe(":8089", r)))
 }
@@ -56,7 +56,7 @@ func getMovie(w http.ResponseWriter, req *http.Request) {
 	title := "Back to the Future"
 
 	var result bson.M
-	err := coll.FindOne(context.TODO(), bson.D{{"title", title}}).Decode(&result)
+	err := coll.FindOne(context.TODO(), bson.D{{Key: "title", Value: title}}).Decode(&result)
 	if err == mongo.ErrNoDocuments {
 		fmt.Fprintf(w, "No document was found with the title %s\n", title)
 		return
@@ -68,9 +68,21 @@ func getMovie(w http.ResponseWriter, req *http.Request) {
 	if err != nil {
 		panic(err)
 	}
-	fmt.Printf("%s\n", jsonData)
+	fmt.Fprintf(w, "%s\n", string(jsonData))
 }
 
 func getMovies(w http.ResponseWriter, req *http.Request) {
+
+}
+
+func postMovies(w http.ResponseWriter, req *http.Request) {
+
+}
+
+func putMovies(w http.ResponseWriter, req *http.Request) {
+
+}
+
+func deleteMovies(w http.ResponseWriter, req *http.Request) {
 
 }
