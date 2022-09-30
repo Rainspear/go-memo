@@ -26,7 +26,7 @@ func getMemos(w http.ResponseWriter, req *http.Request) {
 	cursor, err := coll.Find(context.TODO(), filter)
 	handlePanicError(err)
 	// var results []bson.M
-	var memos []Memo
+	memos := []Memo{}
 	err = cursor.All(context.TODO(), &memos)
 	handlePanicError(err)
 	json.NewEncoder(w).Encode(memos)
@@ -37,6 +37,7 @@ func getMemo(w http.ResponseWriter, req *http.Request) {
 	params := mux.Vars(req)
 	id, err := primitive.ObjectIDFromHex(params["id"])
 	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(w).Encode(ErrorResponse{err.Error(), http.StatusBadRequest})
 		return
 	}
@@ -44,6 +45,7 @@ func getMemo(w http.ResponseWriter, req *http.Request) {
 	var memo Memo
 	err = coll.FindOne(context.TODO(), filter).Decode(&memo)
 	if err != nil {
+		w.WriteHeader(http.StatusNotFound)
 		json.NewEncoder(w).Encode(ErrorResponse{err.Error(), http.StatusNotFound})
 		return
 	}
@@ -56,7 +58,7 @@ func createMemo(w http.ResponseWriter, req *http.Request) {
 	title := req.FormValue("title")
 	author := req.FormValue("author")
 	content := req.FormValue("content")
-	t := time.Now().UTC()
+	t := time.Now()
 	doc := bson.D{
 		{Key: "title", Value: title},
 		{Key: "author", Value: author},
