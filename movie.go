@@ -8,6 +8,7 @@ import (
 
 	"github.com/gorilla/mux"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 type Movie struct {
@@ -15,7 +16,7 @@ type Movie struct {
 	Title     string   `json:"title"`
 	Genres    []string `json:"genre"`
 	Cast      []string `json:"cast"`
-	Countries []string `json:"country"`
+	Countries []string `json:"countries"`
 }
 
 func getMovie(w http.ResponseWriter, req *http.Request) {
@@ -27,11 +28,13 @@ func getMovie(w http.ResponseWriter, req *http.Request) {
 func getMovies(w http.ResponseWriter, req *http.Request) {
 	// start finding
 	coll := client.Database("sample_mflix").Collection("movies")
-	filter := bson.D{{Key: "runtime", Value: 1}}
+	filter := bson.D{}
+	// filter := bson.D{{Key: "runtime", Value: 1}}
 
-	cursor, err := coll.Find(context.TODO(), filter)
+	cursor, err := coll.Find(context.TODO(), filter, options.Find().SetLimit(20))
 	handlePanicError(err)
-	var results []bson.M
+	// var results []bson.M
+	var results []Movie
 	err = cursor.All(context.TODO(), &results)
 	handlePanicError(err)
 	// end finding

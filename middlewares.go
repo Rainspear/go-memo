@@ -11,6 +11,6 @@ func addConfigMiddleware(f http.HandlerFunc) func(http.ResponseWriter, *http.Req
 		w.Header().Set("Content-Type", "application/json")
 		t := time.Now()
 		f(w, r)
-		log.Printf("%s %dms\n", r.RequestURI, time.Since(t).Milliseconds())
+		log.Printf("%s %s %dms\n", r.RequestURI, r.Method, time.Since(t).Milliseconds())
 	})
 }

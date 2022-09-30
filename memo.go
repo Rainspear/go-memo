@@ -6,17 +6,18 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/gorilla/mux"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 type Memo struct {
-	Id          interface{} `json:"_id,omitempty" bson:"_id,omitempty"`
-	Title       string      `json:"title"`
-	Author      string      `json:"author"`
-	Content     string      `json:"content"`
-	CreatedDate time.Time   `json:"createdDate"`
-	LastUpdate  time.Time   `json:"lastUpdate"`
+	Id          interface{} `json:"id,omitempty" bson:"_id,omitempty"`
+	Title       string      `json:"title" bson:"title"`
+	Author      string      `json:"author" bson:"author"`
+	Content     string      `json:"content" bson:"content"`
+	CreatedDate time.Time   `json:"created_date" bson:"created_date"`
+	LastUpdate  time.Time   `json:"last_update" bson:"last_update"`
 }
 
 func getMemos(w http.ResponseWriter, req *http.Request) {
@@ -24,13 +25,29 @@ func getMemos(w http.ResponseWriter, req *http.Request) {
 	filter := bson.D{}
 	cursor, err := coll.Find(context.TODO(), filter)
 	handlePanicError(err)
-	var results []bson.M
-	err = cursor.All(context.TODO(), &results)
+	// var results []bson.M
+	var memos []Memo
+	err = cursor.All(context.TODO(), &memos)
 	handlePanicError(err)
-	json.NewEncoder(w).Encode(results)
+	json.NewEncoder(w).Encode(memos)
 }
 
 func getMemo(w http.ResponseWriter, req *http.Request) {
+	coll := client.Database(database).Collection("memos")
+	params := mux.Vars(req)
+	id, err := primitive.ObjectIDFromHex(params["id"])
+	if err != nil {
+		json.NewEncoder(w).Encode(ErrorResponse{err.Error(), http.StatusBadRequest})
+		return
+	}
+	filter := bson.D{{Key: "_id", Value: id}}
+	var memo Memo
+	err = coll.FindOne(context.TODO(), filter).Decode(&memo)
+	if err != nil {
+		json.NewEncoder(w).Encode(ErrorResponse{err.Error(), http.StatusNotFound})
+		return
+	}
+	json.NewEncoder(w).Encode(memo)
 
 }
 
@@ -46,7 +63,7 @@ func createMemo(w http.ResponseWriter, req *http.Request) {
 		{Key: "content", Value: content},
 		{Key: "createdDate", Value: t},
 		{Key: "lastUpdate", Value: t}}
-	result, err := coll.InsertOne(context.TODO(), doc)
+	result, err := coll.InsertOne(context.TODO(), &doc)
 	handlePanicError(err)
 	id := result.InsertedID.(primitive.ObjectID)
 	json.NewEncoder(w).Encode(struct {
