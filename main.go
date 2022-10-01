@@ -55,7 +55,7 @@ func main() {
 	r.HandleFunc("/signout", addConfigMiddleware(signout)).Methods("POST")
 	// default
 	r.Handle("/favicon.ico", http.NotFoundHandler())
-	fmt.Printf("Starting server at port 8089\n")
+	fmt.Printf("Starting server at port 8089 \r\n")
 	log.Fatal((http.ListenAndServe(":8089", r)))
 	defer closeMongoClient(client)
 }
