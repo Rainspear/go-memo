@@ -75,7 +75,20 @@ func createMemo(w http.ResponseWriter, req *http.Request) {
 }
 
 func updateMemo(w http.ResponseWriter, req *http.Request) {
-
+	params := mux.Vars(req)
+	id, err := primitive.ObjectIDFromHex(params["id"])
+	handleResponseError(err, w, http.StatusBadRequest)
+	filter := bson.D{{Key: "_id", Value: id}}
+	update := bson.D{{Key: "$set", Value: bson.D{
+		{Key: "title", Value: req.FormValue("title")},
+		{Key: "author", Value: req.FormValue("author")},
+		{Key: "content", Value: req.FormValue("content")},
+		{Key: "lastUpdate", Value: time.Now()},
+	}}}
+	coll := client.Database(database).Collection("memos")
+	result, err := coll.UpdateOne(context.TODO(), filter, update)
+	handleResponseError(err, w, http.StatusBadRequest)
+	json.NewEncoder(w).Encode(result)
 }
 
 func deleteMemo(w http.ResponseWriter, req *http.Request) {
