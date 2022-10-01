@@ -12,7 +12,7 @@ import (
 )
 
 type Memo struct {
-	Id          interface{} `json:"id,omitempty" bson:"_id,omitempty"`
+	Id          interface{} `json:"_id,omitempty" bson:"_id,omitempty"`
 	Title       string      `json:"title" bson:"title"`
 	Author      string      `json:"author" bson:"author"`
 	Content     string      `json:"content" bson:"content"`
@@ -36,21 +36,12 @@ func getMemo(w http.ResponseWriter, req *http.Request) {
 	coll := client.Database(database).Collection("memos")
 	params := mux.Vars(req)
 	id, err := primitive.ObjectIDFromHex(params["id"])
-	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		json.NewEncoder(w).Encode(ErrorResponse{err.Error(), http.StatusBadRequest})
-		return
-	}
+	handleResponseError(err, w, http.StatusBadRequest)
 	filter := bson.D{{Key: "_id", Value: id}}
 	var memo Memo
 	err = coll.FindOne(context.TODO(), filter).Decode(&memo)
-	if err != nil {
-		w.WriteHeader(http.StatusNotFound)
-		json.NewEncoder(w).Encode(ErrorResponse{err.Error(), http.StatusNotFound})
-		return
-	}
+	handleResponseError(err, w, http.StatusNotFound)
 	json.NewEncoder(w).Encode(memo)
-
 }
 
 func createMemo(w http.ResponseWriter, req *http.Request) {
@@ -71,7 +62,8 @@ func createMemo(w http.ResponseWriter, req *http.Request) {
 	json.NewEncoder(w).Encode(struct {
 		Id string `json:"id"`
 	}{
-		id.Hex()})
+		id.Hex(),
+	})
 }
 
 func updateMemo(w http.ResponseWriter, req *http.Request) {
@@ -92,5 +84,12 @@ func updateMemo(w http.ResponseWriter, req *http.Request) {
 }
 
 func deleteMemo(w http.ResponseWriter, req *http.Request) {
-
+	params := mux.Vars(req)
+	id, err := primitive.ObjectIDFromHex(params["id"])
+	handleResponseError(err, w, http.StatusBadRequest)
+	filter := bson.D{{Key: "_id", Value: id}}
+	coll := client.Database(database).Collection("memos")
+	result, err := coll.DeleteOne(context.TODO(), filter)
+	handleResponseError(err, w, http.StatusBadRequest)
+	json.NewEncoder(w).Encode(result)
 }
