@@ -44,7 +44,16 @@ func main() {
 	r.HandleFunc("/memos", addConfigMiddleware(createMemo)).Methods("POST")
 	r.HandleFunc("/memos/{id}", addConfigMiddleware(updateMemo)).Methods("PUT")
 	r.HandleFunc("/memos/{id}", addConfigMiddleware(deleteMemo)).Methods("DELETE")
-
+	// user
+	r.HandleFunc("/user", addConfigMiddleware(getUsers)).Methods("GET")
+	r.HandleFunc("/user/{id}", addConfigMiddleware(getCurrentUser)).Methods("GET")
+	r.HandleFunc("/user", addConfigMiddleware(createUser)).Methods("POST")
+	r.HandleFunc("/user/{id}", addConfigMiddleware(updateUser)).Methods("PUT")
+	r.HandleFunc("/user/{id}", addConfigMiddleware(deleteUser)).Methods("DELETE")
+	r.HandleFunc("/signin", addConfigMiddleware(signin)).Methods("POST")
+	r.HandleFunc("/signup", addConfigMiddleware(signup)).Methods("POST")
+	r.HandleFunc("/signout", addConfigMiddleware(signout)).Methods("POST")
+	// default
 	r.Handle("/favicon.ico", http.NotFoundHandler())
 	fmt.Printf("Starting server at port 8089\n")
 	log.Fatal((http.ListenAndServe(":8089", r)))
