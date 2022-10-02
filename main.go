@@ -47,7 +47,6 @@ func main() {
 	// user
 	r.HandleFunc("/user", addConfigMiddleware(getUsers)).Methods("GET")
 	r.HandleFunc("/user/{id}", addConfigMiddleware(getCurrentUser)).Methods("GET")
-	r.HandleFunc("/user", addConfigMiddleware(createUser)).Methods("POST")
 	r.HandleFunc("/user/{id}", addConfigMiddleware(updateUser)).Methods("PUT")
 	r.HandleFunc("/user/{id}", addConfigMiddleware(deleteUser)).Methods("DELETE")
 	r.HandleFunc("/signin", addConfigMiddleware(signin)).Methods("POST")
