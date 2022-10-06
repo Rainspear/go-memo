@@ -47,21 +47,16 @@ func getMemo(w http.ResponseWriter, req *http.Request) {
 
 func createMemo(w http.ResponseWriter, req *http.Request) {
 	coll := client.Database(database).Collection("memos")
-	subject_id := req.FormValue("subject_id")
-	author := req.FormValue("author")
-	content := req.FormValue("content")
-	question := req.FormValue("question")
 	t := time.Now()
-	doc := Memo{SubjectId: subject_id, Author: author, Content: content, Question: question, CreatedDate: t, LastUpdate: t}
-	result, err := coll.InsertOne(context.TODO(), &doc)
+	var data Memo
+	json.NewDecoder(req.Body).Decode(&data)
+	data.LastUpdate = t
+	data.CreatedDate = t
+	result, err := coll.InsertOne(context.TODO(), &data)
 	handlePanicError(err)
-	id := result.InsertedID.(primitive.ObjectID)
 	w.WriteHeader(http.StatusCreated)
-	json.NewEncoder(w).Encode(struct {
-		Id string `json:"id"`
-	}{
-		id.Hex(),
-	})
+	id := result.InsertedID.(primitive.ObjectID)
+	json.NewEncoder(w).Encode(CreatedResponse{id.Hex()})
 }
 
 func updateMemo(w http.ResponseWriter, req *http.Request) {

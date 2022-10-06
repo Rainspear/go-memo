@@ -36,9 +36,11 @@ type Repetition struct {
 }
 
 type Subject struct {
-	Id         interface{}  `json:"_id,omitempty" bson:"_id,omitempty"`
-	Title      string       `json:"title" bson:"title"`
-	Repetition []Repetition `json:"repetition" bson:"repetition"`
+	Id          interface{}  `json:"_id,omitempty" bson:"_id,omitempty"`
+	Title       string       `json:"title" bson:"title"`
+	Repetition  []Repetition `json:"repetition" bson:"repetition"`
+	CreatedDate time.Time    `json:"created_date" bson:"created_date"`
+	LastUpdate  time.Time    `json:"last_update" bson:"last_update"`
 }
 
 func (l Level) IsValid() bool {
@@ -90,7 +92,8 @@ func createSubject(w http.ResponseWriter, req *http.Request) {
 	result, err := coll.InsertOne(req.Context(), &data)
 	handleResponseError(err, w, http.StatusInternalServerError)
 	w.WriteHeader(http.StatusCreated)
-	json.NewEncoder(w).Encode(result)
+	id := result.InsertedID.(primitive.ObjectID)
+	json.NewEncoder(w).Encode(CreatedResponse{id.Hex()})
 }
 
 func updateSubject(w http.ResponseWriter, req *http.Request) {
