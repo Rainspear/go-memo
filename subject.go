@@ -9,6 +9,8 @@ import (
 
 type Level string
 
+type Status string
+
 const (
 	LevelEssential Level = "essential"
 	LevelImportant Level = "important"
@@ -17,10 +19,16 @@ const (
 	LevelMinor     Level = "minor"
 )
 
+const (
+	StatusSuccess Status = "success"
+	StatusFailure Status = "failure"
+	StatusSkipped Status = "skipped"
+)
+
 type Repetition struct {
 	Time   time.Time `json:"time" bson:"time"`
 	Level  Level     `json:"level" bson:"level"`
-	Status string    `json:"status" bson:"status"`
+	Status Status    `json:"status" bson:"status"`
 }
 
 type Subject struct {
@@ -32,6 +40,15 @@ type Subject struct {
 func (l Level) IsValid() bool {
 	switch l {
 	case LevelEssential, LevelImportant, LevelSemi, LevelLess, LevelMinor:
+		return true
+	default:
+		return false
+	}
+}
+
+func (s Status) IsValid() bool {
+	switch s {
+	case StatusSuccess, StatusFailure, StatusSkipped:
 		return true
 	default:
 		return false
