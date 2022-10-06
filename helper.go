@@ -10,6 +10,10 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
+type Enum interface {
+	IsValid() bool
+}
+
 func handlePanicError(err error) {
 	if err != nil {
 		panic(err)

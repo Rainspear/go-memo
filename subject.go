@@ -13,7 +13,8 @@ const (
 	LevelImportant Level = "important"
 	LevelInfo      Level = "info"
 	LevelWarn      Level = "warn"
-	LevelError     Level = "error"
+	LevelFailed    Level = "failed"
+	LevelSuccess   Level = "success"
 )
 
 type Repetition struct {
@@ -26,6 +27,14 @@ type Subject struct {
 	Id         interface{}  `json:"_id,omitempty" bson:"_id,omitempty"`
 	Title      string       `json:"title" bson:"title"`
 	Repetition []Repetition `json:"repetition" bson:"repetition"`
+}
+
+func (l Level) IsValid() bool {
+	switch l {
+	case LevelImportant, LevelInfo, LevelWarn, LevelFailed, LevelSuccess:
+		return true
+	}
+	return false
 }
 
 func getSubjects(w http.ResponseWriter, req *http.Request) {
