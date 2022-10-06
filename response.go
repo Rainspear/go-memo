@@ -8,3 +8,11 @@ type ErrorResponse struct {
 type CreatedResponse struct {
 	Id string `json:"id"`
 }
+
+type UpdatedResponse struct {
+	Id string `json:"id"`
+}
+
+type DeletedResponse struct {
+	Id string `json:"id"`
+}

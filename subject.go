@@ -14,6 +14,10 @@ type Level string
 
 type Status string
 
+type Enum interface {
+	IsValid() bool
+}
+
 const (
 	LevelEssential Level = "essential"
 	LevelImportant Level = "important"
