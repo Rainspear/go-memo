@@ -13,9 +13,10 @@ import (
 
 type Memo struct {
 	Id          interface{} `json:"_id,omitempty" bson:"_id,omitempty"`
-	Title       string      `json:"title" bson:"title"`
+	SubjectId   string      `json:"subject_id" bson:"subject_id"`
 	Author      string      `json:"author" bson:"author"`
 	Content     string      `json:"content" bson:"content"`
+	Question    string      `json:"question" bson:"question"`
 	CreatedDate time.Time   `json:"created_date" bson:"created_date"`
 	LastUpdate  time.Time   `json:"last_update" bson:"last_update"`
 }
@@ -46,16 +47,12 @@ func getMemo(w http.ResponseWriter, req *http.Request) {
 
 func createMemo(w http.ResponseWriter, req *http.Request) {
 	coll := client.Database(database).Collection("memos")
-	title := req.FormValue("title")
+	subject_id := req.FormValue("subject_id")
 	author := req.FormValue("author")
 	content := req.FormValue("content")
+	question := req.FormValue("question")
 	t := time.Now()
-	doc := bson.D{
-		{Key: "title", Value: title},
-		{Key: "author", Value: author},
-		{Key: "content", Value: content},
-		{Key: "createdDate", Value: t},
-		{Key: "lastUpdate", Value: t}}
+	doc := Memo{SubjectId: subject_id, Author: author, Content: content, Question: question, CreatedDate: t, LastUpdate: t}
 	result, err := coll.InsertOne(context.TODO(), &doc)
 	handlePanicError(err)
 	id := result.InsertedID.(primitive.ObjectID)
@@ -71,12 +68,13 @@ func updateMemo(w http.ResponseWriter, req *http.Request) {
 	id, err := primitive.ObjectIDFromHex(params["id"])
 	handleResponseError(err, w, http.StatusBadRequest)
 	filter := bson.D{{Key: "_id", Value: id}}
-	update := bson.D{{Key: "$set", Value: bson.D{
-		{Key: "title", Value: req.FormValue("title")},
-		{Key: "author", Value: req.FormValue("author")},
-		{Key: "content", Value: req.FormValue("content")},
-		{Key: "lastUpdate", Value: time.Now()},
-	}}}
+	subject_id := req.FormValue("subject_id")
+	author := req.FormValue("author")
+	content := req.FormValue("content")
+	question := req.FormValue("question")
+	t := time.Now()
+	doc := Memo{SubjectId: subject_id, Author: author, Content: content, Question: question, LastUpdate: t}
+	update := bson.D{{Key: "$set", Value: &doc}}
 	coll := client.Database(database).Collection("memos")
 	result, err := coll.UpdateOne(context.TODO(), filter, update)
 	handleResponseError(err, w, http.StatusBadRequest)
