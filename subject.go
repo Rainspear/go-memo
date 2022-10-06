@@ -64,10 +64,10 @@ func getSubjects(w http.ResponseWriter, req *http.Request) {
 	filter := bson.D{}
 	cursor, err := coll.Find(req.Context(), filter)
 	handleResponseError(err, w, http.StatusInternalServerError)
-	var results []Subject
-	err = cursor.All(req.Context(), &results)
+	var subjects []Subject
+	err = cursor.All(req.Context(), &subjects)
 	handleResponseError(err, w, http.StatusInternalServerError)
-	json.NewEncoder(w).Encode(results)
+	json.NewEncoder(w).Encode(subjects)
 }
 
 func getSubject(w http.ResponseWriter, req *http.Request) {
@@ -76,7 +76,10 @@ func getSubject(w http.ResponseWriter, req *http.Request) {
 	handleResponseError(err, w, http.StatusBadRequest)
 	coll := client.Database(database).Collection("subjects")
 	filter := bson.D{{Key: "_id", Value: id}}
-	coll.FindOne(req.Context(), filter)
+	var subject Subject
+	err = coll.FindOne(req.Context(), filter).Decode(&subject)
+	handleResponseError(err, w, http.StatusInternalServerError)
+	json.NewEncoder(w).Encode(subject)
 }
 
 func createSubject(w http.ResponseWriter, req *http.Request) {
@@ -91,7 +94,27 @@ func createSubject(w http.ResponseWriter, req *http.Request) {
 }
 
 func updateSubject(w http.ResponseWriter, req *http.Request) {
+	var data Subject
+	err := json.NewDecoder(req.Body).Decode(&data)
+	handleResponseError(err, w, http.StatusBadRequest)
+	coll := client.Database(database).Collection("subjects")
+	params := mux.Vars(req)
+	id, err := primitive.ObjectIDFromHex(params["id"])
+	handleResponseError(err, w, http.StatusBadRequest)
+	update := bson.D{{Key: "$set", Value: &data}}
+	filter := bson.D{{Key: "_id", Value: id}}
+	result, err := coll.UpdateOne(req.Context(), filter, update)
+	handleResponseError(err, w, http.StatusBadRequest)
+	json.NewEncoder(w).Encode(result)
 }
 
 func deleteSubject(w http.ResponseWriter, req *http.Request) {
+	params := mux.Vars(req)
+	id, err := primitive.ObjectIDFromHex(params["id"])
+	handleResponseError(err, w, http.StatusBadRequest)
+	coll := client.Database(database).Collection("subjects")
+	filter := bson.D{{Key: "_id", Value: id}}
+	result, err := coll.DeleteOne(req.Context(), filter)
+	handleResponseError(err, w, http.StatusInternalServerError)
+	json.NewEncoder(w).Encode(result)
 }
