@@ -14,10 +14,6 @@ type Level string
 
 type Status string
 
-type Enum interface {
-	IsValid() bool
-}
-
 const (
 	LevelEssential Level = "essential"
 	LevelImportant Level = "important"
@@ -45,24 +41,6 @@ type Subject struct {
 	Repetition  []Repetition `json:"repetition" bson:"repetition"`
 	CreatedDate time.Time    `json:"created_date" bson:"created_date"`
 	LastUpdate  time.Time    `json:"last_update" bson:"last_update"`
-}
-
-func (l Level) IsValid() bool {
-	switch l {
-	case LevelEssential, LevelImportant, LevelSemi, LevelLess, LevelMinor:
-		return true
-	default:
-		return false
-	}
-}
-
-func (s Status) IsValid() bool {
-	switch s {
-	case StatusSuccess, StatusFailure, StatusSkipped, StatusUntouch:
-		return true
-	default:
-		return false
-	}
 }
 
 func getSubjects(w http.ResponseWriter, req *http.Request) {
