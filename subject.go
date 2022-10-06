@@ -2,9 +2,12 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"time"
+
+	"github.com/gorilla/mux"
+	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 type Level string
@@ -21,6 +24,7 @@ const (
 
 const (
 	StatusSuccess Status = "success"
+	StatusUntouch Status = "untouch"
 	StatusFailure Status = "failure"
 	StatusSkipped Status = "skipped"
 )
@@ -48,7 +52,7 @@ func (l Level) IsValid() bool {
 
 func (s Status) IsValid() bool {
 	switch s {
-	case StatusSuccess, StatusFailure, StatusSkipped:
+	case StatusSuccess, StatusFailure, StatusSkipped, StatusUntouch:
 		return true
 	default:
 		return false
@@ -56,17 +60,34 @@ func (s Status) IsValid() bool {
 }
 
 func getSubjects(w http.ResponseWriter, req *http.Request) {
+	coll := client.Database(database).Collection("subjects")
+	filter := bson.D{}
+	cursor, err := coll.Find(req.Context(), filter)
+	handleResponseError(err, w, http.StatusInternalServerError)
+	var results []Subject
+	err = cursor.All(req.Context(), &results)
+	handleResponseError(err, w, http.StatusInternalServerError)
+	json.NewEncoder(w).Encode(results)
 }
 
 func getSubject(w http.ResponseWriter, req *http.Request) {
+	params := mux.Vars(req)
+	id, err := primitive.ObjectIDFromHex(params["id"])
+	handleResponseError(err, w, http.StatusBadRequest)
+	coll := client.Database(database).Collection("subjects")
+	filter := bson.D{{Key: "_id", Value: id}}
+	coll.FindOne(req.Context(), filter)
 }
 
 func createSubject(w http.ResponseWriter, req *http.Request) {
-	fmt.Printf("Body %+v\n", req.Body)
 	var data Subject
 	err := json.NewDecoder(req.Body).Decode(&data)
-	handlePanicError(err)
-	fmt.Printf("after json decode %v+", data)
+	handleResponseError(err, w, http.StatusBadRequest)
+	coll := client.Database(database).Collection("subjects")
+	result, err := coll.InsertOne(req.Context(), &data)
+	handleResponseError(err, w, http.StatusInternalServerError)
+	w.WriteHeader(http.StatusCreated)
+	json.NewEncoder(w).Encode(result)
 }
 
 func updateSubject(w http.ResponseWriter, req *http.Request) {

@@ -57,6 +57,7 @@ func signup(w http.ResponseWriter, req *http.Request) {
 	}
 	result, err := coll.InsertOne(context.TODO(), &user)
 	handleResponseError(err, w, http.StatusInternalServerError)
+	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(result)
 	// create jwt token
 }

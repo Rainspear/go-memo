@@ -56,6 +56,7 @@ func createMemo(w http.ResponseWriter, req *http.Request) {
 	result, err := coll.InsertOne(context.TODO(), &doc)
 	handlePanicError(err)
 	id := result.InsertedID.(primitive.ObjectID)
+	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(struct {
 		Id string `json:"id"`
 	}{
