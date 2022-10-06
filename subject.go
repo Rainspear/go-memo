@@ -10,11 +10,11 @@ import (
 type Level string
 
 const (
+	LevelEssential Level = "essential"
 	LevelImportant Level = "important"
-	LevelInfo      Level = "info"
-	LevelWarn      Level = "warn"
-	LevelFailed    Level = "failed"
-	LevelSuccess   Level = "success"
+	LevelSemi      Level = "semi-important"
+	LevelLess      Level = "less-important"
+	LevelMinor     Level = "minor"
 )
 
 type Repetition struct {
@@ -31,10 +31,11 @@ type Subject struct {
 
 func (l Level) IsValid() bool {
 	switch l {
-	case LevelImportant, LevelInfo, LevelWarn, LevelFailed, LevelSuccess:
+	case LevelEssential, LevelImportant, LevelSemi, LevelLess, LevelMinor:
 		return true
+	default:
+		return false
 	}
-	return false
 }
 
 func getSubjects(w http.ResponseWriter, req *http.Request) {
