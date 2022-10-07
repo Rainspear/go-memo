@@ -9,7 +9,7 @@ import { Topic } from '../models/topic.model';
 })
 export class TopicsComponent implements OnInit {
 
-  topics ?: Topic[];
+  topics: Topic[] = [];
 
   constructor(private apiSerivce : ApiSerivce) { }
 

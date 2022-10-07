@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { Topic } from 'src/app/models/topic.model';
 
 @Component({
   selector: 'app-topic-list',
@@ -6,6 +7,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./topic-list.component.scss']
 })
 export class TopicListComponent implements OnInit {
+  @Input() topics: Topic[] = [];
 
   constructor() { }
 
