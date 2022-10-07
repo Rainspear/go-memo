@@ -21,8 +21,12 @@ type Memo struct {
 	LastUpdate  time.Time   `json:"last_update" bson:"last_update"`
 }
 
+const (
+	MEMO_COLLECTION string = "Memos"
+)
+
 func getMemos(w http.ResponseWriter, req *http.Request) {
-	coll := client.Database(database).Collection("memos")
+	coll := client.Database(database).Collection(MEMO_COLLECTION)
 	filter := bson.D{}
 	cursor, err := coll.Find(context.TODO(), filter)
 	if handleResponseError(err, w, http.StatusInternalServerError) {
@@ -37,7 +41,7 @@ func getMemos(w http.ResponseWriter, req *http.Request) {
 }
 
 func getMemo(w http.ResponseWriter, req *http.Request) {
-	coll := client.Database(database).Collection("memos")
+	coll := client.Database(database).Collection(MEMO_COLLECTION)
 	params := mux.Vars(req)
 	id, err := primitive.ObjectIDFromHex(params["id"])
 	if handleResponseError(err, w, http.StatusBadRequest) {
@@ -53,7 +57,7 @@ func getMemo(w http.ResponseWriter, req *http.Request) {
 }
 
 func createMemo(w http.ResponseWriter, req *http.Request) {
-	coll := client.Database(database).Collection("memos")
+	coll := client.Database(database).Collection(MEMO_COLLECTION)
 	t := time.Now()
 	var data Memo
 	err := json.NewDecoder(req.Body).Decode(&data)
@@ -84,7 +88,7 @@ func updateMemo(w http.ResponseWriter, req *http.Request) {
 	}
 	data.LastUpdate = time.Now()
 	update := bson.D{{Key: "$set", Value: &data}}
-	coll := client.Database(database).Collection("memos")
+	coll := client.Database(database).Collection(MEMO_COLLECTION)
 	result, err := coll.UpdateOne(context.TODO(), filter, update)
 	if handleResponseError(err, w, http.StatusBadRequest) {
 		return
@@ -99,7 +103,7 @@ func deleteMemo(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 	filter := bson.D{{Key: "_id", Value: id}}
-	coll := client.Database(database).Collection("memos")
+	coll := client.Database(database).Collection(MEMO_COLLECTION)
 	result, err := coll.DeleteOne(context.TODO(), filter)
 	if handleResponseError(err, w, http.StatusInternalServerError) {
 		return

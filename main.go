@@ -15,6 +15,13 @@ var client *mongo.Client
 var uri string
 var database string
 
+const (
+	MEMO_COLLECTION  string = "Memos"
+	USER_COLLECTION  string = "Users"
+	TOPIC_COLLECTION string = "Topics"
+	MOVIE_COLLECTION string = "Movies"
+)
+
 func init() {
 	var err error
 	database = getEnvVariable("MONGODB_DATABASE")

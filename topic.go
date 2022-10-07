@@ -45,7 +45,7 @@ type Topic struct {
 }
 
 func getTopics(w http.ResponseWriter, req *http.Request) {
-	coll := client.Database(database).Collection("topics")
+	coll := client.Database(database).Collection(TOPIC_COLLECTION)
 	filter := bson.D{}
 	cursor, err := coll.Find(req.Context(), filter)
 	if handleResponseError(err, w, http.StatusInternalServerError) {
@@ -65,7 +65,7 @@ func getTopic(w http.ResponseWriter, req *http.Request) {
 	if handleResponseError(err, w, http.StatusBadRequest) {
 		return
 	}
-	coll := client.Database(database).Collection("topics")
+	coll := client.Database(database).Collection(TOPIC_COLLECTION)
 	filter := bson.D{{Key: "_id", Value: id}}
 	var topic Topic
 	err = coll.FindOne(req.Context(), filter).Decode(&topic)
@@ -81,7 +81,7 @@ func createTopic(w http.ResponseWriter, req *http.Request) {
 	if handleResponseError(err, w, http.StatusBadRequest) {
 		return
 	}
-	coll := client.Database(database).Collection("topics")
+	coll := client.Database(database).Collection(TOPIC_COLLECTION)
 	result, err := coll.InsertOne(req.Context(), &data)
 	if handleResponseError(err, w, http.StatusInternalServerError) {
 		return
@@ -96,7 +96,7 @@ func updateTopic(w http.ResponseWriter, req *http.Request) {
 	if handleResponseError(err, w, http.StatusBadRequest) {
 		return
 	}
-	coll := client.Database(database).Collection("topics")
+	coll := client.Database(database).Collection(TOPIC_COLLECTION)
 	params := mux.Vars(req)
 	id, err := primitive.ObjectIDFromHex(params["id"])
 	if handleResponseError(err, w, http.StatusBadRequest) {
@@ -117,7 +117,7 @@ func deleteTopic(w http.ResponseWriter, req *http.Request) {
 	if handleResponseError(err, w, http.StatusBadRequest) {
 		return
 	}
-	coll := client.Database(database).Collection("topics")
+	coll := client.Database(database).Collection(TOPIC_COLLECTION)
 	filter := bson.D{{Key: "_id", Value: id}}
 	result, err := coll.DeleteOne(req.Context(), filter)
 	if handleResponseError(err, w, http.StatusInternalServerError) {

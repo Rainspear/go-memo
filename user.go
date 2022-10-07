@@ -49,7 +49,7 @@ func signup(w http.ResponseWriter, req *http.Request) {
 	if handleResponseError(err, w, http.StatusBadRequest) {
 		return
 	}
-	coll := client.Database(database).Collection("users")
+	coll := client.Database(database).Collection(USER_COLLECTION)
 	err = coll.FindOne(req.Context(), bson.D{{Key: "email", Value: user.Email}}).Err()
 	if err == nil { // existed user in database
 		w.WriteHeader(http.StatusBadRequest)

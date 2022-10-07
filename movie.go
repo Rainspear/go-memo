@@ -27,7 +27,7 @@ func getMovie(w http.ResponseWriter, req *http.Request) {
 
 func getMovies(w http.ResponseWriter, req *http.Request) {
 	// start finding
-	coll := client.Database("sample_mflix").Collection("movies")
+	coll := client.Database("sample_mflix").Collection(MOVIE_COLLECTION)
 	filter := bson.D{}
 	// filter := bson.D{{Key: "runtime", Value: 1}}
 
