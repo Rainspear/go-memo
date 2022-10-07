@@ -38,12 +38,12 @@ func main() {
 	r.HandleFunc("/movies", addConfigMiddleware(createMovie)).Methods("POST")
 	r.HandleFunc("/movies/{id}", addConfigMiddleware(updateMovie)).Methods("PUT")
 	r.HandleFunc("/movies/{id}", addConfigMiddleware(deleteMovie)).Methods("DELETE")
-	// subject
-	r.HandleFunc("/subjects", addConfigMiddleware(getSubjects)).Methods("GET")
-	r.HandleFunc("/subjects/{id}", addConfigMiddleware(getSubject)).Methods("GET")
-	r.HandleFunc("/subjects", addConfigMiddleware(createSubject)).Methods("POST")
-	r.HandleFunc("/subjects/{id}", addConfigMiddleware(updateSubject)).Methods("PUT")
-	r.HandleFunc("/subjects/{id}", addConfigMiddleware(deleteSubject)).Methods("DELETE")
+	// topic
+	r.HandleFunc("/topics", addConfigMiddleware(getTopics)).Methods("GET")
+	r.HandleFunc("/topics/{id}", addConfigMiddleware(getTopic)).Methods("GET")
+	r.HandleFunc("/topics", addConfigMiddleware(createTopic)).Methods("POST")
+	r.HandleFunc("/topics/{id}", addConfigMiddleware(updateTopic)).Methods("PUT")
+	r.HandleFunc("/topics/{id}", addConfigMiddleware(deleteTopic)).Methods("DELETE")
 	// memos
 	r.HandleFunc("/memos", addConfigMiddleware(getMemos)).Methods("GET")
 	r.HandleFunc("/memos/{id}", addConfigMiddleware(getMemo)).Methods("GET")
