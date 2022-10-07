@@ -16,10 +16,10 @@ var uri string
 var database string
 
 const (
-	MEMO_COLLECTION  string = "Memos"
-	USER_COLLECTION  string = "Users"
-	TOPIC_COLLECTION string = "Topics"
-	MOVIE_COLLECTION string = "Movies"
+	MEMO_COLLECTION  string = "memos"
+	USER_COLLECTION  string = "users"
+	TOPIC_COLLECTION string = "topics"
+	MOVIE_COLLECTION string = "movies"
 )
 
 func init() {
@@ -58,10 +58,10 @@ func main() {
 	r.HandleFunc("/memos/{id}", addConfigMiddleware(updateMemo)).Methods("PUT")
 	r.HandleFunc("/memos/{id}", addConfigMiddleware(deleteMemo)).Methods("DELETE")
 	// user
-	r.HandleFunc("/user", addConfigMiddleware(getUsers)).Methods("GET")
-	r.HandleFunc("/user/{id}", addConfigMiddleware(getCurrentUser)).Methods("GET")
-	r.HandleFunc("/user/{id}", addConfigMiddleware(updateUser)).Methods("PUT")
-	r.HandleFunc("/user/{id}", addConfigMiddleware(deleteUser)).Methods("DELETE")
+	r.HandleFunc("/users", addConfigMiddleware(getUsers)).Methods("GET")
+	r.HandleFunc("/users/{id}", addConfigMiddleware(getCurrentUser)).Methods("GET")
+	r.HandleFunc("/users/{id}", addConfigMiddleware(updateUser)).Methods("PUT")
+	r.HandleFunc("/users/{id}", addConfigMiddleware(deleteUser)).Methods("DELETE")
 	r.HandleFunc("/signin", addConfigMiddleware(signin)).Methods("POST")
 	r.HandleFunc("/signup", addConfigMiddleware(signup)).Methods("POST")
 	r.HandleFunc("/signout", addConfigMiddleware(signout)).Methods("POST")
