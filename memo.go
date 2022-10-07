@@ -25,10 +25,14 @@ func getMemos(w http.ResponseWriter, req *http.Request) {
 	coll := client.Database(database).Collection("memos")
 	filter := bson.D{}
 	cursor, err := coll.Find(context.TODO(), filter)
-	handlePanicError(err)
+	if handleResponseError(err, w, http.StatusInternalServerError) {
+		return
+	}
 	memos := []Memo{}
 	err = cursor.All(context.TODO(), &memos)
-	handlePanicError(err)
+	if handleResponseError(err, w, http.StatusInternalServerError) {
+		return
+	}
 	handleResponseSuccess(&memos, w, http.StatusOK)
 }
 
@@ -36,11 +40,15 @@ func getMemo(w http.ResponseWriter, req *http.Request) {
 	coll := client.Database(database).Collection("memos")
 	params := mux.Vars(req)
 	id, err := primitive.ObjectIDFromHex(params["id"])
-	handleResponseError(err, w, http.StatusBadRequest)
+	if handleResponseError(err, w, http.StatusBadRequest) {
+		return
+	}
 	filter := bson.D{{Key: "_id", Value: id}}
 	var memo Memo
 	err = coll.FindOne(context.TODO(), filter).Decode(&memo)
-	handleResponseError(err, w, http.StatusNotFound)
+	if handleResponseError(err, w, http.StatusNotFound) {
+		return
+	}
 	handleResponseSuccess(&memo, w, http.StatusOK)
 }
 
@@ -49,45 +57,52 @@ func createMemo(w http.ResponseWriter, req *http.Request) {
 	t := time.Now()
 	var data Memo
 	err := json.NewDecoder(req.Body).Decode(&data)
-	handleResponseError(err, w, http.StatusBadRequest)
+	if handleResponseError(err, w, http.StatusBadRequest) {
+		return
+	}
 	data.LastUpdate = t
 	data.CreatedDate = t
 	result, err := coll.InsertOne(context.TODO(), &data)
-	handlePanicError(err)
+	if handleResponseError(err, w, http.StatusInternalServerError) {
+		return
+	}
 	id := result.InsertedID.(primitive.ObjectID)
 	handleResponseSuccess(CreatedResponse{id.Hex()}, w, http.StatusCreated)
 }
 
 func updateMemo(w http.ResponseWriter, req *http.Request) {
-	// parse params
 	params := mux.Vars(req)
-	// get id from params
 	id, err := primitive.ObjectIDFromHex(params["id"])
-	handleResponseError(err, w, http.StatusBadRequest)
-	// create filter
+	if handleResponseError(err, w, http.StatusBadRequest) {
+		return
+	}
 	filter := bson.D{{Key: "_id", Value: id}}
-	// create data from body
 	var data Memo
 	err = json.NewDecoder(req.Body).Decode(&data)
-	handleResponseError(err, w, http.StatusBadRequest)
+	if handleResponseError(err, w, http.StatusBadRequest) {
+		return
+	}
 	data.LastUpdate = time.Now()
-	// create update data with operator $set
 	update := bson.D{{Key: "$set", Value: &data}}
-	// find and update
 	coll := client.Database(database).Collection("memos")
 	result, err := coll.UpdateOne(context.TODO(), filter, update)
-	handleResponseError(err, w, http.StatusBadRequest)
-	// return response
+	if handleResponseError(err, w, http.StatusBadRequest) {
+		return
+	}
 	handleResponseSuccess(result, w, http.StatusOK)
 }
 
 func deleteMemo(w http.ResponseWriter, req *http.Request) {
 	params := mux.Vars(req)
 	id, err := primitive.ObjectIDFromHex(params["id"])
-	handleResponseError(err, w, http.StatusBadRequest)
+	if handleResponseError(err, w, http.StatusBadRequest) {
+		return
+	}
 	filter := bson.D{{Key: "_id", Value: id}}
 	coll := client.Database(database).Collection("memos")
 	result, err := coll.DeleteOne(context.TODO(), filter)
-	handleResponseError(err, w, http.StatusBadRequest)
+	if handleResponseError(err, w, http.StatusInternalServerError) {
+		return
+	}
 	handleResponseSuccess(result, w, http.StatusOK)
 }

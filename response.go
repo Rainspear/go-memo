@@ -42,10 +42,11 @@ func handlePanicError(err error) {
 	}
 }
 
-func handleResponseError(err error, w http.ResponseWriter, statusCode int) {
+func handleResponseError(err error, w http.ResponseWriter, statusCode int) bool {
 	if err != nil {
 		w.WriteHeader(statusCode)
 		json.NewEncoder(w).Encode(ErrorResponse{err.Error(), statusCode})
-		return
+		return true
 	}
+	return false
 }

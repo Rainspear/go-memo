@@ -1,7 +1,6 @@
 package main
 
 import (
-	"context"
 	"encoding/json"
 	"net/http"
 	"time"
@@ -41,25 +40,34 @@ func signin(w http.ResponseWriter, req *http.Request) {
 }
 
 func signup(w http.ResponseWriter, req *http.Request) {
-	e := req.FormValue("email")
-	p := req.FormValue("password")
-	n := req.FormValue("name")
-	bs, err := bcrypt.GenerateFromPassword([]byte(p), bcrypt.DefaultCost)
-	handleResponseError(err, w, http.StatusBadRequest)
-	t := time.Now()
-	user := User{Name: n, Email: e, Password: string(bs), CreatedDate: t, LastUpdate: t}
+	var user User
+	err := json.NewDecoder(req.Body).Decode(&user)
+	if handleResponseError(err, w, http.StatusBadRequest) {
+		return
+	}
+	bs, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
+	if handleResponseError(err, w, http.StatusBadRequest) {
+		return
+	}
 	coll := client.Database(database).Collection("users")
-	err = coll.FindOne(context.TODO(), bson.D{{Key: "email", Value: e}}).Err()
+	err = coll.FindOne(req.Context(), bson.D{{Key: "email", Value: user.Email}}).Err()
 	if err == nil { // existed user in database
 		w.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(w).Encode(ErrorResponse{err.Error(), http.StatusBadRequest})
 		return
 	}
-	result, err := coll.InsertOne(context.TODO(), &user)
-	handleResponseError(err, w, http.StatusInternalServerError)
+	// create data to save
+	t := time.Now()
+	user.Password = string(bs)
+	user.CreatedDate = t
+	user.LastUpdate = t
+	result, err := coll.InsertOne(req.Context(), &user)
+	if handleResponseError(err, w, http.StatusInternalServerError) {
+		return
+	}
 	w.WriteHeader(http.StatusCreated)
+	// create jwt token and return response
 	json.NewEncoder(w).Encode(result)
-	// create jwt token
 }
 
 func signout(w http.ResponseWriter, req *http.Request) {

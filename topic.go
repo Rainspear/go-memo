@@ -48,32 +48,44 @@ func getTopics(w http.ResponseWriter, req *http.Request) {
 	coll := client.Database(database).Collection("topics")
 	filter := bson.D{}
 	cursor, err := coll.Find(req.Context(), filter)
-	handleResponseError(err, w, http.StatusInternalServerError)
+	if handleResponseError(err, w, http.StatusInternalServerError) {
+		return
+	}
 	var topics []Topic
 	err = cursor.All(req.Context(), &topics)
-	handleResponseError(err, w, http.StatusInternalServerError)
+	if handleResponseError(err, w, http.StatusInternalServerError) {
+		return
+	}
 	handleResponseSuccess(topics, w, http.StatusOK)
 }
 
 func getTopic(w http.ResponseWriter, req *http.Request) {
 	params := mux.Vars(req)
 	id, err := primitive.ObjectIDFromHex(params["id"])
-	handleResponseError(err, w, http.StatusBadRequest)
+	if handleResponseError(err, w, http.StatusBadRequest) {
+		return
+	}
 	coll := client.Database(database).Collection("topics")
 	filter := bson.D{{Key: "_id", Value: id}}
 	var topic Topic
 	err = coll.FindOne(req.Context(), filter).Decode(&topic)
-	handleResponseError(err, w, http.StatusInternalServerError)
+	if handleResponseError(err, w, http.StatusInternalServerError) {
+		return
+	}
 	handleResponseSuccess(topic, w, http.StatusOK)
 }
 
 func createTopic(w http.ResponseWriter, req *http.Request) {
 	var data Topic
 	err := json.NewDecoder(req.Body).Decode(&data)
-	handleResponseError(err, w, http.StatusBadRequest)
+	if handleResponseError(err, w, http.StatusBadRequest) {
+		return
+	}
 	coll := client.Database(database).Collection("topics")
 	result, err := coll.InsertOne(req.Context(), &data)
-	handleResponseError(err, w, http.StatusInternalServerError)
+	if handleResponseError(err, w, http.StatusInternalServerError) {
+		return
+	}
 	id := result.InsertedID.(primitive.ObjectID)
 	handleResponseSuccess(CreatedResponse{id.Hex()}, w, http.StatusCreated)
 }
@@ -81,25 +93,35 @@ func createTopic(w http.ResponseWriter, req *http.Request) {
 func updateTopic(w http.ResponseWriter, req *http.Request) {
 	var data Topic
 	err := json.NewDecoder(req.Body).Decode(&data)
-	handleResponseError(err, w, http.StatusBadRequest)
+	if handleResponseError(err, w, http.StatusBadRequest) {
+		return
+	}
 	coll := client.Database(database).Collection("topics")
 	params := mux.Vars(req)
 	id, err := primitive.ObjectIDFromHex(params["id"])
-	handleResponseError(err, w, http.StatusBadRequest)
+	if handleResponseError(err, w, http.StatusBadRequest) {
+		return
+	}
 	update := bson.D{{Key: "$set", Value: &data}}
 	filter := bson.D{{Key: "_id", Value: id}}
 	result, err := coll.UpdateOne(req.Context(), filter, update)
-	handleResponseError(err, w, http.StatusBadRequest)
+	if handleResponseError(err, w, http.StatusBadRequest) {
+		return
+	}
 	handleResponseSuccess(result, w, http.StatusOK)
 }
 
 func deleteTopic(w http.ResponseWriter, req *http.Request) {
 	params := mux.Vars(req)
 	id, err := primitive.ObjectIDFromHex(params["id"])
-	handleResponseError(err, w, http.StatusBadRequest)
+	if handleResponseError(err, w, http.StatusBadRequest) {
+		return
+	}
 	coll := client.Database(database).Collection("topics")
 	filter := bson.D{{Key: "_id", Value: id}}
 	result, err := coll.DeleteOne(req.Context(), filter)
-	handleResponseError(err, w, http.StatusInternalServerError)
+	if handleResponseError(err, w, http.StatusInternalServerError) {
+		return
+	}
 	handleResponseSuccess(result, w, http.StatusOK)
 }
