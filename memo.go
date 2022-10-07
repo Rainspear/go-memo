@@ -21,10 +21,6 @@ type Memo struct {
 	LastUpdate  time.Time   `json:"last_update" bson:"last_update"`
 }
 
-const (
-	MEMO_COLLECTION string = "Memos"
-)
-
 func getMemos(w http.ResponseWriter, req *http.Request) {
 	coll := client.Database(database).Collection(MEMO_COLLECTION)
 	filter := bson.D{}
