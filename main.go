@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -38,7 +39,7 @@ func init() {
 
 func main() {
 	r := mux.NewRouter()
-	r.Use(mux.CORSMethodMiddleware(r)) // cors middleware
+	// r.Use(mux.CORSMethodMiddleware(r)) // cors middleware
 	// movies
 	r.HandleFunc("/movies", addConfigMiddleware(getMovies)).Methods("GET")
 	r.HandleFunc("/movies/{id}", addConfigMiddleware(getMovie)).Methods("GET")
@@ -68,6 +69,10 @@ func main() {
 	// default
 	r.Handle("/favicon.ico", http.NotFoundHandler())
 	fmt.Printf("Starting server at port 8089 \r\n")
-	log.Fatal((http.ListenAndServe(":8089", r)))
+	// cors config
+	headersOk := handlers.AllowedHeaders([]string{"X-Requested-With"})
+	originsOk := handlers.AllowedOrigins([]string{getEnvVariable("ORIGIN_ALLOWED")})
+	methodsOk := handlers.AllowedMethods([]string{"GET", "HEAD", "POST", "PUT", "OPTIONS"})
+	log.Fatal((http.ListenAndServe(":8089", handlers.CORS(originsOk, headersOk, methodsOk)(r))))
 	defer closeMongoClient(client)
 }
