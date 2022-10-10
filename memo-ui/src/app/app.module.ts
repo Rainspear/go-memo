@@ -13,6 +13,7 @@ import { MemoDetailComponent } from './memos/memo-detail/memo-detail.component';
 import { TopicDetailComponent } from './topics/topic-detail/topic-detail.component';
 import { TopicItemComponent } from './topics/topic-list/topic-item/topic-item.component';
 import { MemoEditingComponent } from './memos/memo-editing/memo-editing.component';
+import { MemoItemComponent } from './memos/memo-list/memo-item/memo-item.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { MemoEditingComponent } from './memos/memo-editing/memo-editing.componen
     MemoDetailComponent,
     TopicDetailComponent,
     TopicItemComponent,
-    MemoEditingComponent
+    MemoEditingComponent,
+    MemoItemComponent
   ],
   imports: [
     BrowserModule,

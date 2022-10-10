@@ -17,6 +17,7 @@ type Memo struct {
 	Author      string      `json:"author" bson:"author"`
 	Content     string      `json:"content" bson:"content"`
 	Question    string      `json:"question" bson:"question"`
+	Answer      []string    `json:"answer" bson:"answer"`
 	CreatedDate time.Time   `json:"created_date" bson:"created_date"`
 	LastUpdate  time.Time   `json:"last_update" bson:"last_update"`
 }

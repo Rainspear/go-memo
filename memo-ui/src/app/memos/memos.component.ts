@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { ApiSerivce } from '../api.service';
+import { Memo } from '../models/memo.model';
 
 @Component({
   selector: 'app-memos',
@@ -7,9 +9,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MemosComponent implements OnInit {
 
-  constructor() { }
+  memos: Memo[] = [];
+
+  constructor(private apiSerivce: ApiSerivce) {}
 
   ngOnInit(): void {
+    this.apiSerivce.getAllMemos()
+    .subscribe((res: any) => {
+      this.memos = res.data  
+    })
   }
 
 }

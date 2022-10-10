@@ -4,5 +4,15 @@
     <app-memo-editing></app-memo-editing>
     <hr />
     <h2>The Memo List Here</h2>
+    <ul class="list-group">
+      <a 
+      href="#" 
+      class="list-group-item" 
+      style="cursor: pointer;"
+      *ngFor="let memo of memos"
+      >{{memo.question}}
+      
+      ({{memo.content}})</a>
+    </ul>
   </div>
 </div>

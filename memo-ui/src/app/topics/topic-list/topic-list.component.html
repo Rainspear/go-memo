@@ -3,18 +3,23 @@
     <button class="btn btn-success">New Topics</button>
   </div>
 </div>
+<hr />
 <div class="row">
   <div class="col-xs-12">
-    <a href="#" class="list-group-item clearfix">
+    <a 
+    href="#" 
+    class="list-group-item clearfix"
+    *ngFor="let topic of topics"
+    >
       <div class="pull-left">
-        <h4 class="list-group-item-heading">Topic Name</h4>
-        <p class="list-group-item-text">Description</p>
+        <h4 class="list-group-item-heading">Topic Name: {{topic.title}}</h4>
+        <p class="list-group-item-text">Description: {{topic.description}} </p>
       </div>
-      <div class="pull-right">
-        <img src="/" alt="" class="img-responsive" style="max-height: 50px;">
-      </div>
+      <span class="pull-right">
+        <!-- <img src="/" alt="" class="img-responsive" style="max-height: 50px;"> -->
+        <div class="img-responsive" [ngStyle]="{backgroundColor:'#123123', width: '3.5rem', height: '3.5rem'}"></div>
+      </span>
     </a>
-
     <app-topic-item ></app-topic-item>
   </div>
 </div>

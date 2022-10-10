@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
 import { Topic } from 'src/app/models/topic.model';
 
 @Component({
@@ -9,9 +9,16 @@ import { Topic } from 'src/app/models/topic.model';
 export class TopicListComponent implements OnInit {
   @Input() topics: Topic[] = [];
 
-  constructor() { }
+  constructor() {
+   }
 
   ngOnInit(): void {
+    console.log("this.topics", this.topics)
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    // console.log("TopicListComponent ngOnChanges: ", changes)
+    // this.topics = changes['topics']
   }
 
 }
