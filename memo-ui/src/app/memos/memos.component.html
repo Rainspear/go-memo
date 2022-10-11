@@ -4,9 +4,8 @@
     <app-memo-editing [memo]="selectedMemo"></app-memo-editing>
     <hr />
     <h2>The Memo List Here</h2>
-    <p *ngIf="responseStatus === true;">Delete Successfully</p>
-    <p *ngIf="responseStatus === false;">Delete Failed</p>
-    
+    <p *ngIf="responseStatus === true;" class="text-success">Delete Successfully</p>
+    <p *ngIf="responseStatus === false;"class="text-danger">Delete Failed</p>
     <app-memo-list [memos]="memos" (clickDeleteMemo)="onClickDeleteMemo($event)"></app-memo-list>
   </div>
 </div>
