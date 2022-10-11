@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { ApiSerivce } from '../api.service';
+import { ApiSerivce } from '../services/api.service';
 import { Memo } from '../models/memo.model';
 
 @Component({
@@ -10,6 +10,7 @@ import { Memo } from '../models/memo.model';
 export class MemosComponent implements OnInit {
 
   memos: Memo[] = [];
+  selectedMemo?: Memo;
 
   constructor(private apiSerivce: ApiSerivce) {}
 

@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { Topic } from 'src/app/models/topic.model';
 
 @Component({
   selector: 'app-topic-item',
@@ -7,6 +8,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class TopicItemComponent implements OnInit {
 
+  @Input() topic?: Topic;
   constructor() { }
 
   ngOnInit(): void {

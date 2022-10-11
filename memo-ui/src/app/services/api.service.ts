@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Observable,of} from 'rxjs';
-import { Memo } from './models/memo.model';
-import { Topic } from './models/topic.model';
+import { Memo } from '../models/memo.model';
+import { Topic } from '../models/topic.model';
 
 const httpOptions ={
   headers:new HttpHeaders({'Content-Type':'Application/json'})

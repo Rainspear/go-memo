@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { Memo } from 'src/app/models/memo.model';
 
 @Component({
   selector: 'app-memo-list',
@@ -6,7 +7,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./memo-list.component.scss']
 })
 export class MemoListComponent implements OnInit {
-
+  @Input() memos: Memo[] = [];
   constructor() { }
 
   ngOnInit(): void {
