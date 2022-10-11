@@ -1,3 +1,23 @@
+# Some Note about Concept and Technical with Angular
+
+1. Directives:
+Built-in Attributes: [ngModel], [ngClass], [ngStyle]
+Built-in Structural: *ngIf *ngFor [ngSwitch] *ngSwitchCase *ngSwitchDefault
+Can custom on your own way
+
+2. Data binding
+Property: -> Input
+Event: <- Output 
+
+3. Services and Dependencies Injection
+To help solve the creating instance problem when a service depends a lot of other services and so on...
+
+4. HttpClient
+Call with http method
+
+
+
+
 # MemoUi
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 14.2.5.

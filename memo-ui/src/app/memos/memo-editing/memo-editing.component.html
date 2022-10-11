@@ -4,24 +4,24 @@
       <div class="row">
         <div class="col-sm-7 form-group">
           <label for="title">Title</label>
-          <input type="text" id="title" name="title" class="form-control">
+          <input type="text" id="title" name="title" class="form-control" #TopicTitle>
         </div>
       </div>
       <div class="row">
         <div class="col-sm-7 form-group">
           <label for="question">Question</label>
-          <input type="text" id="question" name="question" class="form-control">
+          <input type="text" id="question" name="question" class="form-control" #TopicQuestion>
         </div>
       </div>
       <div class="row">
         <div class="col-sm-7 form-group">
           <label for="content">Answer</label>
-          <input type="text" id="content" name="content" class="form-control">
+          <input type="text" id="content" name="content" class="form-control" #TopicAnswer>
         </div>
       </div>
       <div class="row">
         <div class="col-sm-12">
-            <button class="btn btn-success">Add</button>
+            <button class="btn btn-success" type="button" (click)="onClickAdd(TopicTitle)">Add</button>
             <button class="btn btn-danger">Edit</button>
             <button class="btn btn-primary">Clear</button>
         </div>
