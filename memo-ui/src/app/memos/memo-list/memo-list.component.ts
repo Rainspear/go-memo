@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Memo } from 'src/app/models/memo.model';
 
 @Component({
@@ -8,6 +8,12 @@ import { Memo } from 'src/app/models/memo.model';
 })
 export class MemoListComponent implements OnInit {
   @Input() memos: Memo[] = [];
+  @Output() clickDeleteMemo = new EventEmitter<string>();
+
+  onClickDeleteMemo(id: string): void {
+    this.clickDeleteMemo.emit(id);
+  }
+
   constructor() { }
 
   ngOnInit(): void {

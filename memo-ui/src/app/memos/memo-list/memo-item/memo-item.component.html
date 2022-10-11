@@ -1,15 +1,11 @@
 <a 
-href="/{{memo?._id}}" 
-class="list-group-item" 
+class="row list-group-item" 
 style="cursor: pointer;"
 >
-<div class="row">
-  <div class="col-xs-8">
-    <p>{{memo?.question}}: <strong>{{memo?.content}}</strong></p>
-  </div>
-  <div class="col-xs-4">
-    <button class="btn btn-danger">Delete</button>
-  </div>
-</div>
-
+    <div class="pull-left">
+      <p>{{memo?.question}}: <strong>{{memo?.content}}</strong></p>
+    </div>
+    <div class="pull-right">
+      <button class="btn btn-danger" (click)="onClickDeleteMemo()">Delete</button>
+    </div>
 </a>

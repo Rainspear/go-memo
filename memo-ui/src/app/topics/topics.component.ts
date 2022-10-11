@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiSerivce } from '../services/api.service';
 import { Topic } from '../models/topic.model';
+import { ResponseAPI } from '../models/response.model';
 
 @Component({
   selector: 'app-topics',
@@ -15,7 +16,7 @@ export class TopicsComponent implements OnInit {
 
   ngOnInit(): void {
     this.apiSerivce.getAllTopics()
-     .subscribe((res: any) => {
+     .subscribe((res: ResponseAPI<Topic[]>) => {
       this.topics = res.data
      })
   }

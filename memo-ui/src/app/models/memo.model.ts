@@ -1,5 +1,5 @@
 export interface Memo {
-  _id: string;
+  id: string;
   title: string;
   author: string;
   question: string;

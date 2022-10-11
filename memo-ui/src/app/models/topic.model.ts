@@ -1,5 +1,5 @@
 export interface Topic {
-  _id: string;
+  id: string;
   title: string;
   description: string;
   repetition?: Repetition[];

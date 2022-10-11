@@ -10,7 +10,7 @@ import (
 )
 
 type User struct {
-	Id          interface{} `json:"_id,omitempty" bson:"_id,omitempty"`
+	Id          interface{} `json:"id,omitempty" bson:"_id,omitempty"`
 	Name        string      `json:"name" bson:"name"`
 	Avatar      string      `json:"avatar,omitempty" bson:"avatar,omitempty"`
 	Email       string      `json:"email" bson:"email"`

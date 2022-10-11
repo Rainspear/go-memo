@@ -36,7 +36,7 @@ type Repetition struct {
 }
 
 type Topic struct {
-	Id          interface{}  `json:"_id,omitempty" bson:"_id,omitempty"`
+	Id          interface{}  `json:"id,omitempty" bson:"_id,omitempty"`
 	Title       string       `json:"title" bson:"title"`
 	Repetition  []Repetition `json:"repetition" bson:"repetition"`
 	Description string       `json:"description" bson:"description"`

@@ -12,7 +12,7 @@ import (
 )
 
 type Memo struct {
-	Id          interface{} `json:"_id,omitempty" bson:"_id,omitempty"`
+	Id          interface{} `json:"id,omitempty" bson:"_id,omitempty"`
 	TopicId     string      `json:"topic_id" bson:"topic_id"`
 	Author      string      `json:"author" bson:"author"`
 	Content     string      `json:"content" bson:"content"`
