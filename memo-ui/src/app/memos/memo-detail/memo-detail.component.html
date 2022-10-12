@@ -1,1 +1,14 @@
-<p>memo-detail works!</p>
+<div class="row">
+  <div class="col-xs-3">
+    <ng-content select="[first]"></ng-content>
+  </div>
+  <div class="col-xs-3">
+    <p>memo-detail works!</p>
+  </div>
+  <div class="col-xs-3">
+    <ng-content ></ng-content>
+  </div>
+  <div class="col-xs-3">
+    <ng-content select="[last]"></ng-content>
+  </div>
+</div>

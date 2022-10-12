@@ -3,6 +3,14 @@
     <h2>The Memo Editing Here</h2>
     <app-memo-editing [memo]="selectedMemo"></app-memo-editing>
     <hr />
+    <h2>The Memo Selected Detail Memo here</h2>
+    <app-memo-detail>
+      <p #contentChild last>Content Child is last child</p>
+      Memo Detail from Memo Component 
+      <span first>
+        Multiple ng-content from Memo Component
+      </span>
+    </app-memo-detail>
     <h2>The Memo List Here</h2>
     <p *ngIf="responseStatus === true;" class="text-success">Delete Successfully</p>
     <p *ngIf="responseStatus === false;"class="text-danger">Delete Failed</p>

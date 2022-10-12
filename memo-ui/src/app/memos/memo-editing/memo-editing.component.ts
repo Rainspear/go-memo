@@ -20,7 +20,6 @@ export class MemoEditingComponent implements OnInit {
     console.log("topicTitleInput", this.topicTitleInput);
     console.log("topicQuestionInput", this.topicQuestionInput);
     console.log("topicAnswer", this.topicAnswer);
-
   }
 
   onClickGetMemoData () {
