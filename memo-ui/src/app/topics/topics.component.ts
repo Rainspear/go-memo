@@ -9,10 +9,15 @@ import { ResponseAPI } from '../models/response.model';
   styleUrls: ['./topics.component.scss']
 })
 export class TopicsComponent implements OnInit {
-
+  selectedTopic?: Topic;
   topics: Topic[] = [];
 
   constructor(private apiSerivce : ApiSerivce) { }
+
+  onClickSelectTopic(topic : Topic) {
+    console.log("topic", topic);
+    this.selectedTopic = topic;
+  }
 
   ngOnInit(): void {
     this.apiSerivce.getAllTopics()

@@ -6,6 +6,10 @@
 <hr />
 <div class="row">
   <div class="col-xs-12">
-    <app-topic-item *ngFor="let topic of topics"></app-topic-item>
+    <app-topic-item 
+    (selectedTopic)="onSelectTopic($event)"
+    *ngFor="let topic of topics"
+    [topic]="topic"
+    ></app-topic-item>
   </div>
 </div>
