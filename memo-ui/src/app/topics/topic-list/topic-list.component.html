@@ -8,8 +8,9 @@
   <div class="col-xs-12">
     <app-topic-item 
     (selectedTopic)="onSelectTopic($event)"
-    *ngFor="let topic of topics"
+    *ngFor="let topic of topics; let i = index"
     [topic]="topic"
+    [ngClass]="(i + 1) % 2 === 0 ? 'even' : 'odd'"
     ></app-topic-item>
   </div>
 </div>

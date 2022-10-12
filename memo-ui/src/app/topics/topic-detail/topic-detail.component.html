@@ -23,41 +23,36 @@
   </div>
 </div>
 <hr />
-<div class="row">
-  <div class="col-xs-3">
-    ID
+<div *ngIf="topic" class="row Topic">
+  <div class="col-xs-4">
+    <div class="image-background">
+    </div>
   </div>
-  <div class="col-xs-3">
-    Title
-  </div>
-  <div class="col-xs-3">
-    Description
-  </div>
-  <div class="col-xs-3">
-    Scheduled on
-  </div>
-</div>
-<div class="row">
-  <div class="col-xs-3 long-word">
-    {{topic?.id}}
-  </div>
-  <div class="col-xs-3">
-    {{topic?.title}}
-  </div>
-  <div class="col-xs-3">
-    {{topic?.description}}
-  </div>
-  <div class="col-xs-3">
-    <div *ngFor="let rep of topic?.repetition">
-      <div class="row">
-        <div class="col-xs-4">
-          Date: {{rep.time}}
-        </div>
-        <div class="col-xs-4">
-          Severity: {{rep.level}}
-        </div>
-        <div class="col-xs-4">
-          Status: {{rep.status}}
+  <div class="col-xs-8">
+    <div class="row" style="font-weight: bold;">
+      {{topic.title}}
+    </div>
+    <div class="row">
+      {{topic.description}}
+    </div>
+    <div class="row">
+      <div class="Topic-Card">
+        <div class="Topic-Card-Item" *ngFor="let rep of topic?.repetition; let i = index"
+          style="margin-bottom: .75rem;">
+          <div class="Date">
+            <div class="Header">
+              {{rep.time | date:'MMM'}}
+            </div>
+            <div class="Body">{{rep.time | date:'dd'}}</div>
+          </div>
+          <div class="row">
+            <div class="col-xs-6">
+              Severity: {{rep.level}}
+            </div>
+            <div class="col-xs-6">
+              Status: {{rep.status}}
+            </div>
+          </div>
         </div>
       </div>
     </div>
