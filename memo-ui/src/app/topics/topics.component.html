@@ -1,8 +1,13 @@
+
 <div class="row">
-  <div class="col-md-5">
+  <div class="col-md-12">
     <app-topic-list [topics]="topics" (selectedTopic)="onClickSelectTopic($event)"></app-topic-list>
   </div>
-  <div class="col-md-7">
+
+</div>
+
+<div class="row">
+  <div class="col-md-12">
     <app-topic-detail [topic]="selectedTopic"></app-topic-detail>
   </div>
 </div>

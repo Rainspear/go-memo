@@ -1,0 +1,7 @@
+div.long-word {
+  white-space: nowrap; 
+  width: 25%; 
+  overflow: hidden;
+  text-overflow: ellipsis; 
+  // width: inherit;
+}
