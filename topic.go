@@ -82,35 +82,34 @@ func getTopic(w http.ResponseWriter, req *http.Request) {
 	if handleResponseError(err, w, http.StatusBadRequest) {
 		return
 	}
+	fmt.Println(id)
 	coll := client.Database(database).Collection(TOPIC_COLLECTION)
-	matchStage := bson.D{{Key: "$match", Value: bson.D{{Key: "_id", Value: id}}}}
-	addFieldStage := bson.D{
-		{Key: "$addFields",
-			Value: bson.D{
-				{Key: "repetition",
-					Value: bson.D{
-						{Key: "$sortArray",
-							Value: bson.D{
-								{Key: "input", Value: "$repetition"},
-								{Key: "sortBy", Value: bson.D{{Key: "time", Value: 1}}},
-							},
-						},
-					},
-				},
-			},
-		},
-	}
-	limitStage := bson.D{{Key: "$limit", Value: 1}}
-	// filter := bson.D{{Key: "_id", Value: id}}
-	// var topic Topic
-	// err = coll.FindOne(req.Context(), filter).Decode(&topic)
-	cursor, err := coll.Aggregate(req.Context(), mongo.Pipeline{matchStage, addFieldStage, limitStage})
+	// matchStage := bson.D{{Key: "$match", Value: bson.D{{Key: "_id", Value: id}}}}
+	// addFieldStage := bson.D{
+	// 	{Key: "$addFields",
+	// 		Value: bson.D{
+	// 			{Key: "repetition",
+	// 				Value: bson.D{
+	// 					{Key: "$sortArray",
+	// 						Value: bson.D{
+	// 							{Key: "input", Value: "$repetition"},
+	// 							{Key: "sortBy", Value: bson.D{{Key: "time", Value: 1}}},
+	// 						},
+	// 					},
+	// 				},
+	// 			},
+	// 		},
+	// 	},
+	// }
+	// limitStage := bson.D{{Key: "$limit", Value: 1}}
+	// ----------------------------------------------------------------
+	// cursor, err := coll.Aggregate(req.Context(), mongo.Pipeline{matchStage, addFieldStage, limitStage})
+	filter := bson.D{{Key: "_id", Value: id}}
+	var topic Topic
+	err = coll.FindOne(req.Context(), filter).Decode(&topic)
 	if handleResponseError(err, w, http.StatusInternalServerError) {
 		return
 	}
-	var topic Topic
-	cursor.Decode(&topic)
-	fmt.Printf("data: %+v\n", topic)
 	handleResponseSuccess(topic, w, http.StatusOK)
 }
 
