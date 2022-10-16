@@ -22,13 +22,6 @@ type User struct {
 	Tokens      []string    `json:"tokens" bson:"tokens"`
 }
 
-type Token struct {
-	Email     string        `json:"email" bson:"email"`
-	Name      string        `json:"name" bson:"name"`
-	CreatedAt time.Time     `json:"created_at" bson:"created_at"`
-	Duration  time.Duration `json:"duration" bson:"duration"`
-}
-
 func getUsers(w http.ResponseWriter, req *http.Request) {
 	coll := client.Database(database).Collection(USER_COLLECTION)
 	matchStage := bson.D{{Key: "$match", Value: bson.D{}}}
@@ -73,9 +66,9 @@ func signup(w http.ResponseWriter, req *http.Request) {
 	coll := client.Database(database).Collection(USER_COLLECTION)
 	var existedUser User
 	err = coll.FindOne(req.Context(), bson.D{{Key: "email", Value: user.Email}}).Decode(&existedUser)
-	if existedUser.Email != "" { // existed user in database
+	if existedUser.Email != "" && err == nil { // existed user in database
 		w.WriteHeader(http.StatusBadRequest)
-		json.NewEncoder(w).Encode(ErrorResponse{"user is already existed", http.StatusBadRequest})
+		json.NewEncoder(w).Encode(ErrorResponse{"user is already existed " + err.Error(), http.StatusBadRequest})
 		return
 	}
 	// create data to save
@@ -102,7 +95,7 @@ func signup(w http.ResponseWriter, req *http.Request) {
 	// create jwt token and return response
 
 	fmt.Println("token: ", token)
-	handleResponseSuccess(user, w, http.StatusCreated)
+	// handleResponseSuccess(user, w, http.StatusCreated)
 	handleResponseToken(token, w, http.StatusCreated)
 }
 
