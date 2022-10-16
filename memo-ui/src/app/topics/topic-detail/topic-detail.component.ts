@@ -1,5 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { Topic } from 'src/app/models/topic.model';
+import { TopicSelectingService } from 'src/app/services/topic-selecting.service';
 
 @Component({
   selector: 'app-topic-detail',
@@ -8,7 +9,17 @@ import { Topic } from 'src/app/models/topic.model';
 })
 export class TopicDetailComponent implements OnInit {
   @Input() topic?: Topic;
-  constructor() { }
+  @Output() clickClearSelection = new EventEmitter<void>();
+
+  onClickClearSelection() {
+    this.clickClearSelection.emit();
+  }
+  constructor(private topicSelectingService : TopicSelectingService) {
+    this.topicSelectingService.selectedTopic.subscribe(topic => {
+      this.topic = topic;
+    })
+
+   }
 
   ngOnInit(): void {
   }

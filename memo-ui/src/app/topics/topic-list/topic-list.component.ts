@@ -15,7 +15,6 @@ export class TopicListComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log("this.topics", this.topics)
   }
 
   ngOnChanges(changes: SimpleChanges) {

@@ -7,7 +7,7 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'memo-ui';
-  selectedRoute = "topic"
+  selectedRoute = "auth"
   onNavigate (route: string) {
     this.selectedRoute = route;
     console.log("this.selectedRoute", this.selectedRoute)

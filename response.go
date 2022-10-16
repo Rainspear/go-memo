@@ -27,13 +27,25 @@ type DeletedResponse struct {
 	Id string `json:"id"`
 }
 
+type TokenResponse struct {
+	Token      string `json:"token" bson:"token"`
+	StatusCode int    `json:"status_code" bson:"status_code"`
+}
+
+func handleResponseToken(token string, w http.ResponseWriter, statusCode int) {
+	w.WriteHeader(statusCode)
+	json.NewEncoder(w).Encode(TokenResponse{
+		Token:      token,
+		StatusCode: statusCode,
+	})
+}
+
 func handleResponseSuccess(data interface{}, w http.ResponseWriter, statusCode int) {
 	w.WriteHeader(statusCode)
 	json.NewEncoder(w).Encode(SuccessResponse{
 		Data:       data,
 		StatusCode: statusCode,
 	})
-	return
 }
 
 func handlePanicError(err error) {

@@ -20,7 +20,6 @@ export class MemosComponent implements OnInit {
   }
 
   onClickDeleteMemo(id: string) {
-    console.log('deleteMemo', id);
     this.responseStatus = null;
     this.apiSerivce.deleteMemo(id).subscribe((res : ResponseAPI<Memo>) => {
       if (res?.data) {

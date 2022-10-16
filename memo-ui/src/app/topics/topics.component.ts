@@ -19,6 +19,11 @@ export class TopicsComponent implements OnInit {
     this.selectedTopic = topic;
   }
 
+  onClickClearSelection(){
+    console.log("Clear selection");
+    this.selectedTopic = undefined;
+  }
+
   ngOnInit(): void {
     this.apiSerivce.getAllTopics()
      .subscribe((res: ResponseAPI<Topic[]>) => {

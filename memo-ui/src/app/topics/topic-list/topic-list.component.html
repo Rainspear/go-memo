@@ -1,13 +1,18 @@
 <div class="row">
   <div class="col-xs-12">
-    <button class="btn btn-success">New Topics</button>
+      <button class="btn btn-success">New Topics</button>
   </div>
 </div>
 <hr />
 <div class="row">
   <div class="col-xs-12">
-    <app-topic-item 
+    <!-- <app-topic-item 
     (selectedTopic)="onSelectTopic($event)"
+    *ngFor="let topic of topics; let i = index"
+    [topic]="topic"
+    [ngClass]="(i + 1) % 2 === 0 ? 'even' : 'odd'"
+    ></app-topic-item> -->
+    <app-topic-item 
     *ngFor="let topic of topics; let i = index"
     [topic]="topic"
     [ngClass]="(i + 1) % 2 === 0 ? 'even' : 'odd'"
