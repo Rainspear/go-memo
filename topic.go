@@ -84,33 +84,40 @@ func getTopic(w http.ResponseWriter, req *http.Request) {
 	}
 	fmt.Println(id)
 	coll := client.Database(database).Collection(TOPIC_COLLECTION)
-	// matchStage := bson.D{{Key: "$match", Value: bson.D{{Key: "_id", Value: id}}}}
-	// addFieldStage := bson.D{
-	// 	{Key: "$addFields",
-	// 		Value: bson.D{
-	// 			{Key: "repetition",
-	// 				Value: bson.D{
-	// 					{Key: "$sortArray",
-	// 						Value: bson.D{
-	// 							{Key: "input", Value: "$repetition"},
-	// 							{Key: "sortBy", Value: bson.D{{Key: "time", Value: 1}}},
-	// 						},
-	// 					},
-	// 				},
-	// 			},
-	// 		},
-	// 	},
-	// }
-	// limitStage := bson.D{{Key: "$limit", Value: 1}}
+	matchStage := bson.D{{Key: "$match", Value: bson.D{{Key: "_id", Value: id}}}}
+	addFieldStage := bson.D{
+		{Key: "$addFields",
+			Value: bson.D{
+				{Key: "repetition",
+					Value: bson.D{
+						{Key: "$sortArray",
+							Value: bson.D{
+								{Key: "input", Value: "$repetition"},
+								{Key: "sortBy", Value: bson.D{{Key: "time", Value: 1}}},
+							},
+						},
+					},
+				},
+			},
+		},
+	}
+	limitStage := bson.D{{Key: "$limit", Value: 1}}
 	// ----------------------------------------------------------------
-	// cursor, err := coll.Aggregate(req.Context(), mongo.Pipeline{matchStage, addFieldStage, limitStage})
-	filter := bson.D{{Key: "_id", Value: id}}
-	var topic Topic
-	err = coll.FindOne(req.Context(), filter).Decode(&topic)
+	cursor, err := coll.Aggregate(req.Context(), mongo.Pipeline{matchStage, addFieldStage, limitStage})
 	if handleResponseError(err, w, http.StatusInternalServerError) {
 		return
 	}
-	handleResponseSuccess(topic, w, http.StatusOK)
+	var topics []Topic
+	err = cursor.All(req.Context(), &topics)
+	if handleResponseError(err, w, http.StatusInternalServerError) {
+		return
+	}
+	if len(topics) > 0 {
+		handleResponseSuccess(topics[0], w, http.StatusOK)
+		return
+	}
+	handleResponseSuccess(topics, w, http.StatusOK)
+
 }
 
 func createTopic(w http.ResponseWriter, req *http.Request) {
