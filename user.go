@@ -20,7 +20,12 @@ type User struct {
 	Password    string      `json:"-" bson:"password"`
 	CreatedDate time.Time   `json:"created_date" bson:"created_date"`
 	LastUpdate  time.Time   `json:"last_update" bson:"last_update"`
-	Tokens      []string    `json:"tokens" bson:"tokens"`
+	Tokens      []Token     `json:"tokens" bson:"tokens"`
+}
+
+type Token struct {
+	Token       string    `json:"token" bson:"token"`
+	CreatedDate time.Time `json:"created_date" bson:"created_date"`
 }
 
 func getUsers(w http.ResponseWriter, req *http.Request) {
@@ -82,7 +87,8 @@ func signup(w http.ResponseWriter, req *http.Request) {
 	user.Password = string(bs)
 	user.CreatedDate = t
 	user.LastUpdate = t
-	user.Tokens = append(user.Tokens, token)
+	userTokenObject := Token{token, t}
+	user.Tokens = append(user.Tokens, userTokenObject)
 	_, err = coll.InsertOne(req.Context(), &user)
 	if handleResponseError(err, w, http.StatusInternalServerError) {
 		return
