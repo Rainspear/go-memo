@@ -1,11 +1,10 @@
 <a 
-class="row list-group-item" 
-style="cursor: pointer;"
+class="Memo-Item cursor-pointer flex flex-row justify-between hover:no-underline no-underline border p-4" 
 >
-    <div class="pull-left">
-      <p>{{memo?.question}}: <strong>{{memo?.content}}</strong></p>
+    <div class="flex justify-center items-center">
+      <div>{{memo?.question}}: <strong>{{memo?.content}}</strong></div>
     </div>
-    <div class="pull-right">
+    <div class="">
       <button class="btn btn-danger" (click)="onClickDeleteMemo()">Delete</button>
     </div>
 </a>

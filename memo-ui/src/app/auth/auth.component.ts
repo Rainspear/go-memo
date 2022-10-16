@@ -11,7 +11,7 @@ export class AuthComponent implements OnInit {
 
   route: string = 'signup';
   user?: User
-  statusAction: boolean | null = null;
+  error?: string = ""
   constructor(private apiSerivce: ApiSerivce) { }
 
   onClickCreateUser(user: ParamsPostUser) {
@@ -19,17 +19,17 @@ export class AuthComponent implements OnInit {
   }
 
   createUser(user: ParamsPostUser): void {
-    this.statusAction = false;
+    this.error = "";
     this.apiSerivce.createUser(user).subscribe((res: any) => {
+      console.log("res", res)
       if (res.data) {
         console.log(res.data)
-        this.statusAction = true;
         return;
       }
-      this.statusAction = false;
       return;
+    }, error => {
+      this.error = error?.error?.error || error.message
     })
-    console.log("After created", this.statusAction)
   }
 
   ngOnInit(): void {

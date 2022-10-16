@@ -1,4 +1,4 @@
-import { Output, Component, OnInit, EventEmitter } from '@angular/core';
+import { Input, Output, Component, OnInit, EventEmitter } from '@angular/core';
 import { ParamsPostUser } from 'src/app/models/user.model';
 
 @Component({
@@ -8,6 +8,8 @@ import { ParamsPostUser } from 'src/app/models/user.model';
 })
 export class SignupComponent implements OnInit {
   @Output() clickCreateUser = new EventEmitter<ParamsPostUser>();
+  @Input() error ?: string = "";
+
   constructor() { }
   user: ParamsPostUser = {email : '', password : '', name : ''};
     ngOnInit(): void {

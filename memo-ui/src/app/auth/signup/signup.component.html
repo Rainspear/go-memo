@@ -2,54 +2,39 @@
   <div class="Left w-2/5 p-4">
     <h3 class="p-4 mt-0 font-medium text-center">Register to use</h3>
     <div class="p-4">Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-       Lorem Ipsum has been the industry's standard dummy text ever since the 1500s
+      Lorem Ipsum has been the industry's standard dummy text ever since the 1500s
     </div>
     <div class="p-4">Lorem Ipsum is simply dummy text of the printing and typesetting industry.
       Lorem Ipsum has been the industry's standard dummy text ever since the 1500s
-   </div>
-   <div class="p-4">Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-    Lorem Ipsum has been the industry's standard dummy text ever since the 1500s
- </div>
+    </div>
+    <div class="p-4">Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+      Lorem Ipsum has been the industry's standard dummy text ever since the 1500s
+    </div>
   </div>
 
   <div class="Right w-3/5 p-4">
 
     <div>
       <label class="">Email</label>
-      <input 
-      [(ngModel)]="user.email" 
-      class="border w-full py-4 px-2 outline-0" 
-      id="email" 
-      name="email" 
-      type="text" 
-      placeholder="" />
+      <input [(ngModel)]="user.email" class="border w-full py-4 px-2 outline-0" id="email" name="email" type="text"
+        placeholder="" />
     </div>
     <hr />
     <div>
       <label class="">Password</label>
-      <input 
-      [(ngModel)]="user.password"
-      class="border w-full py-4 px-2 outline-0" 
-      type="password" 
-      id="password" 
-      name="password" 
-      type="text" 
-      placeholder="" />
+      <input [(ngModel)]="user.password" class="border w-full py-4 px-2 outline-0" type="password" id="password"
+        name="password" type="text" placeholder="" />
     </div>
     <hr />
     <div>
       <label class="">Full name</label>
-      <input 
-      [(ngModel)]="user.name"
-      class="border w-full py-4 px-2 outline-0" 
-      id="fullname" 
-      name="fullname" 
-      type="text" 
-      placeholder="" />
+      <input [(ngModel)]="user.name" class="border w-full py-4 px-2 outline-0" id="fullname" name="fullname" type="text"
+        placeholder="" />
     </div>
     <hr />
-    <div>
+    <div class="flex justify-between">
       <button class="bg-sky-500 rounded-md text-white border-r p-4" (click)="onClickCreateUser()">Submit</button>
+      <span [class.hidden]="!error" class="Error font-bold flex justify-center items-center text-red-500">{{error}}</span>
     </div>
   </div>
 </div>

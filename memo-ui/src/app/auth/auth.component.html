@@ -1,5 +1,10 @@
-
-<div [ngSwitch]="route">
-  <app-signup *ngSwitchCase="'signup'" (clickCreateUser)="onClickCreateUser($event)"></app-signup>
-  <app-signin *ngSwitchCase="'signin'"></app-signin>
+<div class="Auth w-4/5 mx-auto my-0 p-4">
+  <app-share-header></app-share-header>
+  <div [ngSwitch]="route">
+    <app-signup *ngSwitchCase="'signup'" 
+    (clickCreateUser)="onClickCreateUser($event)"
+    [error]="error"
+    ></app-signup>
+    <app-signin *ngSwitchCase="'signin'"></app-signin>
+  </div>
 </div>

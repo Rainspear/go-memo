@@ -21,6 +21,8 @@ import { DropdownDirective } from './directives/dropdown.directive';
 import { AuthComponent } from './auth/auth.component';
 import { SigninComponent } from './auth/signin/signin.component';
 import { SignupComponent } from './auth/signup/signup.component';
+import { HomeComponent } from './home/home.component';
+import { ShareHeaderComponent } from './share/share-header/share-header.component';
 
 @NgModule({
   declarations: [
@@ -41,6 +43,8 @@ import { SignupComponent } from './auth/signup/signup.component';
     AuthComponent,
     SigninComponent,
     SignupComponent,
+    HomeComponent,
+    ShareHeaderComponent,
   ],
   imports: [
     BrowserModule,
