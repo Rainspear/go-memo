@@ -10,15 +10,9 @@ import (
 )
 
 type UserClaims struct {
+	SessionID int64  `json:"session_id bson:"session_id"`
+	Email     string `json:"email bson:"email"`
 	jwt.StandardClaims
-	SessionID int64
-}
-
-type Token struct {
-	Email     string        `json:"email" bson:"email"`
-	Name      string        `json:"name" bson:"name"`
-	CreatedAt time.Time     `json:"created_at" bson:"created_at"`
-	Duration  time.Duration `json:"duration" bson:"duration"`
 }
 
 func (u *UserClaims) Valid() error {
@@ -59,17 +53,6 @@ func parseToken(signedToken string) (*UserClaims, error) {
 	return t.Claims.(*UserClaims), nil
 }
 
-func generateJwtTokenAndSign(data Token) string {
-	var jwtData jwt.MapClaims
-	structToMap(data, jwtData) // Convert to jwt.MapClaims
-	token, err := jwt.NewWithClaims(jwt.SigningMethodES256, jwtData).SignedString(jwtKey)
-	if err != nil {
-		fmt.Println("Can not create jwt: ", err)
-		return ""
-	}
-	return token
-}
-
 func signMessage(msg []byte) ([]byte, error) {
 	var key []byte
 	for i := 1; i < 65; i++ {
@@ -78,7 +61,7 @@ func signMessage(msg []byte) ([]byte, error) {
 	h := hmac.New(sha512.New, key)
 	_, err := h.Write(msg)
 	if err != nil {
-		fmt.Println("Error when sigining message", err)
+		fmt.Println("error when sigining message", err)
 	}
 	return h.Sum(nil), nil
 }
@@ -87,7 +70,7 @@ func checkSign(msg, sig []byte) (bool, error) {
 	newSig, err := signMessage(msg)
 
 	if err != nil {
-		return false, fmt.Errorf("Errot when checkSign to get signature: %w", err)
+		return false, fmt.Errorf("errot when checkSign to get signature: %w", err)
 	}
 
 	same := hmac.Equal(sig, newSig)
