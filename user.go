@@ -84,10 +84,10 @@ func signup(w http.ResponseWriter, req *http.Request) {
 	if handleResponseError(err, w, http.StatusInternalServerError) {
 		return
 	}
+	userTokenObject := Token{token, t}
 	user.Password = string(bs)
 	user.CreatedDate = t
 	user.LastUpdate = t
-	userTokenObject := Token{token, t}
 	user.Tokens = append(user.Tokens, userTokenObject)
 	_, err = coll.InsertOne(req.Context(), &user)
 	if handleResponseError(err, w, http.StatusInternalServerError) {
