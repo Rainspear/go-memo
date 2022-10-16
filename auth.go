@@ -10,7 +10,7 @@ import (
 )
 
 type UserClaims struct {
-	SessionID int64  `json:"session_id bson:"session_id"`
+	SessionID string `json:"session_id bson:"session_id"`
 	Email     string `json:"email bson:"email"`
 	jwt.StandardClaims
 }
@@ -19,7 +19,7 @@ func (u *UserClaims) Valid() error {
 	if u.VerifyExpiresAt(time.Now().Unix(), true) {
 		return fmt.Errorf("token has expired")
 	}
-	if u.SessionID == 0 {
+	if u.SessionID == "" {
 		return fmt.Errorf("invalid session ID")
 	}
 	return nil

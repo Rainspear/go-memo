@@ -7,9 +7,9 @@ import (
 	"time"
 
 	"github.com/golang-jwt/jwt"
+	"github.com/google/uuid"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
-	"go.mongodb.org/mongo-driver/internal/uuid"
 	"go.mongodb.org/mongo-driver/mongo"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -83,7 +83,7 @@ func signup(w http.ResponseWriter, req *http.Request) {
 	if handleResponseError(err, w, http.StatusInternalServerError) {
 		return
 	}
-	u := UserClaims{uuid.New(), result.InsertedID.(primitive.ObjectID).Hex(), jwt.StandardClaims{}}
+	u := UserClaims{uuid.New().String(), result.InsertedID.(primitive.ObjectID).Hex(), jwt.StandardClaims{}}
 	token, err := createToken(&u)
 	if err != nil {
 		handleResponseError(err, w, http.StatusInternalServerError)
