@@ -2,14 +2,12 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"time"
 
 	"github.com/golang-jwt/jwt"
 	"github.com/google/uuid"
 	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -22,7 +20,7 @@ type User struct {
 	Password    string      `json:"-" bson:"password"`
 	CreatedDate time.Time   `json:"created_date" bson:"created_date"`
 	LastUpdate  time.Time   `json:"last_update" bson:"last_update"`
-	Tokens      []string    `json:"tokens,omitempty" bson:"tokens,omitempty"`
+	Tokens      []string    `json:"tokens" bson:"tokens"`
 }
 
 func getUsers(w http.ResponseWriter, req *http.Request) {
@@ -71,29 +69,28 @@ func signup(w http.ResponseWriter, req *http.Request) {
 	err = coll.FindOne(req.Context(), bson.D{{Key: "email", Value: user.Email}}).Decode(&existedUser)
 	if existedUser.Email != "" && err == nil { // existed user in database
 		w.WriteHeader(http.StatusBadRequest)
-		json.NewEncoder(w).Encode(ErrorResponse{"user is already existed " + err.Error(), http.StatusBadRequest})
+		json.NewEncoder(w).Encode(ErrorResponse{"user is already existed", http.StatusBadRequest})
 		return
 	}
 	// create data to save
 	t := time.Now()
-	user.Password = string(bs)
-	user.CreatedDate = t
-	user.LastUpdate = t
-	result, err := coll.InsertOne(req.Context(), &user)
+	u := UserClaims{uuid.New().String(), user.Email, jwt.StandardClaims{}}
+	token, err := createToken(&u)
 	if handleResponseError(err, w, http.StatusInternalServerError) {
 		return
 	}
-	u := UserClaims{uuid.New().String(), result.InsertedID.(primitive.ObjectID).Hex(), jwt.StandardClaims{}}
-	token, err := createToken(&u)
-	if err != nil {
-		handleResponseError(err, w, http.StatusInternalServerError)
+	user.Password = string(bs)
+	user.CreatedDate = t
+	user.LastUpdate = t
+	user.Tokens = append(user.Tokens, token)
+	_, err = coll.InsertOne(req.Context(), &user)
+	if handleResponseError(err, w, http.StatusInternalServerError) {
+		return
 	}
 	http.SetCookie(w, &http.Cookie{
 		Name:  "SessionID",
 		Value: token,
 	})
-	// create jwt token and return response
-	fmt.Println("token: ", token)
 	handleResponseToken(token, w, http.StatusCreated)
 }
 

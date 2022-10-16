@@ -15,7 +15,7 @@ import (
 var client *mongo.Client
 var uri string
 var database string
-var jwtKey string
+var jwtKey []byte
 
 const (
 	MEMO_COLLECTION  string = "memos"
@@ -28,14 +28,14 @@ func init() {
 	var err error
 	database = getEnvVariable("MONGODB_DATABASE")
 	uri = getEnvVariable("MONGODB_URI")
-	jwtKey := getEnvVariable("JWT_KEY")
+	jwtKey := []byte(getEnvVariable("JWT_KEY"))
 	if database == "" {
 		log.Fatal("You must set your 'MONGODB_DATABASE' environmental variable. See\n\t https://www.mongodb.com/docs/drivers/go/current/usage-examples/#environment-variable")
 	}
 	if uri == "" {
 		log.Fatal("You must set your 'MONGODB_URI' environmental variable. See\n\t https://www.mongodb.com/docs/drivers/go/current/usage-examples/#environment-variable")
 	}
-	if jwtKey == "" {
+	if string(jwtKey) == "" {
 		log.Fatal("You must set your 'JWT_KEY' environmental variable")
 	}
 	client, err = mongo.Connect(context.TODO(), options.Client().ApplyURI(uri))
