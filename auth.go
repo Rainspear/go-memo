@@ -10,8 +10,8 @@ import (
 )
 
 type UserClaims struct {
-	SessionID string `json:"session_id bson:"session_id"`
-	Email     string `json:"email bson:"email"`
+	SessionID string `json:"session_id" bson:"session_id"`
+	Email     string `json:"email" bson:"email"`
 	jwt.StandardClaims
 }
 
