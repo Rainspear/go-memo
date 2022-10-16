@@ -40,6 +40,25 @@ func createToken(u *UserClaims) (string, error) {
 	return signedToken, nil
 }
 
+func parseToken(signedToken string) (*UserClaims, error) {
+	var u UserClaims
+	t, err := jwt.ParseWithClaims(signedToken, &u, func(t *jwt.Token) (v interface{}, err error) {
+		if t.Method.Alg() == jwt.SigningMethodHS512.Alg() {
+			return nil, fmt.Errorf("invalid signing algorithm")
+		}
+		return jwtKey, nil
+	})
+	if err != nil {
+		return nil, fmt.Errorf("errir in parsetoken, in verifying: %w", err)
+	}
+
+	if !t.Valid {
+		return nil, fmt.Errorf("error in parseToken, token is not valid")
+	}
+
+	return t.Claims.(*UserClaims), nil
+}
+
 func generateJwtTokenAndSign(data Token) string {
 	var jwtData jwt.MapClaims
 	structToMap(data, jwtData) // Convert to jwt.MapClaims
