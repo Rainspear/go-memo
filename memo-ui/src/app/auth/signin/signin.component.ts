@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { ParamsLoginUser } from 'src/app/models/user.model';
 import { ApiService } from 'src/app/services/api.service';
 import { AuthUserService } from 'src/app/services/auth-user.service';
@@ -13,18 +14,16 @@ export class SigninComponent implements OnInit {
 
   @Input() error ?: string = "";
 
-  constructor(private apiService : ApiService, private authService : AuthUserService) { }
+  constructor(private apiService : ApiService, private authService : AuthUserService, private router: Router) { }
 
   onClickLogin () {
     this.error = "";
     this.apiService.login(this.user).subscribe((res: any) => {
       console.log("res", res)
-      if (res.data) {
-        console.log(res.data)
-        this.authService.onGetUser(res.data)
-        return;
+      if (res.token) {
+        localStorage.setItem('token', res.token)
+        this.router.navigate(['/memo']);
       }
-      return;
     }, error => {
       this.error = error?.error?.error || error.message
     })

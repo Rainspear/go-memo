@@ -30,12 +30,11 @@ export class SignupComponent implements OnInit {
     this.error = "";
     this.apiSerivce.createUser(user).subscribe((res: any) => {
       console.log("res", res)
-      if (res.data) {
-        console.log(res.data)
-        this.authService.onGetUser(res.data)
-        return;
+      if (res.token) {
+        console.log(res)
+        localStorage.setItem('token', res.token)
+        this.router.navigate(['/memo']);
       }
-      return;
     }, error => {
       this.error = error?.error?.error || error.message
     })

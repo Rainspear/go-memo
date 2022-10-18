@@ -4,39 +4,41 @@
       <span class="icon-bar" *ngFor="let iconBar of [1, 2, 3]"></span>
     </button>
     <div routerLink="/" class="text-black font-bold cursor-pointer pr-4 py-8 inline-block" routerLinkActive="Active"
-      [routerLinkActiveOptions]="{exact: true}"
-      [queryParams]="{test: 'test'}"
-      >Memorization</div>
+      [routerLinkActiveOptions]="{exact: true}" [queryParams]="{test: 'test'}">Memorization</div>
   </div>
   <div class="Header-Link w-full flex flex-row justify-between items-center">
     <ul class="flex flex-row m-0">
       <li class="text-black font-bold h-full px-4 py-8 cursor-pointer" routerLinkActive="Active"
-        [routerLinkActiveOptions]="{exact: true}" routerLink="/memo" (click)="onClickSelectNav('memo')">
+        [routerLinkActiveOptions]="{exact: true}" routerLink="/memo">
         Memo</li>
       <li class="text-black font-bold h-full px-4 py-8 cursor-pointer" routerLinkActive="Active"
-        [routerLinkActiveOptions]="{exact: true}" routerLink="/topic" (click)="onClickSelectNav('topic')">Topic</li>
+        [routerLinkActiveOptions]="{exact: true}" routerLink="/topic">Topic</li>
     </ul>
     <ul class="flex flex-row m-0">
-      <li *ngIf="user; else elseUser" class="flex flex-row items-center text-black font-bold px-4 cursor-pointer">
-        <img *ngIf="user.avatar; else elseAvatar" class="rounded-full w-12 aspect-square" [src]="user.avatar" [alt]="user.name" />
-        <ng-template #elseAvatar>
-          <img class="rounded-full w-12 h-12 bg-sky-800" />
-        </ng-template>
-        <span class="m-4">{{user.name}}</span>
-      </li>
+      <ng-template [ngIf]="user" [ngIfElse]="elseUser">
+        <li *ngIf="user; else elseUser" class="flex flex-row items-center text-black font-bold px-4 cursor-pointer">
+          <img *ngIf="user.avatar; else elseAvatar" class="rounded-full w-12 aspect-square" [src]="user.avatar"
+            [alt]="user.name" />
+          <ng-template #elseAvatar>
+            <img class="rounded-full w-12 h-12 bg-sky-800" />
+          </ng-template>
+          <span class="m-4">{{user.name}}</span>
+        </li>
+        <li class="text-black font-bold h-full px-4 py-8 cursor-pointer" (click)="onClickLogout()">Logout</li>
+      </ng-template>
       <ng-template #elseUser>
         <li class="text-black font-bold h-full px-4 py-8 cursor-pointer" routerLink="/auth/signup"
-          (click)="onClickSelectNav('auth')" routerLinkActive="Active" [routerLinkActiveOptions]="{exact: true}">
+          routerLinkActive="Active" [routerLinkActiveOptions]="{exact: true}">
           Register
         </li>
+        <li class="dropdown text-black font-bold h-full px-4 py-8 cursor-pointer" appDropdown>
+          <span class="dropdown-toggle" role="button">Manage</span>
+          <ul class="dropdown-menu right-0">
+            <li><a href="#">Save Data</a></li>
+            <li><a href="#">Fetch Data</a></li>
+          </ul>
+        </li>
       </ng-template>
-      <li class="dropdown text-black font-bold h-full px-4 py-8 cursor-pointer" appDropdown>
-        <span class="dropdown-toggle" role="button">Manage</span>
-        <ul class="dropdown-menu right-0">
-          <li><a href="#">Save Data</a></li>
-          <li><a href="#">Fetch Data</a></li>
-        </ul>
-      </li>
     </ul>
   </div>
 </nav>

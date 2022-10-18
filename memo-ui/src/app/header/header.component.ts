@@ -1,4 +1,5 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
+import { Observable, Subscription } from 'rxjs';
 import { User } from '../models/user.model';
 import { ApiService } from '../services/api.service';
 import { AuthUserService } from '../services/auth-user.service';
@@ -8,32 +9,36 @@ import { AuthUserService } from '../services/auth-user.service';
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent implements OnInit, OnDestroy {
   collapsed: boolean = true;
-  user?: User
+  user?: User;
+  userSubscription?: Subscription;
   @Output() featureSelected = new EventEmitter<string>();
-  constructor(private authService : AuthUserService, private apiService: ApiService) {
-    this.authService.logged.subscribe(user => {
+  constructor(private authService: AuthUserService, private apiService: ApiService) {
+    this.userSubscription = this.authService.loggedUser.subscribe(user => {
       this.user = user
     })
   }
 
-  onClickSelectNav(route: string) {
-    this.featureSelected.emit(route);
+  // onClickSelectNav(route: string) {
+  // this.featureSelected.emit(route);
+  // }
+
+  onClickLogout() {
+    this.apiService.logOutUser().subscribe(user => {})
   }
 
   ngOnInit(): void {
-    this.apiService.currentUser().subscribe((res: any) => {
-      console.log("res", res)
-      if (res.data) {
-        console.log(res.data)
-        this.authService.onGetUser(res.data)
-        return;
-      }
-      return;
-    }, error => {
-      // this.error = error?.error?.error || error.message
-    })
+    if (!this.user)
+      this.apiService.currentUser().subscribe((res: any) => {
+        if (res.data) {
+          this.user = res.data;
+          this.authService.loggedUser.next(res.data)
+        }
+      })
   }
 
+  ngOnDestroy(): void {
+    if (this.userSubscription) this.userSubscription.unsubscribe();
+  }
 }

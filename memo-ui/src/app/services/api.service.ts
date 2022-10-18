@@ -46,13 +46,16 @@ export class ApiService implements OnInit {
     return this.httpClient.get<ResponseAPI<Topic[]>>(`${apiUrl}/topics/${id}`).pipe()
   }
 
-
   createUser(user: ParamsCreateUser): Observable<ResponseAPI<User>> {
     return this.httpClient.post<ResponseAPI<User>>(`${apiUrl}/signup`, user).pipe()
   }
 
   currentUser(): Observable<ResponseAPI<User>> {
     return this.httpClient.get<ResponseAPI<User>>(`${apiUrl}/current-user`).pipe()
+  }
+
+  logOutUser() : Observable<ResponseAPI<string>> {
+    return this.httpClient.get<ResponseAPI<string>>(`${apiUrl}/signout`).pipe()
   }
 
   login(user: ParamsLoginUser): Observable<ResponseAPI<User>> {

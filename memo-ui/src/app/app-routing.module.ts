@@ -8,6 +8,7 @@ import { SigninComponent } from './auth/signin/signin.component';
 import { SignupComponent } from './auth/signup/signup.component';
 import { MemoDetailComponent } from './memos/memo-detail/memo-detail.component';
 import { TopicDetailComponent } from './topics/topic-detail/topic-detail.component';
+import { AuthGuardService } from './services/auth-guard.service';
 
 const routes: Routes = [
   {
@@ -25,6 +26,7 @@ const routes: Routes = [
   {
     path: 'memo',
     component: MemosComponent,
+    canActivate: [AuthGuardService],
     children: [
       {
         path: ':id',

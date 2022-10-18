@@ -68,7 +68,7 @@ func main() {
 	r.Handle("/favicon.ico", http.NotFoundHandler())
 	fmt.Printf("Starting server at port 8089 \r\n")
 	// cors config
-	headersOk := handlers.AllowedHeaders([]string{"X-Requested-With", "Content-Type"})
+	headersOk := handlers.AllowedHeaders([]string{X_REQUEST_HEADER_KEY, CONTENT_HEADER_KEY, AUTH_HEADER_KEY})
 	originsOk := handlers.AllowedOrigins([]string{getEnvVariable("ORIGIN_ALLOWED")})
 	methodsOk := handlers.AllowedMethods([]string{"GET", "HEAD", "POST", "PUT", "DELETE", "OPTIONS"})
 	log.Fatal((http.ListenAndServe(":8089", handlers.CORS(originsOk, headersOk, methodsOk)(r))))

@@ -28,14 +28,16 @@ type DeletedResponse struct {
 }
 
 type TokenResponse struct {
-	Token      string `json:"token" bson:"token"`
-	StatusCode int    `json:"status_code" bson:"status_code"`
+	Token      string      `json:"token" bson:"token"`
+	Data       interface{} `json:"data" bson:"data"`
+	StatusCode int         `json:"status_code" bson:"status_code"`
 }
 
-func handleResponseToken(token string, w http.ResponseWriter, statusCode int) {
+func handleResponseToken(token string, data interface{}, w http.ResponseWriter, statusCode int) {
 	w.WriteHeader(statusCode)
 	json.NewEncoder(w).Encode(TokenResponse{
 		Token:      token,
+		Data:       data,
 		StatusCode: statusCode,
 	})
 }

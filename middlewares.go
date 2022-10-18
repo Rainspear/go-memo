@@ -2,9 +2,13 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"net/http"
+	"strings"
 	"time"
+
+	"go.mongodb.org/mongo-driver/bson"
 )
 
 func addConfigMiddleware(f http.HandlerFunc) func(http.ResponseWriter, *http.Request) {
@@ -18,17 +22,35 @@ func addConfigMiddleware(f http.HandlerFunc) func(http.ResponseWriter, *http.Req
 
 func authorizeUser(f http.HandlerFunc) func(http.ResponseWriter, *http.Request) {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		c, err := r.Cookie(SESSION_COOKIE_KEY)
-		if err != nil {
-			handleResponseError(err, w, http.StatusUnauthorized)
+		bearer := r.Header.Get(AUTH_HEADER_KEY)
+		if bearer == "" {
+			handleResponseError(fmt.Errorf("token was empty"), w, http.StatusBadRequest)
 			return
 		}
-		userClaim, err := parseToken(c.Value)
+		token := strings.Split(bearer, " ")[1]
+		if token == "" {
+			handleResponseError(fmt.Errorf("invalid token"), w, http.StatusBadRequest)
+			return
+		}
+		userClaim, err := parseToken(token)
 		if err != nil {
 			handleResponseError(err, w, http.StatusInternalServerError)
 			return
 		}
-		ctx := context.WithValue(r.Context(), USER_CONTEXT_KEY, *userClaim)
+		filter := bson.D{
+			{Key: "email", Value: userClaim.Email},
+			{Key: "tokens", Value: bson.D{{Key: "$elemMatch", Value: bson.D{{Key: "token", Value: token}}}}},
+		}
+		var u UserResponse
+		err = client.Database(database).Collection(USER_COLLECTION).FindOne(r.Context(), filter).Decode(&u)
+		if handleResponseError(err, w, http.StatusUnauthorized) {
+			return
+		}
+		if u.Email == "" {
+			handleResponseError(fmt.Errorf("invalid logged user"), w, http.StatusUnauthorized)
+			return
+		}
+		ctx := context.WithValue(r.Context(), USER_CONTEXT_KEY, u)
 		f(w, r.WithContext(ctx))
 	})
 }

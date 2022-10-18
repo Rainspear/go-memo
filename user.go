@@ -4,10 +4,12 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/golang-jwt/jwt"
 	"github.com/google/uuid"
+	"github.com/jinzhu/copier"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"golang.org/x/crypto/bcrypt"
@@ -25,9 +27,11 @@ type User struct {
 }
 
 type UserResponse struct {
-	Name   string `json:"name" bson:"name"`
-	Avatar string `json:"avatar," bson:"avatar,"`
-	Email  string `json:"email" bson:"email"`
+	Name        string    `json:"name" bson:"name"`
+	Avatar      string    `json:"avatar," bson:"avatar,"`
+	Email       string    `json:"email" bson:"email"`
+	CreatedDate time.Time `json:"created_date" bson:"created_date"`
+	LastUpdate  time.Time `json:"last_update" bson:"last_update"`
 }
 
 type Token struct {
@@ -52,14 +56,8 @@ func getUsers(w http.ResponseWriter, req *http.Request) {
 }
 
 func getCurrentUser(w http.ResponseWriter, req *http.Request) {
-	loggedUser := (req.Context().Value(USER_CONTEXT_KEY)).(UserClaims)
-	coll := client.Database(database).Collection(USER_COLLECTION)
-	var u UserResponse
-	err := coll.FindOne(req.Context(), bson.D{{Key: "email", Value: loggedUser.Email}}).Decode(&u)
-	if handleResponseError(err, w, http.StatusInternalServerError) {
-		return
-	}
-	handleResponseSuccess(u, w, http.StatusOK)
+	loggedUser := (req.Context().Value(USER_CONTEXT_KEY)).(UserResponse)
+	handleResponseSuccess(loggedUser, w, http.StatusOK)
 }
 
 func updateUser(w http.ResponseWriter, req *http.Request) {
@@ -71,48 +69,46 @@ func deleteUser(w http.ResponseWriter, req *http.Request) {
 }
 
 func signin(w http.ResponseWriter, req *http.Request) {
-	var user User
-	err := json.NewDecoder(req.Body).Decode(&user)
+	var u User
+	err := json.NewDecoder(req.Body).Decode(&u)
 	if handleResponseError(err, w, http.StatusBadRequest) {
 		return
 	}
 	// validate input
-	if user.Email == "" || user.Password == "" {
+	if u.Email == "" || u.Password == "" {
 		handleResponseError(fmt.Errorf("you must specify email and password"), w, http.StatusBadRequest)
 		return
 	}
 	// normailize data
 	coll := client.Database(database).Collection(USER_COLLECTION)
-	filter := bson.D{{Key: "email", Value: user.Email}}
-	var u User
-	err = coll.FindOne(req.Context(), filter).Decode(&u)
+	filter := bson.D{{Key: "email", Value: u.Email}}
+	var user User
+	err = coll.FindOne(req.Context(), filter).Decode(&user)
 	if handleResponseError(err, w, http.StatusBadRequest) {
 		return
 	}
-	err = bcrypt.CompareHashAndPassword([]byte(u.Password), []byte(user.Password))
+	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(u.Password))
 	if handleResponseError(err, w, http.StatusBadRequest) {
 		return
 	}
 	// create token
-	userClaims := UserClaims{uuid.New().String(), user.Email, jwt.StandardClaims{}}
+	userClaims := UserClaims{uuid.New().String(), user.Email, jwt.StandardClaims{ExpiresAt: time.Now().Add(TOKEN_EXPIRATION_TIME).Unix()}}
 	token, err := createToken(&userClaims)
 	if handleResponseError(err, w, http.StatusInternalServerError) {
 		return
 	}
 	tokenObject := Token{token, time.Now()}
-	u.Tokens = append(u.Tokens, tokenObject)
-	_, err = coll.UpdateOne(req.Context(), bson.D{{Key: "email", Value: u.Email}},
+	user.Tokens = append(user.Tokens, tokenObject)
+	_, err = coll.UpdateOne(req.Context(), bson.D{{Key: "email", Value: user.Email}},
 		bson.D{
 			{Key: "$set", Value: bson.D{
-				{Key: "tokens", Value: u.Tokens}}}})
+				{Key: "tokens", Value: user.Tokens}}}})
 	if handleResponseError(err, w, http.StatusInternalServerError) {
 		return
 	}
-	http.SetCookie(w, &http.Cookie{
-		Name:  SESSION_COOKIE_KEY,
-		Value: token,
-	})
-	handleResponseSuccess(UserResponse{Name: u.Name, Avatar: u.Avatar, Email: u.Email}, w, http.StatusOK)
+	var userResponse UserResponse
+	copier.Copy(&userResponse, &user)
+	handleResponseToken(token, userResponse, w, http.StatusOK)
 }
 
 func signup(w http.ResponseWriter, req *http.Request) {
@@ -134,7 +130,7 @@ func signup(w http.ResponseWriter, req *http.Request) {
 	}
 	// create data to save
 	t := time.Now()
-	u := UserClaims{uuid.New().String(), user.Email, jwt.StandardClaims{}}
+	u := UserClaims{uuid.New().String(), user.Email, jwt.StandardClaims{ExpiresAt: time.Now().Add(TOKEN_EXPIRATION_TIME).Unix()}}
 	token, err := createToken(&u)
 	if handleResponseError(err, w, http.StatusInternalServerError) {
 		return
@@ -148,20 +144,27 @@ func signup(w http.ResponseWriter, req *http.Request) {
 	if handleResponseError(err, w, http.StatusInternalServerError) {
 		return
 	}
-	http.SetCookie(w, &http.Cookie{
-		Name:  SESSION_COOKIE_KEY,
-		Value: token,
-	})
-	handleResponseSuccess(UserResponse{Name: user.Name, Avatar: user.Avatar, Email: user.Email}, w, http.StatusCreated)
+	var userResponse UserResponse
+	copier.Copy(&userResponse, &user)
+	handleResponseToken(token, userResponse, w, http.StatusOK)
 }
 
 func signout(w http.ResponseWriter, req *http.Request) {
-	c, err := req.Cookie(SESSION_COOKIE_KEY)
-	if err != nil {
-		handleResponseError(err, w, http.StatusBadRequest)
+	// c, err := req.Cookie(SESSION_COOKIE_KEY)
+	// if err != nil {
+	// 	handleResponseError(err, w, http.StatusBadRequest)
+	// 	return
+	// }
+	// c = &http.Cookie{Name: SESSION_COOKIE_KEY, Value: "", MaxAge: -1}
+	// http.SetCookie(w, c)
+	loggedUser := (req.Context().Value(USER_CONTEXT_KEY)).(UserResponse)
+	token := strings.Split(req.Header.Get(AUTH_HEADER_KEY), " ")[1]
+	fmt.Println("token: ", token)
+	filter := bson.D{{Key: "email", Value: loggedUser.Email}}
+	update := bson.D{{Key: "$pull", Value: bson.D{{Key: "tokens", Value: bson.D{{Key: "$elemMatch", Value: bson.D{{Key: "token", Value: token}}}}}}}}
+	result, err := client.Database(database).Collection(USER_COLLECTION).UpdateOne(req.Context(), filter, update)
+	if handleResponseError(err, w, http.StatusInternalServerError) {
 		return
 	}
-	c = &http.Cookie{Name: SESSION_COOKIE_KEY, Value: "", MaxAge: -1}
-	http.SetCookie(w, c)
-	handleResponseSuccess("logout successfully", w, http.StatusOK)
+	handleResponseSuccess(result, w, http.StatusOK)
 }
