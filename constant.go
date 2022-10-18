@@ -3,6 +3,8 @@ package main
 import "time"
 
 // colections name in mongodb
+type ColectionKey string
+
 const (
 	MEMO_COLLECTION  string = "memos"
 	USER_COLLECTION  string = "users"
@@ -16,13 +18,15 @@ const (
 )
 
 // context key
+type ContextKey string
+
 const (
-	USER_CONTEXT_KEY string = "user"
+	USER_CONTEXT_KEY ContextKey = "user"
 )
 
 // expire time
 const (
-	TOKEN_EXPIRATION_TIME time.Duration = (time.Hour * 24 * 365 * 100) // ~ 100 years
+	TOKEN_EXPIRATION_TIME time.Duration = (time.Hour * 365 * 24 * 100) // ~ 100 years
 )
 
 // request and response keys

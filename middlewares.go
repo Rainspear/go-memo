@@ -24,10 +24,15 @@ func authorizeUser(f http.HandlerFunc) func(http.ResponseWriter, *http.Request) 
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		bearer := r.Header.Get(AUTH_HEADER_KEY)
 		if bearer == "" {
-			handleResponseError(fmt.Errorf("token was empty"), w, http.StatusBadRequest)
+			handleResponseError(fmt.Errorf("header was empty"), w, http.StatusBadRequest)
 			return
 		}
-		token := strings.Split(bearer, " ")[1]
+		s := strings.Split(bearer, " ")
+		if len(s) < 2 {
+			handleResponseError(fmt.Errorf("not right to access"), w, http.StatusUnauthorized)
+			return
+		}
+		token := s[1]
 		if token == "" {
 			handleResponseError(fmt.Errorf("invalid token"), w, http.StatusBadRequest)
 			return

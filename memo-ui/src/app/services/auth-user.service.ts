@@ -25,6 +25,7 @@ export class AuthUserService implements OnDestroy {
               observer.complete();
             } else {
               this.router.navigate(['/auth', "signin"])
+              localStorage.setItem('token', '')
               observer.next(false);
               observer.complete();
             }
@@ -33,6 +34,7 @@ export class AuthUserService implements OnDestroy {
             this.router.navigate(['/auth', "signin"])
             observer.next(false);
             observer.complete();
+            localStorage.setItem('token', '')
           })
         } else {
           observer.next(true)

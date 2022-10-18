@@ -55,7 +55,7 @@ export class ApiService implements OnInit {
   }
 
   logOutUser() : Observable<ResponseAPI<string>> {
-    return this.httpClient.get<ResponseAPI<string>>(`${apiUrl}/signout`).pipe()
+    return this.httpClient.post<ResponseAPI<string>>(`${apiUrl}/signout`, {}).pipe()
   }
 
   login(user: ParamsLoginUser): Observable<ResponseAPI<User>> {

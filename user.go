@@ -92,7 +92,7 @@ func signin(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 	// create token
-	userClaims := UserClaims{uuid.New().String(), user.Email, jwt.StandardClaims{ExpiresAt: time.Now().Add(TOKEN_EXPIRATION_TIME).Unix()}}
+	userClaims := UserClaims{uuid.New().String(), user.Email, jwt.StandardClaims{}}
 	token, err := createToken(&userClaims)
 	if handleResponseError(err, w, http.StatusInternalServerError) {
 		return
@@ -130,7 +130,7 @@ func signup(w http.ResponseWriter, req *http.Request) {
 	}
 	// create data to save
 	t := time.Now()
-	u := UserClaims{uuid.New().String(), user.Email, jwt.StandardClaims{ExpiresAt: time.Now().Add(TOKEN_EXPIRATION_TIME).Unix()}}
+	u := UserClaims{uuid.New().String(), user.Email, jwt.StandardClaims{}}
 	token, err := createToken(&u)
 	if handleResponseError(err, w, http.StatusInternalServerError) {
 		return
@@ -150,13 +150,6 @@ func signup(w http.ResponseWriter, req *http.Request) {
 }
 
 func signout(w http.ResponseWriter, req *http.Request) {
-	// c, err := req.Cookie(SESSION_COOKIE_KEY)
-	// if err != nil {
-	// 	handleResponseError(err, w, http.StatusBadRequest)
-	// 	return
-	// }
-	// c = &http.Cookie{Name: SESSION_COOKIE_KEY, Value: "", MaxAge: -1}
-	// http.SetCookie(w, c)
 	loggedUser := (req.Context().Value(USER_CONTEXT_KEY)).(UserResponse)
 	token := strings.Split(req.Header.Get(AUTH_HEADER_KEY), " ")[1]
 	fmt.Println("token: ", token)
