@@ -1,4 +1,5 @@
-import { Component, ContentChild, ElementRef, OnInit, AfterContentInit, AfterContentChecked } from '@angular/core';
+import { Component, ContentChild, ElementRef, OnInit, AfterContentInit, AfterContentChecked, Input } from '@angular/core';
+import { Memo } from 'src/app/models/memo.model';
 
 @Component({
   selector: 'app-memo-detail',
@@ -7,6 +8,7 @@ import { Component, ContentChild, ElementRef, OnInit, AfterContentInit, AfterCon
 })
 export class MemoDetailComponent implements OnInit, AfterContentInit, AfterContentChecked  {
   @ContentChild("contentChild") contentChild?: ElementRef;
+  @Input() memo?: Memo;
   constructor() { }
 
   ngOnInit(): void {

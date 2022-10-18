@@ -17,13 +17,6 @@ var uri string
 var database string
 var jwtKey []byte
 
-const (
-	MEMO_COLLECTION  string = "memos"
-	USER_COLLECTION  string = "users"
-	TOPIC_COLLECTION string = "topics"
-	MOVIE_COLLECTION string = "movies"
-)
-
 func init() {
 	var err error
 	database = getEnvVariable("MONGODB_DATABASE")
@@ -64,13 +57,13 @@ func main() {
 	r.HandleFunc("/memos/{id}", addConfigMiddleware(updateMemo)).Methods("PUT")
 	r.HandleFunc("/memos/{id}", addConfigMiddleware(deleteMemo)).Methods("DELETE")
 	// user
-	r.HandleFunc("/users", addConfigMiddleware(getUsers)).Methods("GET")
-	r.HandleFunc("/users/{id}", addConfigMiddleware(getCurrentUser)).Methods("GET")
+	r.HandleFunc("/users", addConfigMiddleware(authorizeUser(getUsers))).Methods("GET")
+	r.HandleFunc("/current-user", addConfigMiddleware(authorizeUser(getCurrentUser))).Methods("GET")
 	r.HandleFunc("/users/{id}", addConfigMiddleware(updateUser)).Methods("PUT")
 	r.HandleFunc("/users/{id}", addConfigMiddleware(deleteUser)).Methods("DELETE")
 	r.HandleFunc("/signin", addConfigMiddleware(signin)).Methods("POST")
 	r.HandleFunc("/signup", addConfigMiddleware(signup)).Methods("POST")
-	r.HandleFunc("/signout", addConfigMiddleware(signout)).Methods("POST")
+	r.HandleFunc("/signout", addConfigMiddleware(authorizeUser(signout))).Methods("POST")
 	// default
 	r.Handle("/favicon.ico", http.NotFoundHandler())
 	fmt.Printf("Starting server at port 8089 \r\n")

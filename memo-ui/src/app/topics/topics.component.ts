@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ApiSerivce } from '../services/api.service';
+import { ApiService } from '../services/api.service';
 import { Topic } from '../models/topic.model';
 import { ResponseAPI } from '../models/response.model';
 
@@ -12,7 +12,7 @@ export class TopicsComponent implements OnInit {
   selectedTopic?: Topic;
   topics: Topic[] = [];
 
-  constructor(private apiSerivce : ApiSerivce) { }
+  constructor(private apiSerivce : ApiService) { }
 
   onClickSelectTopic(topic : Topic) {
     console.log("topic", topic);

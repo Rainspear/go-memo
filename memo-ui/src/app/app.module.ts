@@ -23,6 +23,7 @@ import { SigninComponent } from './auth/signin/signin.component';
 import { SignupComponent } from './auth/signup/signup.component';
 import { HomeComponent } from './home/home.component';
 import { ShareHeaderComponent } from './share/share-header/share-header.component';
+import { CurrentComponent } from './auth/current/current.component';
 
 @NgModule({
   declarations: [
@@ -45,6 +46,7 @@ import { ShareHeaderComponent } from './share/share-header/share-header.componen
     SignupComponent,
     HomeComponent,
     ShareHeaderComponent,
+    CurrentComponent,
   ],
   imports: [
     BrowserModule,

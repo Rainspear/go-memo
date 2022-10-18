@@ -5,8 +5,13 @@ export interface User {
   created_at: string;
 }
 
-export interface ParamsPostUser {
+export interface ParamsCreateUser {
   email: string;
   name: string;
+  password: string;
+}
+
+export interface ParamsLoginUser {
+  email: string;
   password: string;
 }

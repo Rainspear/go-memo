@@ -37,13 +37,13 @@ func createToken(u *UserClaims) (string, error) {
 func parseToken(signedToken string) (*UserClaims, error) {
 	var u UserClaims
 	t, err := jwt.ParseWithClaims(signedToken, &u, func(t *jwt.Token) (v interface{}, err error) {
-		if t.Method.Alg() == jwt.SigningMethodHS512.Alg() {
+		if t.Method.Alg() != jwt.SigningMethodHS512.Alg() {
 			return nil, fmt.Errorf("invalid signing algorithm")
 		}
 		return jwtKey, nil
 	})
 	if err != nil {
-		return nil, fmt.Errorf("errir in parsetoken, in verifying: %w", err)
+		return nil, fmt.Errorf("error in parsetoken, in verifying: %w", err)
 	}
 
 	if !t.Valid {

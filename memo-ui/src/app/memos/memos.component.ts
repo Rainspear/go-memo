@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { ApiSerivce } from '../services/api.service';
+import { ApiService } from '../services/api.service';
 import { Memo } from '../models/memo.model';
 import { ResponseAPI } from '../models/response.model';
 
@@ -13,7 +13,7 @@ export class MemosComponent implements OnInit {
   memos: Memo[] = [];
   selectedMemo?: Memo;
   responseStatus: boolean | null = null;
-  constructor(private apiSerivce: ApiSerivce) {}
+  constructor(private apiSerivce: ApiService) {}
 
   onClickGetMemoData() {
 

@@ -1,38 +1,25 @@
 import { Component, OnInit } from '@angular/core';
-import { ParamsPostUser, User } from '../models/user.model';
-import { ApiSerivce } from '../services/api.service';
+import { Router } from '@angular/router';
+import { ParamsCreateUser, User } from '../models/user.model';
+import { ApiService } from '../services/api.service';
+import { AuthUserService } from '../services/auth-user.service';
 @Component({
   selector: 'app-auth',
   templateUrl: './auth.component.html',
   styleUrls: ['./auth.component.scss'],
-  providers: [ApiSerivce]
+  providers: [ApiService]
 })
+
 export class AuthComponent implements OnInit {
 
   route: string = 'signup';
   user?: User
   error?: string = ""
-  constructor(private apiSerivce: ApiSerivce) { }
+  constructor(private apiService : ApiService, private authService: AuthUserService) { }
 
-  onClickCreateUser(user: ParamsPostUser) {
-    this.createUser(user);
-  }
-
-  createUser(user: ParamsPostUser): void {
-    this.error = "";
-    this.apiSerivce.createUser(user).subscribe((res: any) => {
-      console.log("res", res)
-      if (res.data) {
-        console.log(res.data)
-        return;
-      }
-      return;
-    }, error => {
-      this.error = error?.error?.error || error.message
-    })
-  }
 
   ngOnInit(): void {
+
   }
 
 }
