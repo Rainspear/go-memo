@@ -6,7 +6,20 @@ export interface Topic {
 }
 
 export interface Repetition {
-  time: string;
+  time: number;
   level: string;
   status: string;
+}
+
+export interface FilterParamsTopic {
+  from_date: number;
+  to_date: number;
+}
+
+export interface IFilterTopic {
+  name: string;
+  value: {
+    from_date: number;
+    to_date: number;
+  }
 }

@@ -3,7 +3,7 @@
     <div class="text-xl mb-2">Job Status</div>
     <div class="text-4xl font-bold mb-4">{{job.status | titlecase}}</div>
     <div class="text-xl mb-2">Job Scheduled</div>
-    <div class="text-4xl font-bold">{{job.time | date}}</div>
+    <div class="text-4xl font-bold">{{job.time * 1000 | date}}</div>
   </div>
   <div class="Right">
     <div class="Job-Card-Row flex flex-row">

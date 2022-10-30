@@ -2,7 +2,7 @@ import { Injectable, OnInit } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { Memo } from '../models/memo.model';
-import { Topic } from '../models/topic.model';
+import { FilterParamsTopic, Topic } from '../models/topic.model';
 import { ResponseAPI } from '../models/response.model';
 import { ParamsCreateUser, ParamsLoginUser, User } from '../models/user.model';
 import { AuthComponent } from '../auth/auth.component';
@@ -42,8 +42,14 @@ export class ApiService implements OnInit {
     return this.httpClient.get<ResponseAPI<Topic[]>>(`${apiUrl}/topics`).pipe()
   }
 
-  getSingleTopic(id: string) :  Observable<ResponseAPI<Topic[]>> {
-    return this.httpClient.get<ResponseAPI<Topic[]>>(`${apiUrl}/topics/${id}`).pipe()
+  deleteTopic(id: string): Observable<ResponseAPI<Topic>> {
+    return this.httpClient.delete<ResponseAPI<Topic>>(`${apiUrl}/topics/${id}`).pipe()
+  }
+
+  getSingleTopic(id: string, filter?: FilterParamsTopic): Observable<ResponseAPI<Topic[]>> {
+    // URLSearchParams
+    return this.httpClient.get<ResponseAPI<Topic[]>>(`${apiUrl}/topics/${id}`, { params: { ...filter } }).pipe()
+
   }
 
   createUser(user: ParamsCreateUser): Observable<ResponseAPI<User>> {
@@ -54,7 +60,7 @@ export class ApiService implements OnInit {
     return this.httpClient.get<ResponseAPI<User>>(`${apiUrl}/current-user`).pipe()
   }
 
-  logOutUser() : Observable<ResponseAPI<string>> {
+  logOutUser(): Observable<ResponseAPI<string>> {
     return this.httpClient.post<ResponseAPI<string>>(`${apiUrl}/signout`, {}).pipe()
   }
 

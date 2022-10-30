@@ -22,6 +22,16 @@ export class TopicItemComponent implements OnInit {
     // this.selectedTopic.emit(this.topic);
   }
 
+  onClickDeleteTopic(event: MouseEvent) {
+    event.preventDefault();
+    event.stopPropagation();
+    if (this.topic) this.apiService.deleteTopic(this.topic.id).subscribe((res: any) => {
+      if (res.data) {
+        if (this.topic) this.topicSelectingService.selectedTopic.next(this.topic)
+      }
+    })
+  }
+
   ngOnInit(): void {
   }
 

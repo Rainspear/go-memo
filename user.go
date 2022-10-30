@@ -21,22 +21,22 @@ type User struct {
 	Avatar      string      `json:"avatar," bson:"avatar,"`
 	Email       string      `json:"email" bson:"email"`
 	Password    string      `json:"password" bson:"password"`
-	CreatedDate time.Time   `json:"created_date" bson:"created_date"`
-	LastUpdate  time.Time   `json:"last_update" bson:"last_update"`
+	CreatedDate int64       `json:"created_date" bson:"created_date"`
+	LastUpdate  int64       `json:"last_update" bson:"last_update"`
 	Tokens      []Token     `json:"tokens" bson:"tokens"`
 }
 
 type UserResponse struct {
-	Name        string    `json:"name" bson:"name"`
-	Avatar      string    `json:"avatar," bson:"avatar,"`
-	Email       string    `json:"email" bson:"email"`
-	CreatedDate time.Time `json:"created_date" bson:"created_date"`
-	LastUpdate  time.Time `json:"last_update" bson:"last_update"`
+	Name        string `json:"name" bson:"name"`
+	Avatar      string `json:"avatar," bson:"avatar,"`
+	Email       string `json:"email" bson:"email"`
+	CreatedDate int64  `json:"created_date" bson:"created_date"`
+	LastUpdate  int64  `json:"last_update" bson:"last_update"`
 }
 
 type Token struct {
-	Token       string    `json:"token" bson:"token"`
-	CreatedDate time.Time `json:"created_date" bson:"created_date"`
+	Token       string `json:"token" bson:"token"`
+	CreatedDate int64  `json:"created_date" bson:"created_date"`
 }
 
 func getUsers(w http.ResponseWriter, req *http.Request) {
@@ -97,7 +97,7 @@ func signin(w http.ResponseWriter, req *http.Request) {
 	if handleResponseError(err, w, http.StatusInternalServerError) {
 		return
 	}
-	tokenObject := Token{token, time.Now()}
+	tokenObject := Token{token, time.Now().Unix()}
 	user.Tokens = append(user.Tokens, tokenObject)
 	_, err = coll.UpdateOne(req.Context(), bson.D{{Key: "email", Value: user.Email}},
 		bson.D{
@@ -129,7 +129,7 @@ func signup(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 	// create data to save
-	t := time.Now()
+	t := time.Now().Unix()
 	u := UserClaims{uuid.New().String(), user.Email, jwt.StandardClaims{}}
 	token, err := createToken(&u)
 	if handleResponseError(err, w, http.StatusInternalServerError) {

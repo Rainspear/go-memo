@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"strconv"
 	"time"
 
 	"github.com/gorilla/mux"
@@ -32,9 +33,9 @@ const (
 )
 
 type Repetition struct {
-	Time   time.Time `json:"time" bson:"time"`
-	Level  Level     `json:"level" bson:"level"`
-	Status Status    `json:"status" bson:"status"`
+	Time   int64  `json:"time" bson:"time"`
+	Level  Level  `json:"level" bson:"level"`
+	Status Status `json:"status" bson:"status"`
 }
 
 type Topic struct {
@@ -42,12 +43,62 @@ type Topic struct {
 	Title       string       `json:"title" bson:"title"`
 	Repetition  []Repetition `json:"repetition" bson:"repetition"`
 	Description string       `json:"description" bson:"description"`
-	CreatedDate time.Time    `json:"created_date" bson:"created_date"`
-	LastUpdate  time.Time    `json:"last_update" bson:"last_update"`
+	CreatedDate int64        `json:"created_date" bson:"created_date"`
+	LastUpdate  int64        `json:"last_update" bson:"last_update"`
 }
 
 func getTopics(w http.ResponseWriter, req *http.Request) {
 	coll := client.Database(database).Collection(TOPIC_COLLECTION)
+	from_date, err := strconv.ParseInt(req.FormValue("from_date"), 10, 64)
+	if err != nil {
+		from_date = 0
+	}
+	to_date, err := strconv.ParseInt(req.FormValue("to_date"), 10, 64)
+	if err != nil {
+		to_date = time.Now().Unix()
+	}
+	fmt.Println("from_date: ", from_date)
+	fmt.Println("to_date: ", to_date)
+	filterRepetitionStage := bson.D{
+		{Key: "$addFields",
+			Value: bson.D{
+				{Key: "repetition",
+					Value: bson.D{
+						{Key: "$filter",
+							Value: bson.D{
+								{Key: "input", Value: "$repetition"},
+								{Key: "as", Value: "repetition"},
+								{Key: "cond",
+									Value: bson.D{
+										{Key: "$and",
+											Value: bson.A{
+												bson.D{
+													{Key: "$gte",
+														Value: bson.A{
+															"$$repetition.time",
+															from_date,
+														},
+													},
+												},
+												bson.D{
+													{Key: "$lte",
+														Value: bson.A{
+															"$$repetition.time",
+															to_date,
+														},
+													},
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+	}
 	addFieldStage := bson.D{
 		{Key: "$addFields",
 			Value: bson.D{
@@ -64,7 +115,7 @@ func getTopics(w http.ResponseWriter, req *http.Request) {
 			},
 		},
 	}
-	cursor, err := coll.Aggregate(req.Context(), mongo.Pipeline{addFieldStage})
+	cursor, err := coll.Aggregate(req.Context(), mongo.Pipeline{filterRepetitionStage, addFieldStage})
 	if handleResponseError(err, w, http.StatusInternalServerError) {
 		return
 	}
@@ -78,8 +129,14 @@ func getTopics(w http.ResponseWriter, req *http.Request) {
 
 func getTopic(w http.ResponseWriter, req *http.Request) {
 	params := mux.Vars(req)
-	from_d := req.FormValue("from_date")
-	to_d := req.FormValue("to_date")
+	from_date, err := strconv.ParseInt(req.FormValue("from_date"), 10, 64)
+	if err != nil {
+		from_date = 0
+	}
+	to_date, err := strconv.ParseInt(req.FormValue("to_date"), 10, 64)
+	if err != nil {
+		to_date = time.Now().Unix()
+	}
 	id, err := primitive.ObjectIDFromHex(params["id"])
 	if handleResponseError(err, w, http.StatusBadRequest) {
 		return
@@ -87,35 +144,33 @@ func getTopic(w http.ResponseWriter, req *http.Request) {
 	fmt.Println(id)
 	coll := client.Database(database).Collection(TOPIC_COLLECTION)
 	matchStage := bson.D{{Key: "$match", Value: bson.D{{Key: "_id", Value: id}}}}
-	filterRepetitionStage := bson.D{{}}
-	if from_d != "" && to_d != "" {
-		filterRepetitionStage = bson.D{
-			{"$addFields",
-				bson.D{
-					{"repetition",
-						bson.D{
-							{"$filter",
-								bson.D{
-									{"input", "$repetition"},
-									{"as", "repetition"},
-									{"cond",
-										bson.D{
-											{"$and",
-												bson.A{
-													bson.D{
-														{"$gte",
-															bson.A{
-																"$$repetition.time",
-																time.Date(2022, 10, 9, 4, 4, 32, 0, time.UTC),
-															},
-														},
+	fmt.Println("from_date: ", from_date)
+	fmt.Println("to_date: ", to_date)
+	filterRepetitionStage := bson.D{
+		{Key: "$addFields",
+			Value: bson.D{
+				{Key: "repetition",
+					Value: bson.D{
+						{Key: "$filter",
+							Value: bson.D{
+								{Key: "input", Value: "$repetition"},
+								{Key: "as", Value: "repetition"},
+								{Key: "cond",
+									Value: bson.D{
+										{Key: "$and",
+											Value: bson.A{
+												bson.D{
+													{Key: "$gte",
+														Value: bson.A{
+															"$$repetition.time",
+															from_date},
 													},
-													bson.D{
-														{"$lte",
-															bson.A{
-																"$$repetition.time",
-																time.Date(2022, 10, 20, 4, 4, 32, 0, time.UTC),
-															},
+												},
+												bson.D{
+													{Key: "$lte",
+														Value: bson.A{
+															"$$repetition.time",
+															to_date,
 														},
 													},
 												},
@@ -128,7 +183,7 @@ func getTopic(w http.ResponseWriter, req *http.Request) {
 					},
 				},
 			},
-		}
+		},
 	}
 	addFieldStage := bson.D{
 		{Key: "$addFields",
@@ -171,6 +226,9 @@ func createTopic(w http.ResponseWriter, req *http.Request) {
 	if handleResponseError(err, w, http.StatusBadRequest) {
 		return
 	}
+	t := time.Now().Unix()
+	data.CreatedDate = t
+	data.LastUpdate = t
 	coll := client.Database(database).Collection(TOPIC_COLLECTION)
 	result, err := coll.InsertOne(req.Context(), &data)
 	if handleResponseError(err, w, http.StatusInternalServerError) {
