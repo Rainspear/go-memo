@@ -1,0 +1,3 @@
+export const TIME_ONE_DAY_IN_SECONDS = 24 * 60 * 60;
+export const TIME_ONE_WEEK_IN_SECONDS = TIME_ONE_DAY_IN_SECONDS * 7; // 7 days
+export const TIME_ONE_MONTH_IN_SECONDS = TIME_ONE_DAY_IN_SECONDS * 30; // 30 days

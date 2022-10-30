@@ -1,4 +1,4 @@
-import { EventEmitter, Injectable, OnDestroy, Output } from '@angular/core';
+import { Injectable, OnDestroy, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable, Subject, Subscription } from 'rxjs';
 import { User } from '../models/user.model';
@@ -12,7 +12,13 @@ export class AuthUserService implements OnDestroy {
   userSubscription?: Subscription
   @Output() loggedUser = new Subject<User>;
 
-  isAuthenicated(): Observable<boolean> {
+  constructor(private apiService: ApiService, private router: Router) {
+    this.userSubscription = this.loggedUser.subscribe(user => {
+      this.user = user;
+    })
+  }
+
+  isAuthenicated(isNavigate: boolean = false): Observable<boolean> {
     return new Observable<boolean>(observer => {
       const token = localStorage.getItem('token')
       if (token) {
@@ -24,17 +30,17 @@ export class AuthUserService implements OnDestroy {
               observer.next(true)
               observer.complete();
             } else {
-              this.router.navigate(['/auth', "signin"])
+              if (isNavigate) { this.router.navigate(['/auth', "signin"]) }
               localStorage.setItem('token', '')
               observer.next(false);
               observer.complete();
             }
             return true;
           }, err => {
-            this.router.navigate(['/auth', "signin"])
+            if (isNavigate) { this.router.navigate(['/auth', "signin"]) }
+            localStorage.setItem('token', '')
             observer.next(false);
             observer.complete();
-            localStorage.setItem('token', '')
           })
         } else {
           observer.next(true)
@@ -42,15 +48,19 @@ export class AuthUserService implements OnDestroy {
         }
         return;
       }
-      this.router.navigate(['/auth', "signin"])
+      if (isNavigate) { this.router.navigate(['/auth', "signin"]) }
       observer.next(false);
       observer.complete();
       return;
     })
   }
-  constructor(private apiService: ApiService, private router: Router) {
-    this.userSubscription = this.loggedUser.subscribe(user => {
-      this.user = user;
+
+  logOutAndClearToken() {
+    this.apiService.logOutUser().subscribe(res => {
+      if (res.data) {
+        this.router.navigate(['/auth', "signin"])
+        localStorage.setItem('token', '')
+      }
     })
   }
 

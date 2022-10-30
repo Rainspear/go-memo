@@ -78,6 +78,8 @@ func getTopics(w http.ResponseWriter, req *http.Request) {
 
 func getTopic(w http.ResponseWriter, req *http.Request) {
 	params := mux.Vars(req)
+	from_d := req.FormValue("from_date")
+	to_d := req.FormValue("to_date")
 	id, err := primitive.ObjectIDFromHex(params["id"])
 	if handleResponseError(err, w, http.StatusBadRequest) {
 		return
@@ -85,6 +87,49 @@ func getTopic(w http.ResponseWriter, req *http.Request) {
 	fmt.Println(id)
 	coll := client.Database(database).Collection(TOPIC_COLLECTION)
 	matchStage := bson.D{{Key: "$match", Value: bson.D{{Key: "_id", Value: id}}}}
+	filterRepetitionStage := bson.D{{}}
+	if from_d != "" && to_d != "" {
+		filterRepetitionStage = bson.D{
+			{"$addFields",
+				bson.D{
+					{"repetition",
+						bson.D{
+							{"$filter",
+								bson.D{
+									{"input", "$repetition"},
+									{"as", "repetition"},
+									{"cond",
+										bson.D{
+											{"$and",
+												bson.A{
+													bson.D{
+														{"$gte",
+															bson.A{
+																"$$repetition.time",
+																time.Date(2022, 10, 9, 4, 4, 32, 0, time.UTC),
+															},
+														},
+													},
+													bson.D{
+														{"$lte",
+															bson.A{
+																"$$repetition.time",
+																time.Date(2022, 10, 20, 4, 4, 32, 0, time.UTC),
+															},
+														},
+													},
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		}
+	}
 	addFieldStage := bson.D{
 		{Key: "$addFields",
 			Value: bson.D{
@@ -103,7 +148,7 @@ func getTopic(w http.ResponseWriter, req *http.Request) {
 	}
 	limitStage := bson.D{{Key: "$limit", Value: 1}}
 	// ----------------------------------------------------------------
-	cursor, err := coll.Aggregate(req.Context(), mongo.Pipeline{matchStage, addFieldStage, limitStage})
+	cursor, err := coll.Aggregate(req.Context(), mongo.Pipeline{matchStage, filterRepetitionStage, addFieldStage, limitStage})
 	if handleResponseError(err, w, http.StatusInternalServerError) {
 		return
 	}

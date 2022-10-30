@@ -154,7 +154,7 @@ func signout(w http.ResponseWriter, req *http.Request) {
 	token := strings.Split(req.Header.Get(AUTH_HEADER_KEY), " ")[1]
 	fmt.Println("token: ", token)
 	filter := bson.D{{Key: "email", Value: loggedUser.Email}}
-	update := bson.D{{Key: "$pull", Value: bson.D{{Key: "tokens", Value: bson.D{{Key: "$elemMatch", Value: bson.D{{Key: "token", Value: token}}}}}}}}
+	update := bson.D{{Key: "$pull", Value: bson.D{{Key: "tokens", Value: bson.D{{Key: "token", Value: token}}}}}}
 	result, err := client.Database(database).Collection(USER_COLLECTION).UpdateOne(req.Context(), filter, update)
 	if handleResponseError(err, w, http.StatusInternalServerError) {
 		return

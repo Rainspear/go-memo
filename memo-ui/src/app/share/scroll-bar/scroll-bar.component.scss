@@ -1,0 +1,15 @@
+.Scroll-Bar {
+  height: 100%;
+  --scrollbar-border-radius: 8px;
+  --scrollbar-padding: 1px;
+  --scrollbar-viewport-margin: 0;
+  --scrollbar-track-color: transparent;
+  --scrollbar-wrapper-color: transparent;
+  // --scrollbar-thumb-color:  rgba(0, 0, 0, 0.2);
+  --scrollbar-thumb-color: #0f172a99;
+  --scrollbar-thumb-hover-color: var(--scrollbar-thumb-color);
+  --scrollbar-size: 8px;
+  --scrollbar-hover-size: var(--scrollbar-size);
+  --scrollbar-thumb-transition: height ease-in-out 100ms, width ease-in-out 100ms;
+  --scrollbar-track-transition: height ease-in-out 100ms, width ease-in-out 100ms;
+}

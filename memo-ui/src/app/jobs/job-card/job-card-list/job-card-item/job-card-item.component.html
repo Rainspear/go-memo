@@ -1,0 +1,25 @@
+<div *ngIf="job" class="Job-Card-Item p-8 bg-teal-700 rounded-2xl text-white flex flex-row justify-between mb-4">
+  <div class="Left">
+    <div class="text-xl mb-2">Job Status</div>
+    <div class="text-4xl font-bold mb-4">{{job.status | titlecase}}</div>
+    <div class="text-xl mb-2">Job Scheduled</div>
+    <div class="text-4xl font-bold">{{job.time | date}}</div>
+  </div>
+  <div class="Right">
+    <div class="Job-Card-Row flex flex-row">
+      <div class="Job-Card-Col flex flex-col pr-4">
+        <div class="Job-Card-Name text-4xl mb-2">JayPark</div>
+        <div class="Job-Card-Phone text-xl">+84 123 123 236</div>
+      </div>
+      <div>
+        <img class="bg-center rounded-full w-24 h-24"
+          src="https://images.unsplash.com/photo-1547407139-3c921a66005c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80" />
+      </div>
+    </div>
+    <div class="Job-Card-Severity">
+      <div class="bg-white/25 text-white w-fit p-4 rounded-lg">
+        {{job.level | titlecase}}
+      </div>
+    </div>
+  </div>
+</div>

@@ -3,6 +3,8 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
+import { NgScrollbarModule } from 'ngx-scrollbar';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
@@ -25,6 +27,10 @@ import { HomeComponent } from './home/home.component';
 import { ShareHeaderComponent } from './share/share-header/share-header.component';
 import { CurrentComponent } from './auth/current/current.component';
 import { AuthInterceptorService } from './services/auth-interceptor.service';
+import { JobCardComponent } from './jobs/job-card/job-card.component';
+import { JobCardListComponent } from './jobs/job-card/job-card-list/job-card-list.component';
+import { JobCardItemComponent } from './jobs/job-card/job-card-list/job-card-item/job-card-item.component';
+import { ScrollBarComponent } from './share/scroll-bar/scroll-bar.component';
 
 @NgModule({
   declarations: [
@@ -48,12 +54,18 @@ import { AuthInterceptorService } from './services/auth-interceptor.service';
     HomeComponent,
     ShareHeaderComponent,
     CurrentComponent,
+    JobCardComponent,
+    JobCardListComponent,
+    JobCardItemComponent,
+    ScrollBarComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
+    FontAwesomeModule,
+    NgScrollbarModule,
   ],
   providers: [{provide: HTTP_INTERCEPTORS, useClass: AuthInterceptorService, multi: true}],
   bootstrap: [AppComponent]
