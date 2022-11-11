@@ -1,4 +1,17 @@
-<div class="Memo-List ">
-  <app-memo-item class="" *ngFor="let memo of memos;let i = index " [index]="i" [memo]="memo" (clickDeleteMemo)="onClickDeleteMemo($event)">
+<div class="Memo-Control flex justify-between">
+  <div class="p-4 border-2 bg-white text-gray-900 hover:bg-gray-900 hover:text-white cursor-pointer rounded-xl "
+    (click)="onToggle(true)">
+    <fa-icon [icon]="faPlusCircle"></fa-icon>
+    Memo
+  </div>
+  <div class="p-4 border-2 bg-white text-gray-900 hover:bg-gray-900 hover:text-white cursor-pointer rounded-xl"
+    (click)="onToggle(true)">
+    <fa-icon [icon]="faPlusCircle"></fa-icon>
+    Schedule
+  </div>
+</div>
+<div class="Memo-Wrap">
+  <app-memo-item *ngFor="let memo of memos;let i = index " [index]="i" [memo]="memo"
+    (clickDeleteMemo)="onClickDeleteMemo($event)">
   </app-memo-item>
 </div>

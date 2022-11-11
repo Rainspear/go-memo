@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output, AfterViewChecked } from '@angular/core';
+import { faCircleQuestion, faNoteSticky, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { Memo } from 'src/app/models/memo.model';
 import { MemoDetailService } from 'src/app/services/memo-detail.service';
 
@@ -8,6 +9,11 @@ import { MemoDetailService } from 'src/app/services/memo-detail.service';
   styleUrls: ['./memo-item.component.scss']
 })
 export class MemoItemComponent implements OnInit, AfterViewChecked {
+  faCircleQuestion = faCircleQuestion;
+  faNoteSticky = faNoteSticky;
+  faXmark = faXmark;
+
+
   @Output() clickDeleteMemo = new EventEmitter<string>();
   @Input() memo?: Memo;
   @Input() index: number = 0;

@@ -1,3 +1,4 @@
+<!-- Ver 1 -->
 <!-- <div class="p-4 w-4/5 mx-auto my-0">
   <div class="row">
     <div class="col-xs-12">
@@ -69,6 +70,11 @@
     There no topic was selected
   </div>
 </ng-template> -->
+
+
+
+
+<!-- 
 <div class="Topic-Detail w-5/6  mx-auto">
   <div class="Topic-Detail-Header flex-col items-center justify-between rounded-xl p-8 my-8" *ngIf="topic">
     <div class="flex justify-between">
@@ -121,9 +127,8 @@
           <app-memo-list [memos]="memos"></app-memo-list>
         </div>
       </ng-template>
-    </div>
-
-    <!-- <div class="Topic-Detail-Section w-1/3 text-left mx-auto rounded-2xl">
+    </div> -->
+<!-- <div class="Topic-Detail-Section w-1/3 text-left mx-auto rounded-2xl">
       <h3 class="font-semibold py-11 my-0 mb-4 mx-auto flex items-center">
         <fa-icon class="text-blue-600" [icon]="faClock"></fa-icon>
         <span class="ml-4 "> Space Repetition</span>
@@ -149,8 +154,27 @@
       </h3>
       <app-memos *ngIf="memos" [memos]="memos"></app-memos>
     </div> -->
-  </div>
-</div>
+<!-- </div>
+</div> -->
+
+
+<!-- Ver 2 -->
+<!-- <button class="p-4 border text-blue-500 text-2xl hover:bg-blue-500 hover:text-white bg-white rounded-xl mr-2"
+  (click)="onReloadMemo()">
+  <fa-icon [icon]="faRotateRight"></fa-icon>
+</button>
+<button class="p-4 border text-blue-500 text-2xl hover:bg-blue-500 hover:text-white bg-white rounded-xl"
+  (click)="onToggleCreatingMemo(true)">
+  <fa-icon [icon]="faPlusCircle"></fa-icon>
+</button>
+
+
 <app-memo-creating-modal [show]="showCreatingMemo" (toggle)="onToggleCreatingMemo($event)"
   (submit)="onSubmitCreatingMemo()"></app-memo-creating-modal>
-<app-memo-detail-modal [show]="showDetailMemo" (toggle)="onToggleDetailMemo($event)"></app-memo-detail-modal>
+<app-memo-detail-modal [show]="showDetailMemo" (toggle)="onToggleDetailMemo($event)"></app-memo-detail-modal> -->
+
+<!-- Ver 3 -->
+<div class="Topic-Detail py-4 px-16 mx-auto my-0">
+  <h2 class="font-bold my-12">Topic: {{topic?.title || ""}}</h2>
+  <app-memo-list [topic]="topic" [memos]="memos"></app-memo-list>
+</div>

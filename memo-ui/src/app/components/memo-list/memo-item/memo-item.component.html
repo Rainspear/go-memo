@@ -9,7 +9,25 @@ class="Memo-Item cursor-pointer flex flex-row justify-between hover:no-underline
     </div>
 </a> -->
 
-<div (click)="onSelect()" class="Memo-Item h-auto hover:bg-gray-50 cursor-pointer hover:no-underline no-underline border p-6 bg-white rounded-xl" *ngIf="memo">
-  <div class="font-bold">{{memo.question}}</div>
-  <div>{{memo.content}}</div>
+<div (click)="onSelect()"
+  class="Memo-Item h-auto hover:bg-gray-50 cursor-pointer hover:no-underline no-underline border  bg-white rounded-xl"
+  *ngIf="memo">
+  <div class=" p-4 flex items-start bg h-32 text-white justify-between bg-gray-900">
+    <span class="mr-4">
+      <fa-icon [icon]="faCircleQuestion"></fa-icon>
+    </span>
+    <span class="Ellipsis">
+      {{memo.question}}
+    </span>
+    <span class="mr-4">
+      <fa-icon [icon]="faXmark" size="lg"></fa-icon>
+    </span>
+  </div>
+  <div class="p-4 flex justify-start">
+    <span class="mr-4">
+      <fa-icon [icon]="faNoteSticky"></fa-icon>
+    </span>
+    <span>{{memo.content}}
+    </span>
+  </div>
 </div>

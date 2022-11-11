@@ -1,6 +1,6 @@
 <!-- <div class="cursor-pointer flex flex-row" 
 *ngIf="topic"  
-[ngClass]="(index + 1) % 2 === 0 ? 'bg-slate-100' : ''"
+[ngClass]="(index + 1) % 2 === 0 ? 'bg-gray-100' : ''"
 (click)="onSelectTopic()">
   <div class="Cell p-4 flex items-center pl-8 w-4/12">
     <span>{{topic.id}}</span>
@@ -16,23 +16,28 @@
   </div>
 </div> -->
 
-<div 
-*ngIf="topic" class="Topic p-6 flex flex-col cursor-pointer hover:bg-slate-50" 
-(click)="onSelectTopic()"
->
-  <div class="Cell p-4 flex items-center pl-8">
-    <fa-icon [icon]="faCode"></fa-icon>
+<div *ngIf="topic" class="Topic flex flex-col cursor-pointer hover:bg-gray-50" (click)="onSelectTopic()">
+  <div class="Cell p-4 flex items-start bg h-32 text-white justify-between bg-gray-900">
+    <span class="mr-4">
+      <fa-icon [icon]="faCode"></fa-icon>
+    </span>
+    <span class="Ellipsis text-left w-full">{{topic.title}}</span>
+    <span class="ml-4" (click)="onClickDeleteTopic($event)">
+      <fa-icon [icon]="faXmark" size="lg"></fa-icon>
+    </span>
   </div>
-  <div class="Cell p-4 flex items-center pl-8">
+  <div class="Cell p-4 flex justify-between pl-8 border-y-2" *ngIf="topic.created_date">
+    <span>{{topic.author.name || "Anonymous"}}</span>
+    <span>{{topic.created_date * 1000 | date}}</span>
+  </div>
+  <!-- <div class="Cell p-4 flex items-center pl-8">
     <span>{{topic.id}}</span>
-  </div>
-  <div class="Cell p-4 flex items-center pl-8">
+  </div> -->
+  <!-- <div class="Cell p-4 flex items-center pl-8">
     <span>{{topic.title}}</span>
-  </div>
+  </div> -->
   <div class="Cell p-4 flex items-center pl-8">
     <span>{{topic.description}}</span>
   </div>
-  <div class="Cell p-4 flex self-end pl-8">
-    {{topic.created_date | date}}
-  </div>
+
 </div>

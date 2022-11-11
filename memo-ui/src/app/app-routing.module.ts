@@ -10,10 +10,6 @@ import { AuthGuardService } from './services/auth-guard.service';
 
 const routes: Routes = [
   {
-    path: '',
-    component: HomeComponent,
-  },
-  {
     path: 'topic',
     component: TopicsComponent,
     canActivate: [AuthGuardService],
@@ -36,6 +32,12 @@ const routes: Routes = [
         component: SignupComponent,
       }
     ]
+  },
+  {
+    path: '',
+    // component: HomeComponent,
+    redirectTo: '/topic',
+    pathMatch: 'full',
   },
 ];
 
