@@ -19,13 +19,13 @@ type Movie struct {
 	Countries []string `json:"countries"`
 }
 
-func getMovie(w http.ResponseWriter, req *http.Request) {
+func getMovie(_ http.ResponseWriter, req *http.Request) {
 	params := mux.Vars(req)
 	fmt.Printf("getMovie params %+v \n", params)
 	// fmt.Printf("getMovie client %+v \n", client)
 }
 
-func getMovies(w http.ResponseWriter, req *http.Request) {
+func getMovies(w http.ResponseWriter, _ *http.Request) {
 	// start finding
 	coll := client.Database("sample_mflix").Collection(MOVIE_COLLECTION)
 	filter := bson.D{}

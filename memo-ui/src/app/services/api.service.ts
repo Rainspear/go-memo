@@ -4,7 +4,7 @@ import { Observable, of } from 'rxjs';
 import { Memo, ParamsCreateMemo, ParamsFilterMemo } from '../models/memo.model';
 import { ParamsCreateTopic, Topic } from '../models/topic.model';
 import { ResponseAPI } from '../models/response.model';
-import { ParamsCreateUser, ParamsLoginUser, User } from '../models/user.model';
+import { ParamsCreateUser, ParamsLoginUser, ParamsUpdateUser, User } from '../models/user.model';
 import { Schedule, ParamsFilterSchedule, ParamsCreateSchedule } from '../models/schedule.model';
 
 const httpOptions = {
@@ -61,6 +61,10 @@ export class ApiService implements OnInit {
 
   currentUser(): Observable<ResponseAPI<User>> {
     return this.httpClient.get<ResponseAPI<User>>(`${apiUrl}/current-user`).pipe()
+  }
+
+  updateUser(user: ParamsUpdateUser) : Observable<ResponseAPI<User>> {
+    return this.httpClient.put<ResponseAPI<User>>(`${apiUrl}/current-user`, user).pipe()
   }
 
   logOutUser(): Observable<ResponseAPI<string>> {

@@ -1,7 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output, AfterViewChecked } from '@angular/core';
 import { faCircleQuestion, faNoteSticky, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { Memo } from 'src/app/models/memo.model';
-import { MemoDetailService } from 'src/app/services/memo-detail.service';
 
 @Component({
   selector: 'app-memo-item',
@@ -18,15 +17,17 @@ export class MemoItemComponent implements OnInit, AfterViewChecked {
   @Input() memo?: Memo;
   @Input() index: number = 0;
 
+  constructor() { }
+
+
   onClickDeleteMemo() {
     this.clickDeleteMemo.emit(this.memo?.id);
   }
 
   onSelect() {
-    if (this.memo) this.memoDetailService.selectMemo.next(this.memo);
+    // if (this.memo) this.memoDetailService.selectMemo.next(this.memo);
   }
 
-  constructor(private memoDetailService: MemoDetailService) { }
 
   ngOnInit(): void {
   }

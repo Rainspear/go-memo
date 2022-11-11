@@ -31,14 +31,10 @@ export class SignupComponent implements OnInit {
     this.apiSerivce.createUser(user).subscribe((res: any) => {
       if (res.token) {
         localStorage.setItem('token', res.token)
-        this.router.navigate(['/memo']);
+        this.router.navigate(['/topic']);
       }
     }, error => {
       this.error = error?.error?.error || error.message
     })
   }
-
-  // onClickCreateUser() { 
-  //   this.clickCreateUser.emit(this.user);
-  // }
 }

@@ -1,1 +1,18 @@
-<h2  class="py-4 text-center" >Memo - Memorize easily for learner</h2>
+<div class="Navigation mt-12 py-4 flex justify-between cursor-pointer">
+  <div class="flex items-center">
+    <ng-content select="[LeftSection]"></ng-content>
+  </div>
+  <div class="UserSection p-6 bg-gray-100 hover:bg-gray-200 rounded-xl flex items-center" [routerLink]="['/auth', 'current']" *ngIf="user">
+    <img *ngIf="user.avatar else NoAvatarUser" class="rounded-full w-16 h-16" [src]="user.avatar">
+    <ng-template #NoAvatarUser>
+      <div class="rounded-full w-16 h-16 bg-slate-700"></div>
+    </ng-template>
+    <div class="flex flex-col mx-8">
+      <span class="font-semibold">{{user.name}}</span>
+      <span class="text-zinc-400">{{user.email}}</span>
+    </div>
+    <div class="flex items-center text-gray-600 hover:text-gray-800">
+      <fa-icon [icon]="faGear"></fa-icon>
+    </div>
+  </div>
+</div>

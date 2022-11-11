@@ -1,13 +1,12 @@
-import { Component, Input, OnInit, Output, EventEmitter, OnDestroy, SimpleChanges } from '@angular/core';
-import { ActivatedRoute, Params } from '@angular/router';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { faNoteSticky, faCalendar } from '@fortawesome/free-regular-svg-icons';
-import { faBrain, faCaretLeft, faClock, faEdit, faPlusCircle, faRotateRight, IconDefinition } from '@fortawesome/free-solid-svg-icons';
+import { faBrain, faCaretLeft, faClock, faEdit,  faPlusCircle, faRotateRight, IconDefinition } from '@fortawesome/free-solid-svg-icons';
 import { Subscription } from 'rxjs';
-import { Memo, ParamsFilterMemo } from 'src/app/models/memo.model';
+import { Memo } from 'src/app/models/memo.model';
 import { ParamsFilterSchedule, Schedule } from 'src/app/models/schedule.model';
 import { IFilterTopic, Topic } from 'src/app/models/topic.model';
 import { ApiService } from 'src/app/services/api.service';
-import { MemoDetailService } from 'src/app/services/memo-detail.service';
 import { TopicSelectingService } from 'src/app/services/topic-selecting.service';
 
 
@@ -31,27 +30,33 @@ export class TopicDetailComponent implements OnInit, OnDestroy {
   faCalendar = faCalendar;
   faNoteSticky = faNoteSticky;
   faCaretLeft = faCaretLeft;
+  
+  id?: string;
 
   memos?: Memo[];
-  id?: string;
   topic?: Topic;
-  filter?: IFilterTopic
   schedules?: Schedule[]
+  filter?: IFilterTopic
+
   topicSubscription?: Subscription;
   schduleSubscription?: Subscription;
   memosSubscription?: Subscription;
+
   showCreatingMemo: boolean = false;
   showDetailMemo: boolean = false;
   showCreatingSchedule: boolean = false;
-  error?: string;
+
   tabs: ITab[] = [{ name: "schedules", icon: this.faClock }, { name: "memos", icon: this.faBrain }]
   currentTab: ITab = this.tabs[0];
   selectedTab: "Memo" | "Schedule" = "Schedule";
+
+  error?: string;
 
   constructor(
     private topicSelectingService: TopicSelectingService,
     private apiService: ApiService,
     private route: ActivatedRoute,
+
   ) {
     this.topicSelectingService.selectedFilter.subscribe((filter: IFilterTopic) => {
       this.filter = filter;

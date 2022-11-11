@@ -1,1 +1,55 @@
-<p>current works!</p>
+<div class="User-Detail w-4/5 pb-4 px-16 mx-auto mt-12">
+  <div class="flex justify-between">
+    <div class="mr-4 p-4 border bg-white text-gray-900 hover:bg-gray-900 hover:text-white cursor-pointer rounded-xl"
+      (click)="onNavigate()">
+      <fa-icon size="xl" [icon]="faCaretLeft"></fa-icon>
+      Back
+    </div>
+    <div class="mr-4 p-4 border bg-white text-gray-900 hover:bg-gray-900 hover:text-white cursor-pointer rounded-xl"
+      [routerLink]="['/topic']">
+      Topics
+      <fa-icon size="xl" [icon]="faCaretRight"></fa-icon>
+    </div>
+  </div>
+  <hr />
+  <div class="flex" *ngIf="user">
+    <div class="Left-User mr-8">
+      <div class="User-Square w-72 h-72 border-collapse border border-gray-700 flex justify-center items-center">
+        <img class="rounded-full w-56 h-56" *ngIf="user.avatar else NoUserAvatar" [src]="user.avatar"
+          alt="user-avatar" />
+        <ng-template #NoUserAvatar>
+          <div class="rounded-full w-56 h-56 bg-slate-600">
+
+          </div>
+        </ng-template>
+      </div>
+    </div>
+    <div class="Right-User">
+      <div class="mb-12">
+        <div class="flex justify-between">
+          <label for="topicDescription">Name</label>
+          <fa-icon [icon]="faPen"></fa-icon>
+        </div>
+        <input name="topicDescription" id="topicDescription" type="text" [value]="user.name" [(ngModel)]="user.name"
+          class="w-full outline-0 p-4 border border-gray-100 bg-gray-100 rounded-xl" />
+      </div>
+      <div class="mb-12">
+        <div class="flex justify-between">
+          <label class="" for="topicDescription">
+            Email
+          </label>
+          <fa-icon [icon]="faLock"></fa-icon>
+        </div>
+        <input name="topicDescription" id="topicDescription" type="text" [value]="user.email" disabled
+          class="w-full outline-0 p-4 border disabled:bg-zinc-200 border-gray-100 bg-gray-100 rounded-xl" />
+      </div>
+    </div>
+  </div>
+  <hr />
+  <div class="flex">
+    <div class="p-4 border-2 bg-gray-900 hover:bg-white hover:text-gray-900 cursor-pointer text-white rounded-xl"
+      (click)="onSave()">
+      Save
+    </div>
+  </div>
+</div>

@@ -19,7 +19,7 @@ export class AuthComponent implements OnInit {
 
 
   ngOnInit(): void {
-
+    this.authService.isAuthenicated().subscribe()
   }
 
 }

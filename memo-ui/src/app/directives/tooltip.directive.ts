@@ -24,8 +24,8 @@ export class TooltipDirective implements OnDestroy {
   }
 
   @HostListener('mouseleave') onMouseLeave() {
-    // if (this.timer) clearTimeout(this.timer);
-    // if (this.myPopup) { this.myPopup.remove() }
+    if (this.timer) clearTimeout(this.timer);
+    if (this.myPopup) { this.myPopup.remove() }
   }
 
   private createTooltipPopup(x: number, y: number) {
