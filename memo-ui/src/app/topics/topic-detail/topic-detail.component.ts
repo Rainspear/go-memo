@@ -1,6 +1,6 @@
-import { Component, Input, OnInit, Output, EventEmitter, OnDestroy } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter, OnDestroy, OnChanges, SimpleChanges } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
-import { faBrain, faClock, faEdit, faPlusCircle, faRotateRight } from '@fortawesome/free-solid-svg-icons';
+import { faBrain, faClock, faEdit, faPlusCircle, faRotateRight, IconDefinition } from '@fortawesome/free-solid-svg-icons';
 import { Subscription } from 'rxjs';
 import { Memo, ParamsFilterMemo } from 'src/app/models/memo.model';
 import { ParamsFilterSchedule, Schedule } from 'src/app/models/schedule.model';
@@ -8,37 +8,55 @@ import { IFilterTopic, Topic } from 'src/app/models/topic.model';
 import { ApiService } from 'src/app/services/api.service';
 import { MemoDetailService } from 'src/app/services/memo-detail.service';
 import { TopicSelectingService } from 'src/app/services/topic-selecting.service';
-faClock
+
+
+interface ITab {
+  name: string;
+  icon: IconDefinition;
+}
+
+
 @Component({
   selector: 'app-topic-detail',
   templateUrl: './topic-detail.component.html',
   styleUrls: ['./topic-detail.component.scss']
 })
-
-export class TopicDetailComponent implements OnInit, OnDestroy {
-  memos?: Memo[];
-  id?: string;
-  topic?: Topic;
-  filter?: IFilterTopic
-  schedules?: Schedule[] = []
-  topicSubscription?: Subscription;
-  schduleSubscription?: Subscription;
-  memosSubscription?: Subscription;
-  showCreatingMemo: boolean = false;
-  showDetailMemo: boolean = false;
-  error?: string;
-
+export class TopicDetailComponent implements OnInit, OnDestroy, OnChanges {
   faClock = faClock;
   faBrain = faBrain;
   faPlusCircle = faPlusCircle;
   faRotateRight = faRotateRight;
   faEdit = faEdit;
 
+  memos?: Memo[];
+  id?: string;
+  topic?: Topic;
+  filter?: IFilterTopic
+  schedules?: Schedule[]
+  topicSubscription?: Subscription;
+  schduleSubscription?: Subscription;
+  memosSubscription?: Subscription;
+  showCreatingMemo: boolean = false;
+  showDetailMemo: boolean = false;
+  error?: string;
+  tabs: ITab[] = [{ name: "schedules", icon: this.faClock }, { name: "memos", icon: this.faBrain }]
+  currentTab: ITab = this.tabs[0];
+
   constructor(
     private topicSelectingService: TopicSelectingService,
     private apiService: ApiService,
     private route: ActivatedRoute,
-  ) { }
+  ) {
+    this.topicSelectingService.selectedFilter.subscribe((filter: IFilterTopic) => {
+      this.filter = filter;
+      this.schduleSubscription = this.invokeSchedules({ topic_id: this.route.snapshot.params['id'], ...this.filter?.value })
+    })
+  }
+
+  onChangeCurrentTab(tabName: string) {
+    let selectedTab = this.tabs.filter(tab => tab.name === tabName)[0]
+    this.currentTab = selectedTab;
+  }
 
   onToggleCreatingMemo(show: boolean): void {
     this.showCreatingMemo = show;
@@ -84,11 +102,11 @@ export class TopicDetailComponent implements OnInit, OnDestroy {
     this.id = this.route.snapshot.params['id'];
     if (this.id) this.topicSubscription = this.invokeSingleTopic(this.id);
     if (this.id) this.memosSubscription = this.invokeAllMemo(this.id);
-    if (this.id) this.schduleSubscription = this.invokeSchedules({ topic_id: this.id, ...this.filter?.value })
-    this.topicSelectingService.selectedFilter.subscribe((filter: IFilterTopic) => {
-      this.filter = filter;
-      if (this.id) this.schduleSubscription = this.invokeSchedules({ topic_id: this.id, ...this.filter?.value })
-    })
+    console.log("this.schedules ", this.schedules)
+  }
+
+  ngOnChanges(changes: any): void {
+    console.log("this.schedules ", changes)
   }
 
   ngOnDestroy(): void {

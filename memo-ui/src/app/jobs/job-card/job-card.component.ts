@@ -13,7 +13,7 @@ import { TopicSelectingService } from 'src/app/services/topic-selecting.service'
 export class JobCardComponent implements OnInit {
 
   @Input() topic?: Topic;
-  @Input() schedules?: Schedule[] = [];
+  @Input() schedules?: Schedule[]
 
   filters: IFilterTopic[] = [
     { name: "Today", value: { from_date: Math.floor(Date.now() / 1000) - TIME_ONE_DAY_IN_SECONDS, to_date: Math.floor(Date.now() / 1000) } },

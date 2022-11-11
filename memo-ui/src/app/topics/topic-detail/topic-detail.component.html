@@ -98,18 +98,38 @@
       <div class="">{{topic.description}}</div>
     </div>
   </div>
-  <div class="Topic-Detail-Body pb-8 bg-gray-100 p-4 flex flex-row">
-    <div class="Topic-Detail-Section w-1/3 text-left mx-auto rounded-2xl">
+  <div class="Topic-Detail-Body pb-8 bg-gray-100 py-4 flex flex-row">
+    <!-- <div class="flex flex-row"> -->
+    <div class="Topic-Detail-Section w-1/2 text-left mx-auto cursor-pointer " *ngFor="let tab of tabs"
+      (click)="onChangeCurrentTab(tab.name)">
+      <h3 
+      [ngClass]="tab.name === currentTab.name ? 'border-b-4 border-blue-600' : ''"
+      class="font-semibold py-11 my-0 mb-4 mx-auto flex justify-center items-center">
+        <fa-icon class="text-blue-600" [icon]="tab.icon"></fa-icon>
+        <span class="ml-4 ">{{tab.name}}</span>
+      </h3>
+      <div [ngSwitch]="tab.name">
+        <ng-template ngSwitchCase="schedules">
+          <app-job-card [topic]="topic" [schedules]="schedules"></app-job-card>
+        </ng-template>
+        <ng-template ngSwitchCase="memo">
+          <app-memos *ngIf="memos" [memos]="memos"></app-memos>
+        </ng-template>
+      </div>
+    </div>
+    <!-- </div> -->
+
+    <!-- <div class="Topic-Detail-Section w-1/3 text-left mx-auto rounded-2xl">
       <h3 class="font-semibold py-11 my-0 mb-4 mx-auto flex items-center">
-        <fa-icon class="px-4 text-blue-600" [icon]="faClock"></fa-icon>
+        <fa-icon class="text-blue-600" [icon]="faClock"></fa-icon>
         <span class="ml-4 "> Space Repetition</span>
       </h3>
       <app-job-card [topic]="topic" [schedules]="schedules"></app-job-card>
     </div>
     <div class="w-2/3">
-      <h3 class="font-semibold py-8 my-0 mb-4 text-left mx-auto items-center flex justify-between">
+      <h3 class="font-semibold pl-4 py-8 my-0 mb-4 text-left mx-auto items-center flex justify-between">
         <div>
-          <fa-icon class="px-4 text-blue-600" [icon]="faBrain"></fa-icon>
+          <fa-icon class="text-blue-600" [icon]="faBrain"></fa-icon>
           <span class="ml-4 ">Memo Recall</span>
         </div>
         <div>
@@ -124,7 +144,7 @@
         </div>
       </h3>
       <app-memos *ngIf="memos" [memos]="memos"></app-memos>
-    </div>
+    </div> -->
   </div>
 </div>
 <app-memo-creating-modal [show]="showCreatingMemo" (toggle)="onToggleCreatingMemo($event)"

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, OnChanges, SimpleChanges } from '@angular/core';
 import { Schedule } from 'src/app/models/schedule.model';
 
 @Component({
@@ -6,10 +6,14 @@ import { Schedule } from 'src/app/models/schedule.model';
   templateUrl: './job-card-list.component.html',
   styleUrls: ['./job-card-list.component.scss']
 })
-export class JobCardListComponent implements OnInit {
+export class JobCardListComponent implements OnInit, OnChanges {
 
-  @Input() jobs?: Schedule[] = []
+  @Input() schedules?: Schedule[] = undefined
   constructor() { }
+
+  ngOnChanges(changes: any): void {
+    console.log("changes ", changes)
+  }
 
   ngOnInit(): void {
   }
