@@ -29,9 +29,7 @@ export class SignupComponent implements OnInit {
   createUser(user: ParamsCreateUser): void {
     this.error = "";
     this.apiSerivce.createUser(user).subscribe((res: any) => {
-      console.log("res", res)
       if (res.token) {
-        console.log(res)
         localStorage.setItem('token', res.token)
         this.router.navigate(['/memo']);
       }

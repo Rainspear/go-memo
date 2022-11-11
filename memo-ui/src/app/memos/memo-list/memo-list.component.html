@@ -1,4 +1,4 @@
-<ul class="list-group">
-  <app-memo-item  *ngFor="let memo of memos; " [memo]="memo" (clickDeleteMemo)="onClickDeleteMemo($event)">
+<div class="Memo-List ">
+  <app-memo-item class="" *ngFor="let memo of memos;let i = index " [index]="i" [memo]="memo" (clickDeleteMemo)="onClickDeleteMemo($event)">
   </app-memo-item>
-</ul>
+</div>

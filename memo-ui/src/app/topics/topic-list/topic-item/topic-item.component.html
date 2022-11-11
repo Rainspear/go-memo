@@ -1,6 +1,6 @@
 <div class="cursor-pointer flex flex-row" 
 *ngIf="topic"  
-[ngClass]="(index + 1) % 2 === 0 ? 'bg-gray-100' : ''"
+[ngClass]="(index + 1) % 2 === 0 ? 'bg-slate-100' : ''"
 (click)="onSelectTopic()">
   <div class="Cell p-4 flex items-center pl-8 w-4/12">
     <span>{{topic.id}}</span>

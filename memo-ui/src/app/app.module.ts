@@ -32,6 +32,9 @@ import { JobCardListComponent } from './jobs/job-card/job-card-list/job-card-lis
 import { JobCardItemComponent } from './jobs/job-card/job-card-list/job-card-item/job-card-item.component';
 import { ScrollBarComponent } from './share/scroll-bar/scroll-bar.component';
 import { LightboxComponent } from './lightbox/lightbox.component';
+import { TopicCreatingModalComponent } from './lightbox/topic-creating-modal/topic-creating-modal.component';
+import { MemoCreatingModalComponent } from './lightbox/memo-creating-modal/memo-creating-modal.component';
+import { MemoDetailModalComponent } from './lightbox/memo-detail-modal/memo-detail-modal.component';
 
 @NgModule({
   declarations: [
@@ -60,6 +63,9 @@ import { LightboxComponent } from './lightbox/lightbox.component';
     JobCardItemComponent,
     ScrollBarComponent,
     LightboxComponent,
+    TopicCreatingModalComponent,
+    MemoCreatingModalComponent,
+    MemoDetailModalComponent,
   ],
   imports: [
     BrowserModule,

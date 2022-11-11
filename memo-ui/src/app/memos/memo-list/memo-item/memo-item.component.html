@@ -1,4 +1,4 @@
-<a 
+<!-- <a 
 class="Memo-Item cursor-pointer flex flex-row justify-between hover:no-underline no-underline border p-4" 
 >
     <div class="flex justify-center items-center">
@@ -7,4 +7,9 @@ class="Memo-Item cursor-pointer flex flex-row justify-between hover:no-underline
     <div class="">
       <button class="btn btn-danger" (click)="onClickDeleteMemo()">Delete</button>
     </div>
-</a>
+</a> -->
+
+<div (click)="onSelect()" class="Memo-Item h-auto hover:bg-gray-50 cursor-pointer hover:no-underline no-underline border p-6 bg-white rounded-xl" *ngIf="memo">
+  <div class="font-bold">{{memo.question}}</div>
+  <div>{{memo.content}}</div>
+</div>

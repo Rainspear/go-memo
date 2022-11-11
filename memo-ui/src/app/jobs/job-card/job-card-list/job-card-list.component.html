@@ -1,9 +1,7 @@
 <div>
-
   <ng-template [ngIf]="jobs && jobs.length > 0" [ngIfElse]="NoJob">
     <app-job-card-item *ngFor="let job of jobs; let i = index;" [job]="job" [index]="i"></app-job-card-item>
   </ng-template>
-
   <ng-template #NoJob>
     <div class="p-4 font-bold" #NoJob>
       No Jobs were scheduled

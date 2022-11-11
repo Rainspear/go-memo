@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, OnChanges, Output, SimpleChanges, OnDestroy } from '@angular/core';
+import { faXmarkCircle } from '@fortawesome/free-solid-svg-icons';
 import { Subject, Subscription } from 'rxjs';
 
 @Component({
@@ -9,25 +10,19 @@ import { Subject, Subscription } from 'rxjs';
 export class LightboxComponent implements OnInit, OnChanges, OnDestroy {
 
   @Input() show?: boolean;
-  // showSubject = new Subject<boolean>();
-  @Input() toggleForm: () => void = () => {}
-    // @Output() showSubject = new EventEmitter<void>();
-  // @Output() onClose = new EventEmitter<boolean>();
-  // subscriptionShow: Subscription;
-  // @Input() onCloseApp = () => {}
+  @Output() toggle = new EventEmitter<boolean>();
+
+  faXmarkCircle = faXmarkCircle;
 
   constructor() {
   }
 
   onClickCloseApp() {
-    // this.show = !this.show;
-    // this.showSubject.emit();
-    this.toggleForm()
+    this.toggle.emit(!this.show);
   }
 
   ngOnChanges(changes: any): void {
-    console.log("LightboxComponent changes", changes)
-    this.show = changes?.show.currentValue
+
   }
 
   ngOnInit(): void {
@@ -35,7 +30,6 @@ export class LightboxComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    // this.subscriptionShow.unsubscribe();
   }
 
 }

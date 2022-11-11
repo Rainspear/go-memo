@@ -16,12 +16,9 @@ export class TopicListComponent implements OnInit {
     this.selectedTopic.emit(topic);
   }
 
-  onToggleForm() {
-    console.log(this.showCreatingForm, "before")
-    this.showCreatingForm = !this.showCreatingForm; 
-    console.log(this.showCreatingForm, "after")
+  onToggle(showCreatingForm : boolean) {
+    this.showCreatingForm = showCreatingForm;
   }
-
 
   ngOnInit(): void {
   }

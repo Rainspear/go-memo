@@ -1,0 +1,33 @@
+<app-lightbox [show]="show" (toggle)="onToggleHandler($event)">
+  <div header class="py-4">
+    <h3 class="font-semibold m-0 mb-4 text-gray-900 dark:text-white">Memo</h3>
+    <div class="text-gray-500">Submit to create your topic for piece of information</div>
+  </div>
+  <div class="p-8">
+    <div class="">
+      <label for="questionMemo">Question</label>
+      <input name="questionMemo" id="questionMemo" type="text"
+        class="w-full outline-0 p-4 border border-gray-100 bg-gray-100 rounded-xl" [(ngModel)]="memo.question" />
+    </div>
+    <hr />
+    <div class="">
+      <label for="contentMemo">Content</label>
+      <textarea name="contentMemo" id="contentMemo" type="text"
+        class="w-full outline-0 p-4 border border-gray-100 bg-gray-100 rounded-xl"
+        [(ngModel)]="memo.content"></textarea>
+    </div>
+  </div>
+  <div footer class="flex items-center p-6 space-x-2 rounded-b border-t border-gray-200 dark:border-gray-600">
+    <button data-modal-toggle="defaultModal" type="button"
+      class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+      (click)="onSubmitHandler()">
+      Create
+    </button>
+    <button data-modal-toggle="defaultModal" type="button"
+      class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
+      (click)="onToggleHandler(false)">
+      Cancel
+    </button>
+    <span class="ml-4 p-4" *ngIf="error">{{error}}</span>
+  </div>
+</app-lightbox>

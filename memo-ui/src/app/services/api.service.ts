@@ -1,8 +1,8 @@
 import { Injectable, OnInit } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
-import { Memo } from '../models/memo.model';
-import { FilterParamsTopic, Topic } from '../models/topic.model';
+import { Memo, ParamsCreateMemo, ParamsFilterMemo } from '../models/memo.model';
+import { CreateParamsTopic, FilterParamsTopic, Topic } from '../models/topic.model';
 import { ResponseAPI } from '../models/response.model';
 import { ParamsCreateUser, ParamsLoginUser, User } from '../models/user.model';
 import { AuthComponent } from '../auth/auth.component';
@@ -23,15 +23,15 @@ export class ApiService implements OnInit {
   ngOnInit() {
   }
 
-  getAllMemos(): Observable<ResponseAPI<Memo[]>> {
-    return this.httpClient.get<ResponseAPI<Memo[]>>(`${apiUrl}/memos`).pipe()
+  getAllMemos(params?: ParamsFilterMemo): Observable<ResponseAPI<Memo[]>> {
+    return this.httpClient.get<ResponseAPI<Memo[]>>(`${apiUrl}/memos`, { params: { ...params } }).pipe()
   }
 
   getSingleMemo(id: string): Observable<ResponseAPI<Memo>> {
     return this.httpClient.get<ResponseAPI<Memo>>(`${apiUrl}/memos/${id}`).pipe()
   }
 
-  postMemo(data: Memo): Observable<ResponseAPI<Memo>> {
+  createMemo(data: ParamsCreateMemo): Observable<ResponseAPI<Memo>> {
     return this.httpClient.post<ResponseAPI<Memo>>(`${apiUrl}/memos`, data, httpOptions).pipe()
   }
 
@@ -43,6 +43,10 @@ export class ApiService implements OnInit {
     return this.httpClient.get<ResponseAPI<Topic[]>>(`${apiUrl}/topics`).pipe()
   }
 
+  createTopic(data: CreateParamsTopic): Observable<ResponseAPI<Topic>> {
+    return this.httpClient.post<ResponseAPI<Topic>>(`${apiUrl}/topics`, data).pipe()
+  }
+
   deleteTopic(id: string): Observable<ResponseAPI<Topic>> {
     return this.httpClient.delete<ResponseAPI<Topic>>(`${apiUrl}/topics/${id}`).pipe()
   }
@@ -50,7 +54,6 @@ export class ApiService implements OnInit {
   getSingleTopic(id: string, filter?: FilterParamsTopic): Observable<ResponseAPI<Topic[]>> {
     // URLSearchParams
     return this.httpClient.get<ResponseAPI<Topic[]>>(`${apiUrl}/topics/${id}`, { params: { ...filter } }).pipe()
-
   }
 
   createUser(user: ParamsCreateUser): Observable<ResponseAPI<User>> {

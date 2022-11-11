@@ -19,10 +19,9 @@ export class SigninComponent implements OnInit {
   onClickLogin () {
     this.error = "";
     this.apiService.login(this.user).subscribe((res: any) => {
-      console.log("res", res)
       if (res.token) {
         localStorage.setItem('token', res.token)
-        this.router.navigate(['/memo']);
+        this.router.navigate(['/topic']);
       }
     }, error => {
       this.error = error?.error?.error || error.message

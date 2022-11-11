@@ -18,22 +18,24 @@ const routes: Routes = [
   {
     path: 'topic',
     component: TopicsComponent,
+    canActivate: [AuthGuardService],
   },
   {
     path: 'topic/:id',
     component: TopicDetailComponent,
-  },
-  {
-    path: 'memo',
-    component: MemosComponent,
     canActivate: [AuthGuardService],
-    children: [
-      {
-        path: ':id',
-        component: MemoDetailComponent,
-      }
-    ]
   },
+  // {
+  //   path: 'memo',
+  //   component: MemosComponent,
+  //   canActivate: [AuthGuardService],
+  //   children: [
+  //     {
+  //       path: ':id',
+  //       component: MemoDetailComponent,
+  //     }
+  //   ]
+  // },
   {
     path: 'auth',
     component: AuthComponent,

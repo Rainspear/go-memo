@@ -1,0 +1,16 @@
+<app-lightbox [show]="show" (toggle)="onToggleHandler($event)">
+  <div header class="py-4">
+    <h3 class="font-semibold m-0 mb-4 text-gray-900 dark:text-white">Memo</h3>
+    <div class="text-gray-500">Submit to create your topic for piece of information</div>
+  </div>
+  
+  <div footer class="flex items-center p-6 space-x-2 rounded-b border-t border-gray-200 dark:border-gray-600">
+    <button data-modal-toggle="defaultModal" type="button"
+      class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+      (click)="onSubmitHandler()">
+      Ok
+    </button>
+
+    <span class="ml-4 p-4" *ngIf="error">{{error}}</span>
+  </div>
+</app-lightbox>

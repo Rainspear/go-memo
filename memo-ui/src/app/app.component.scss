@@ -1,3 +1,11 @@
 .App-Container {
   height: calc(100vh - 8rem);
 }
+
+.Long-Word {
+  white-space: nowrap;
+  width: 25%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  // width: inherit;
+}

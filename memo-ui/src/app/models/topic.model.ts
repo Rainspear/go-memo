@@ -6,10 +6,16 @@ export interface Topic {
   author_id: string;
   author: User;
   description: string;
+  created_date?: number;
+  last_update?: number;
   // repetition?: Schedule[];
 }
 
+export interface CreateParamsTopic {
+  title: string;
+  description: string;
 
+}
 
 export interface FilterParamsTopic {
   from_date: number;

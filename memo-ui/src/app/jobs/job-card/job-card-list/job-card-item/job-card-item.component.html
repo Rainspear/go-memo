@@ -3,26 +3,29 @@
 : (index + 1) % 4 === 1 ? 'bg-orange-400' 
 : (index + 1) % 4 === 2 ? 'bg-indigo-500'
 : (index + 1) % 4 === 3 ? 'bg-red-500' : 'bg-green-600'"
-  class="Job-Card-Item p-8 rounded-2xl text-white flex flex-row justify-between mb-4">
-  <div class="Left">
+  class="Job-Card-Item p-4 rounded-2xl text-white flex flex-row justify-between mb-4">
+  <div class="Left px-1 text-left">
     <div class="text-xl mb-2">Job Status</div>
-    <div class="text-4xl font-bold mb-4">{{job.status | titlecase}}</div>
+    <div class="text-2xl font-semibold mb-4">{{job.status | titlecase}}</div>
     <div class="text-xl mb-2">Job Scheduled</div>
-    <div class="text-4xl font-bold">{{job.time * 1000 | date}}</div>
+    <div class="text-2xl font-semibold">{{job.time * 1000 | date}}</div>
   </div>
-  <div class="Right">
-    <div class="Job-Card-Row flex flex-row">
-      <div class="Job-Card-Col flex flex-col pr-4">
-        <div class="Job-Card-Name text-4xl mb-2">JayPark</div>
-        <div class="Job-Card-Phone text-xl">+84 123 123 236</div>
+  <div class="Right px-1">
+    <div class="Job-Card-Row flex flex-row ">
+      <div class="pr-4 Job-Card-Col text-right flex flex-col">
+        <div class="Job-Card-Name text-2xl font-semibold mb-2">{{job.author.name}}</div>
+        <div class="Job-Card-Phone text-xl">{{job.author.email}}</div>
       </div>
-      <div>
-        <img class="bg-center rounded-full w-24 h-24"
-          src="https://images.unsplash.com/photo-1547407139-3c921a66005c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80" />
+      <div class="">
+        <img class="bg-center rounded-full w-16 h-16" *ngIf="job.author.avatar else defaultImage"
+          [src]="job.author.avatar" />
+        <ng-template #defaultImage>
+          <div class="w-16 h-16 bg-slate-600 rounded-full"></div>
+        </ng-template>
       </div>
     </div>
-    <div class="Job-Card-Severity">
-      <div class="bg-white/25 text-white w-fit p-4 rounded-lg">
+    <div class="Job-Card-Severity mt-4">
+      <div class="bg-white/25 text-white mr-0 ml-auto w-fit p-4 rounded-lg">
         {{job.level | titlecase}}
       </div>
     </div>

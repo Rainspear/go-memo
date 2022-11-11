@@ -16,10 +16,10 @@ export class MemoEditingComponent implements OnInit {
   constructor() { }
 
   onClickAdd(inputElement: HTMLInputElement ) {
-    console.log("current title params pass in function ", inputElement.type + "=" + inputElement.value);
-    console.log("topicTitleInput", this.topicTitleInput);
-    console.log("topicQuestionInput", this.topicQuestionInput);
-    console.log("topicAnswer", this.topicAnswer);
+    // console.log("current title params pass in function ", inputElement.type + "=" + inputElement.value);
+    // console.log("topicTitleInput", this.topicTitleInput);
+    // console.log("topicQuestionInput", this.topicQuestionInput);
+    // console.log("topicAnswer", this.topicAnswer);
   }
 
   onClickGetMemoData () {
