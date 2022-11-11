@@ -1,16 +1,25 @@
-<app-share-header></app-share-header>
-
-<div class="Topic-Control flex justify-end">
+<!-- <div class="Topic-Control flex justify-end">
   <button class="p-4 border bg-blue-500 text-white rounded-xl" (click)="onToggle(true)">Add</button>
-</div>
-<hr />
+</div> -->
+<!-- <hr />
 <div class="Topic-List-Header bg-slate-100 w-full flex flex-row">
   <div class="Cell p-4 pl-8 w-4/12 font-bold">ID</div>
   <div class="Cell p-4 pl-8 w-2/12 font-bold">Title</div>
   <div class="Cell p-4 pl-8 w-4/12 font-bold">Description</div>
   <div class="Cell p-4 pl-8 w-2/12 font-bold">Control</div>
+</div> -->
+
+<div class="Topic-Control flex justify-between">
+  <div class="text-3xl font-bold">Autumn</div>
+  <div class="p-4 border bg-blue-500 hover:bg-white hover:text-blue-500 text-white rounded-xl" (click)="onToggle(true)">
+    <fa-icon [icon]="faPlusCircle"></fa-icon>
+    Add
+  </div>
 </div>
-<app-topic-item *ngFor="let topic of topics; let i = index" [topic]="topic" [index]="i"></app-topic-item>
+<hr />
+<div class="grid grid-cols-4 gap-6">
+  <app-topic-item *ngFor="let topic of topics; let i = index" [topic]="topic" [index]="i"></app-topic-item>
+</div>
 <hr />
 <!-- <app-lightbox [show]="showCreatingForm" (toggle)="onToggle($event)"></app-lightbox>-->
 <app-topic-creating-modal [show]="showCreatingForm" (toggle)="onToggle($event)"></app-topic-creating-modal>

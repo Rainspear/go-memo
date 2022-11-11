@@ -111,9 +111,9 @@
     </div>
     <div [ngSwitch]="currentTab.name">
       <ng-template [ngSwitchCase]="tabs[0].name">
-        <div class="flex flex-row">
+        <div class="flex flex-row justify-evenly">
           <app-job-card-list [topic]="topic" [schedules]="schedules"></app-job-card-list>
-          <!-- <app-job-card-list [topic]="topic" [schedules]="schedules"></app-job-card-list> -->
+          <app-job-card-list [topic]="topic" [schedules]="schedules"></app-job-card-list>
         </div>
       </ng-template>
       <ng-template [ngSwitchCase]="tabs[1].name">

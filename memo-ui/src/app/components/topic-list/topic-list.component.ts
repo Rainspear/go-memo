@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
+import { faPlusCircle } from '@fortawesome/free-solid-svg-icons';
 import { Topic } from 'src/app/models/topic.model';
 
 @Component({
@@ -7,6 +8,7 @@ import { Topic } from 'src/app/models/topic.model';
   styleUrls: ['./topic-list.component.scss']
 })
 export class TopicListComponent implements OnInit {
+  faPlusCircle = faPlusCircle;
   showCreatingForm: boolean = false;
   test :number = 0
   @Input() topics: Topic[] = [];

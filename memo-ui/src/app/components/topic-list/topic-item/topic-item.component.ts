@@ -1,14 +1,18 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
+import { faCode } from '@fortawesome/free-solid-svg-icons';
 import { Topic } from 'src/app/models/topic.model';
 import { ApiService } from 'src/app/services/api.service';
 import { TopicSelectingService } from 'src/app/services/topic-selecting.service';
+
 @Component({
   selector: 'app-topic-item',
   templateUrl: './topic-item.component.html',
   styleUrls: ['./topic-item.component.scss']
 })
 export class TopicItemComponent implements OnInit {
+  faCode = faCode;
+
   @Input() topic?: Topic;
   @Input() index: number = 0;
   @Output() selectedTopic = new EventEmitter<Topic>();

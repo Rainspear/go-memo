@@ -1,4 +1,4 @@
-<div class="cursor-pointer flex flex-row" 
+<!-- <div class="cursor-pointer flex flex-row" 
 *ngIf="topic"  
 [ngClass]="(index + 1) % 2 === 0 ? 'bg-slate-100' : ''"
 (click)="onSelectTopic()">
@@ -13,6 +13,26 @@
   </div>
   <div class="Cell p-4 flex items-center pl-8 w-2/12">
     <button (click)="onClickDeleteTopic($event)" class="mr-4 inline-block btn btn-danger">Delete</button>
-    <!-- <div class="img-responsive" [ngStyle]="{backgroundColor:'#123123', width: '3.5rem', height: '3.5rem'}"></div> -->
+  </div>
+</div> -->
+
+<div 
+*ngIf="topic" class="Topic p-6 flex flex-col cursor-pointer hover:bg-slate-50" 
+(click)="onSelectTopic()"
+>
+  <div class="Cell p-4 flex items-center pl-8">
+    <fa-icon [icon]="faCode"></fa-icon>
+  </div>
+  <div class="Cell p-4 flex items-center pl-8">
+    <span>{{topic.id}}</span>
+  </div>
+  <div class="Cell p-4 flex items-center pl-8">
+    <span>{{topic.title}}</span>
+  </div>
+  <div class="Cell p-4 flex items-center pl-8">
+    <span>{{topic.description}}</span>
+  </div>
+  <div class="Cell p-4 flex self-end pl-8">
+    {{topic.created_date | date}}
   </div>
 </div>
