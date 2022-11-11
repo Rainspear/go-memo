@@ -13,8 +13,8 @@
   </div>
   <hr />
   <div class="flex" *ngIf="user">
-    <div class="Left-User mr-8">
-      <div class="User-Square w-72 h-72 border-collapse border border-gray-700 flex justify-center items-center">
+    <div class="Left-User mr-12">
+      <div class="User-Square w-72 h-72 border-collapse border rounded-lg border-zinc-200 flex justify-center items-center">
         <img class="rounded-full w-56 h-56" *ngIf="user.avatar else NoUserAvatar" [src]="user.avatar"
           alt="user-avatar" />
         <ng-template #NoUserAvatar>
