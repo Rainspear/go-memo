@@ -27,6 +27,7 @@ type User struct {
 }
 
 type UserResponse struct {
+	// Id          interface{} `json:"id,omitempty" bson:"_id,omitempty"`
 	Name        string `json:"name" bson:"name"`
 	Avatar      string `json:"avatar," bson:"avatar,"`
 	Email       string `json:"email" bson:"email"`
@@ -39,7 +40,7 @@ type Token struct {
 	CreatedDate int64  `json:"created_date" bson:"created_date"`
 }
 
-func getUsers(w http.ResponseWriter, req *http.Request) {
+func getUsers(w http.ResponseWriter, req *http.Request) { // for testing purposes
 	coll := client.Database(database).Collection(USER_COLLECTION)
 	matchStage := bson.D{{Key: "$match", Value: bson.D{}}}
 	addFieldStage := bson.D{{Key: "$project", Value: bson.D{{Key: "password", Value: 0}}}}
@@ -52,12 +53,19 @@ func getUsers(w http.ResponseWriter, req *http.Request) {
 	if handleResponseError(err, w, http.StatusInternalServerError) {
 		return
 	}
-	handleResponseSuccess(users, w, http.StatusOK)
+	var u []UserResponse
+	copier.Copy(&u, users)
+	handleResponseSuccess(u, w, http.StatusOK)
 }
 
 func getCurrentUser(w http.ResponseWriter, req *http.Request) {
-	loggedUser := (req.Context().Value(USER_CONTEXT_KEY)).(UserResponse)
-	handleResponseSuccess(loggedUser, w, http.StatusOK)
+	loggedUser := (req.Context().Value(USER_CONTEXT_KEY)).(User)
+	var u UserResponse
+	err := copier.Copy(&u, loggedUser)
+	if handleResponseError(err, w, http.StatusInternalServerError) {
+		return
+	}
+	handleResponseSuccess(u, w, http.StatusOK)
 }
 
 func updateUser(w http.ResponseWriter, req *http.Request) {
@@ -107,7 +115,10 @@ func signin(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 	var userResponse UserResponse
-	copier.Copy(&userResponse, &user)
+	err = copier.Copy(&userResponse, user)
+	if handleResponseError(err, w, http.StatusInternalServerError) {
+		return
+	}
 	handleResponseToken(token, userResponse, w, http.StatusOK)
 }
 
@@ -145,12 +156,12 @@ func signup(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 	var userResponse UserResponse
-	copier.Copy(&userResponse, &user)
+	copier.Copy(&userResponse, user)
 	handleResponseToken(token, userResponse, w, http.StatusOK)
 }
 
 func signout(w http.ResponseWriter, req *http.Request) {
-	loggedUser := (req.Context().Value(USER_CONTEXT_KEY)).(UserResponse)
+	loggedUser := (req.Context().Value(USER_CONTEXT_KEY)).(User)
 	token := strings.Split(req.Header.Get(AUTH_HEADER_KEY), " ")[1]
 	fmt.Println("token: ", token)
 	filter := bson.D{{Key: "email", Value: loggedUser.Email}}

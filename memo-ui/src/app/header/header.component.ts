@@ -3,13 +3,15 @@ import { Subscription } from 'rxjs';
 import { User } from '../models/user.model';
 import { ApiService } from '../services/api.service';
 import { AuthUserService } from '../services/auth-user.service';
-
+import { faNoteSticky, faBrain } from '@fortawesome/free-solid-svg-icons'
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent implements OnInit, OnDestroy {
+  faNoteSticky = faNoteSticky;
+  faBrain = faBrain;
   collapsed: boolean = true;
   user?: User;
   userSubscription?: Subscription;

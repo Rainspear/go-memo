@@ -46,9 +46,10 @@ func authorizeUser(f http.HandlerFunc) func(http.ResponseWriter, *http.Request) 
 			{Key: "email", Value: userClaim.Email},
 			{Key: "tokens", Value: bson.D{{Key: "$elemMatch", Value: bson.D{{Key: "token", Value: token}}}}},
 		}
-		var u UserResponse
+		var u User
 		err = client.Database(database).Collection(USER_COLLECTION).FindOne(r.Context(), filter).Decode(&u)
-		if handleResponseError(err, w, http.StatusUnauthorized) {
+		if err != nil {
+			handleResponseError(fmt.Errorf("Can not authorized user"), w, http.StatusUnauthorized)
 			return
 		}
 		if u.Email == "" {

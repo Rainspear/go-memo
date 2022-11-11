@@ -8,7 +8,7 @@ import { Repetition } from 'src/app/models/topic.model';
 })
 export class JobCardListComponent implements OnInit {
 
-  @Input() jobs?: Repetition[]
+  @Input() jobs?: Repetition[] = []
   constructor() { }
 
   ngOnInit(): void {

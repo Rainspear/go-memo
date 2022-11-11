@@ -6,10 +6,11 @@ import "time"
 type ColectionKey string
 
 const (
-	MEMO_COLLECTION  string = "memos"
-	USER_COLLECTION  string = "users"
-	TOPIC_COLLECTION string = "topics"
-	MOVIE_COLLECTION string = "movies"
+	MEMO_COLLECTION     string = "memos"
+	USER_COLLECTION     string = "users"
+	TOPIC_COLLECTION    string = "topics"
+	MOVIE_COLLECTION    string = "movies"
+	SCHEDULE_COLLECTION string = "schedules"
 )
 
 // session key in cookies

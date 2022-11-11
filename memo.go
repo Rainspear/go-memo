@@ -1,36 +1,38 @@
 package main
 
 import (
-	"context"
 	"encoding/json"
 	"net/http"
 	"time"
 
 	"github.com/gorilla/mux"
+	"github.com/jinzhu/copier"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 type Memo struct {
-	Id          interface{} `json:"id,omitempty" bson:"_id,omitempty"`
-	TopicId     string      `json:"topic_id" bson:"topic_id"`
-	Author      string      `json:"author" bson:"author"`
-	Content     string      `json:"content" bson:"content"`
-	Question    string      `json:"question" bson:"question"`
-	Answer      []string    `json:"answer" bson:"answer"`
-	CreatedDate time.Time   `json:"created_date" bson:"created_date"`
-	LastUpdate  time.Time   `json:"last_update" bson:"last_update"`
+	Id          interface{}  `json:"id,omitempty" bson:"_id,omitempty"`
+	TopicId     interface{}  `json:"topic_id" bson:"topic_id"`
+	AuthorId    interface{}  `json:"author_id" bson:"author_id"`
+	Topic       Topic        `json:"topic" bson:"topic"`
+	Author      UserResponse `json:"author" bson:"author"`
+	Content     string       `json:"content" bson:"content"`
+	Question    string       `json:"question" bson:"question"`
+	Answer      []string     `json:"answer" bson:"answer"`
+	CreatedDate int64        `json:"created_date" bson:"created_date"`
+	LastUpdate  int64        `json:"last_update" bson:"last_update"`
 }
 
 func getMemos(w http.ResponseWriter, req *http.Request) {
 	coll := client.Database(database).Collection(MEMO_COLLECTION)
 	filter := bson.D{}
-	cursor, err := coll.Find(context.TODO(), filter)
+	cursor, err := coll.Find(req.Context(), filter)
 	if handleResponseError(err, w, http.StatusInternalServerError) {
 		return
 	}
 	memos := []Memo{}
-	err = cursor.All(context.TODO(), &memos)
+	err = cursor.All(req.Context(), memos)
 	if handleResponseError(err, w, http.StatusInternalServerError) {
 		return
 	}
@@ -46,7 +48,7 @@ func getMemo(w http.ResponseWriter, req *http.Request) {
 	}
 	filter := bson.D{{Key: "_id", Value: id}}
 	var memo Memo
-	err = coll.FindOne(context.TODO(), filter).Decode(&memo)
+	err = coll.FindOne(req.Context(), filter).Decode(&memo)
 	if handleResponseError(err, w, http.StatusNotFound) {
 		return
 	}
@@ -54,16 +56,24 @@ func getMemo(w http.ResponseWriter, req *http.Request) {
 }
 
 func createMemo(w http.ResponseWriter, req *http.Request) {
+	loggedUser := (req.Context().Value(USER_CONTEXT_KEY)).(User)
 	coll := client.Database(database).Collection(MEMO_COLLECTION)
-	t := time.Now()
+	t := time.Now().Unix()
 	var data Memo
 	err := json.NewDecoder(req.Body).Decode(&data)
 	if handleResponseError(err, w, http.StatusBadRequest) {
 		return
 	}
+	var ur UserResponse
+	err = copier.Copy(&ur, loggedUser)
+	if err != nil {
+		handleResponseError(err, w, http.StatusInternalServerError)
+	}
 	data.LastUpdate = t
 	data.CreatedDate = t
-	result, err := coll.InsertOne(context.TODO(), &data)
+	data.AuthorId = loggedUser.Id
+	data.Author = ur
+	result, err := coll.InsertOne(req.Context(), data)
 	if handleResponseError(err, w, http.StatusInternalServerError) {
 		return
 	}
@@ -83,10 +93,10 @@ func updateMemo(w http.ResponseWriter, req *http.Request) {
 	if handleResponseError(err, w, http.StatusBadRequest) {
 		return
 	}
-	data.LastUpdate = time.Now()
+	data.LastUpdate = time.Now().Unix()
 	update := bson.D{{Key: "$set", Value: &data}}
 	coll := client.Database(database).Collection(MEMO_COLLECTION)
-	result, err := coll.UpdateOne(context.TODO(), filter, update)
+	result, err := coll.UpdateOne(req.Context(), filter, update)
 	if handleResponseError(err, w, http.StatusBadRequest) {
 		return
 	}
@@ -101,7 +111,7 @@ func deleteMemo(w http.ResponseWriter, req *http.Request) {
 	}
 	filter := bson.D{{Key: "_id", Value: id}}
 	coll := client.Database(database).Collection(MEMO_COLLECTION)
-	result, err := coll.DeleteOne(context.TODO(), filter)
+	result, err := coll.DeleteOne(req.Context(), filter)
 	if handleResponseError(err, w, http.StatusInternalServerError) {
 		return
 	}
