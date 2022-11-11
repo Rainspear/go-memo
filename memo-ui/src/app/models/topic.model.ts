@@ -11,15 +11,10 @@ export interface Topic {
   // repetition?: Schedule[];
 }
 
-export interface CreateParamsTopic {
+export interface ParamsCreateTopic {
   title: string;
   description: string;
 
-}
-
-export interface FilterParamsTopic {
-  from_date: number;
-  to_date: number;
 }
 
 export interface IFilterTopic {

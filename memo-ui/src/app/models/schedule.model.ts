@@ -10,3 +10,9 @@ export interface Schedule {
   level: string;
   status: string;
 }
+
+export interface ParamsFilterSchedule {
+  from_date?: number;
+  to_date?: number;
+  topic_id: string;
+}

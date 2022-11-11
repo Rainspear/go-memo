@@ -2,8 +2,8 @@ import { Component, Input, OnInit, Output, EventEmitter, OnDestroy } from '@angu
 import { ActivatedRoute, Params } from '@angular/router';
 import { faBrain, faClock, faEdit, faPlusCircle, faRotateRight } from '@fortawesome/free-solid-svg-icons';
 import { Subscription } from 'rxjs';
-import { Memo } from 'src/app/models/memo.model';
-import { Schedule } from 'src/app/models/schedule.model';
+import { Memo, ParamsFilterMemo } from 'src/app/models/memo.model';
+import { ParamsFilterSchedule, Schedule } from 'src/app/models/schedule.model';
 import { IFilterTopic, Topic } from 'src/app/models/topic.model';
 import { ApiService } from 'src/app/services/api.service';
 import { MemoDetailService } from 'src/app/services/memo-detail.service';
@@ -19,10 +19,11 @@ export class TopicDetailComponent implements OnInit, OnDestroy {
   memos?: Memo[];
   id?: string;
   topic?: Topic;
+  filter?: IFilterTopic
   schedules?: Schedule[] = []
   topicSubscription?: Subscription;
-  paramsSubscription?: Subscription;
-  submitSubscription?: Subscription;
+  schduleSubscription?: Subscription;
+  memosSubscription?: Subscription;
   showCreatingMemo: boolean = false;
   showDetailMemo: boolean = false;
   error?: string;
@@ -32,14 +33,12 @@ export class TopicDetailComponent implements OnInit, OnDestroy {
   faPlusCircle = faPlusCircle;
   faRotateRight = faRotateRight;
   faEdit = faEdit;
-  
+
   constructor(
     private topicSelectingService: TopicSelectingService,
     private apiService: ApiService,
     private route: ActivatedRoute,
-    private memoDetailService: MemoDetailService
-  ) {
-  }
+  ) { }
 
   onToggleCreatingMemo(show: boolean): void {
     this.showCreatingMemo = show;
@@ -50,22 +49,23 @@ export class TopicDetailComponent implements OnInit, OnDestroy {
   }
 
   onSubmitCreatingMemo() {
-    this.submitSubscription = this.invokeAllMemo(this?.id || undefined);
+    this.memosSubscription = this.invokeAllMemo(this?.id || undefined);
   }
 
   onReloadMemo() {
-    this.submitSubscription = this.invokeAllMemo(this?.id || undefined);
+    this.memosSubscription = this.invokeAllMemo(this?.id || undefined);
+  }
+
+  invokeSchedules(filter: ParamsFilterSchedule): Subscription {
+    return this.apiService.getScheduleByFilter(filter).subscribe((res: any) => {
+      this.schedules = res.data
+    })
   }
 
   invokeSingleTopic(id: string): Subscription {
     return this.apiService.getSingleTopic(id).subscribe((res: any) => {
       if (res.data) {
         this.topic = res.data;
-        this.apiService.getScheduleByTopicId(res.data.id).subscribe((response) => {
-          this.schedules = response.data;
-        }, (error) => {
-          this.error = error.error;
-        })
       }
     })
   }
@@ -83,22 +83,12 @@ export class TopicDetailComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.id = this.route.snapshot.params['id'];
     if (this.id) this.topicSubscription = this.invokeSingleTopic(this.id);
-    this.submitSubscription = this.invokeAllMemo(this?.id || undefined);
-    // this.paramsSubscription = this.route.params.subscribe((params: Params) => {
-    //   this.id = params['id'];
-    // })
-    // if (this.id) {
-    //   this.topicSelectingService.selectedFilter.subscribe((filter: IFilterTopic) => {
-    //     if (this.id) {
-    //       this.topicSubscription = this.apiService.getSingleTopic(this.id, filter.value).subscribe((res: any) => {
-    //         if (res.data) {
-    //           this.topic = res.data
-    //         }
-    //       })
-    //     }
-    //   })
-    // }
-
+    if (this.id) this.memosSubscription = this.invokeAllMemo(this.id);
+    if (this.id) this.schduleSubscription = this.invokeSchedules({ topic_id: this.id, ...this.filter?.value })
+    this.topicSelectingService.selectedFilter.subscribe((filter: IFilterTopic) => {
+      this.filter = filter;
+      if (this.id) this.schduleSubscription = this.invokeSchedules({ topic_id: this.id, ...this.filter?.value })
+    })
   }
 
   ngOnDestroy(): void {
@@ -106,12 +96,12 @@ export class TopicDetailComponent implements OnInit, OnDestroy {
     if (this.topicSubscription) {
       this.topicSubscription.unsubscribe();
     }
-    if (this.submitSubscription) {
-      this.submitSubscription.unsubscribe();
+    if (this.memosSubscription) {
+      this.memosSubscription.unsubscribe();
     }
-    // if (this.paramsSubscription) {
-    //   this.paramsSubscription.unsubscribe();
-    // }
+    if (this.schduleSubscription) {
+      this.schduleSubscription.unsubscribe();
+    }
   }
 
 }

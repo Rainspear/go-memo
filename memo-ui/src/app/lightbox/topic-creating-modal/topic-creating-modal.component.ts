@@ -1,5 +1,5 @@
 import { EventEmitter, Component, OnInit, Input, Output } from '@angular/core';
-import { CreateParamsTopic, Topic } from 'src/app/models/topic.model';
+import { ParamsCreateTopic, Topic } from 'src/app/models/topic.model';
 import { ApiService } from 'src/app/services/api.service';
 
 @Component({
@@ -13,7 +13,7 @@ export class TopicCreatingModalComponent implements OnInit {
 
   @Input() show: boolean = false;
   @Output() toggle = new EventEmitter<boolean>()
-  topic: CreateParamsTopic = { title: '', description: '' }
+  topic: ParamsCreateTopic = { title: '', description: '' }
   error?: string;
 
   onToggleHandler(show: boolean) {

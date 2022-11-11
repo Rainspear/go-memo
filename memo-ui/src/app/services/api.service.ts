@@ -2,11 +2,10 @@ import { Injectable, OnInit } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { Memo, ParamsCreateMemo, ParamsFilterMemo } from '../models/memo.model';
-import { CreateParamsTopic, FilterParamsTopic, Topic } from '../models/topic.model';
+import { ParamsCreateTopic, Topic } from '../models/topic.model';
 import { ResponseAPI } from '../models/response.model';
 import { ParamsCreateUser, ParamsLoginUser, User } from '../models/user.model';
-import { AuthComponent } from '../auth/auth.component';
-import { Schedule } from '../models/schedule.model';
+import { Schedule, ParamsFilterSchedule } from '../models/schedule.model';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'Application/json' })
@@ -43,7 +42,7 @@ export class ApiService implements OnInit {
     return this.httpClient.get<ResponseAPI<Topic[]>>(`${apiUrl}/topics`).pipe()
   }
 
-  createTopic(data: CreateParamsTopic): Observable<ResponseAPI<Topic>> {
+  createTopic(data: ParamsCreateTopic): Observable<ResponseAPI<Topic>> {
     return this.httpClient.post<ResponseAPI<Topic>>(`${apiUrl}/topics`, data).pipe()
   }
 
@@ -51,7 +50,7 @@ export class ApiService implements OnInit {
     return this.httpClient.delete<ResponseAPI<Topic>>(`${apiUrl}/topics/${id}`).pipe()
   }
 
-  getSingleTopic(id: string, filter?: FilterParamsTopic): Observable<ResponseAPI<Topic[]>> {
+  getSingleTopic(id: string, filter?: ParamsFilterSchedule): Observable<ResponseAPI<Topic[]>> {
     // URLSearchParams
     return this.httpClient.get<ResponseAPI<Topic[]>>(`${apiUrl}/topics/${id}`, { params: { ...filter } }).pipe()
   }
@@ -72,7 +71,7 @@ export class ApiService implements OnInit {
     return this.httpClient.post<ResponseAPI<User>>(`${apiUrl}/signin`, user).pipe()
   }
 
-  getScheduleByTopicId(topicId: string): Observable<ResponseAPI<Schedule[]>> {
-    return this.httpClient.get<ResponseAPI<Schedule[]>>(`${apiUrl}/schedules`, { params: { topic_id: topicId } }).pipe()
+  getScheduleByFilter(filter ?: ParamsFilterSchedule): Observable<ResponseAPI<Schedule[]>> {
+    return this.httpClient.get<ResponseAPI<Schedule[]>>(`${apiUrl}/schedules`, { params: { ...filter } }).pipe()
   }
 }

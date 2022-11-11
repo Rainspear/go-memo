@@ -84,11 +84,11 @@
           <strong class="bg-gray-100 p-4 ml-2">
             {{topic.author.name}}
           </strong>
-          <span *ngIf="topic && topic.created_date"> {{(topic.created_date  * 1000) | date:'medium'}}</span>
+          <span *ngIf="topic && topic.created_date"> {{(topic.created_date * 1000) | date:'medium'}}</span>
         </div>
       </div>
       <div>
-        <button class="p-4 border bg-blue-500 text-2xl hover:bg-blue-400 text-white rounded-xl">
+        <button class="p-4 border  text-blue-500 text-2xl hover:bg-blue-500 hover:text-white bg-white rounded-xl">
           <fa-icon [icon]="faEdit"></fa-icon>
         </button>
       </div>
@@ -113,10 +113,12 @@
           <span class="ml-4 ">Memo Recall</span>
         </div>
         <div>
-          <button class="p-4 border bg-blue-500 text-2xl hover:bg-blue-400 text-white rounded-xl mr-2" (click)="onReloadMemo()">
+          <button class="p-4 border text-blue-500 text-2xl hover:bg-blue-500 hover:text-white bg-white rounded-xl mr-2"
+            (click)="onReloadMemo()">
             <fa-icon [icon]="faRotateRight"></fa-icon>
           </button>
-          <button class="p-4 border bg-blue-500 text-2xl hover:bg-blue-400 text-white rounded-xl" (click)="onToggleCreatingMemo(true)">
+          <button class="p-4 border text-blue-500 text-2xl hover:bg-blue-500 hover:text-white bg-white rounded-xl"
+            (click)="onToggleCreatingMemo(true)">
             <fa-icon [icon]="faPlusCircle"></fa-icon>
           </button>
         </div>
