@@ -14,13 +14,8 @@ export class MemoListComponent implements OnInit {
   @Input() memos?: Memo[] ;
   @Input() topic?: Topic;
   @Output() clickDeleteMemo = new EventEmitter<string>();
-  showCreatingMemo = false;
   onClickDeleteMemo(id: string): void {
     this.clickDeleteMemo.emit(id);
-  }
-
-  onToggle(show: boolean){
-    this.showCreatingMemo = show;
   }
 
   constructor() { }

@@ -174,7 +174,43 @@
 <app-memo-detail-modal [show]="showDetailMemo" (toggle)="onToggleDetailMemo($event)"></app-memo-detail-modal> -->
 
 <!-- Ver 3 -->
-<div class="Topic-Detail py-4 px-16 mx-auto my-0">
+<div class="Topic-Detail pb-4 px-16 mx-auto my-0">
   <h2 class="font-bold my-12">Topic: {{topic?.title || ""}}</h2>
-  <app-memo-list [topic]="topic" [memos]="memos"></app-memo-list>
+  <div class="Navigation py-4 flex justify-start">
+    <div class="mr-4 p-4 border bg-white text-gray-900 hover:bg-gray-900 hover:text-white cursor-pointer rounded-xl"
+      [routerLink]="['/topic']">
+      <fa-icon size="xl" [icon]="faCaretLeft"></fa-icon>
+      Back to Topics
+    </div>
+  </div>
+  <div class="Memo-Control mb-4 flex justify-between">
+    <div class="Left-Control flex">
+      <div class="mr-4 p-4 border hover:bg-gray-900 hover:text-white cursor-pointer rounded-xl "
+        (click)="onSelectCategory('Memo')"
+        [ngClass]="selectedTab === 'Memo' ? 'bg-gray-900 text-white' : 'bg-white text-gray-900'">
+        <fa-icon [icon]="faNoteSticky"></fa-icon>
+        Memo
+      </div>
+      <div class="p-4 border hover:bg-gray-900 hover:text-white cursor-pointer rounded-xl"
+        [ngClass]="selectedTab === 'Schedule' ? 'bg-gray-900 text-white' : 'bg-white text-gray-900'"
+        (click)="onSelectCategory('Schedule')">
+        <fa-icon [icon]="faCalendar"></fa-icon>
+        Schedule
+      </div>
+    </div>
+    <div class="Right-Control flex">
+      <div class="ml-4 p-4 border hover:bg-gray-900 hover:text-white cursor-pointer rounded-xl bg-white text-gray-900 "
+        (click)="onToggleCreatingMemo(true)">
+        <fa-icon [icon]="faPlusCircle"></fa-icon>
+        Add
+      </div>
+    </div>
+  </div>
+  <app-memo-list *ngIf="selectedTab === 'Memo'" [topic]="topic" [memos]="memos"></app-memo-list>
+  <app-calendar *ngIf="selectedTab === 'Schedule' && schedules" [schedules]="schedules"></app-calendar>
+
 </div>
+
+<app-memo-creating-modal [show]="showCreatingMemo" (toggle)="onToggleCreatingMemo($event)"
+  (submit)="onSubmitCreatingMemo()"></app-memo-creating-modal>
+<app-memo-detail-modal [show]="showDetailMemo" (toggle)="onToggleDetailMemo($event)"></app-memo-detail-modal>

@@ -1,6 +1,7 @@
 import { Component, Input, OnInit, Output, EventEmitter, OnDestroy, OnChanges, SimpleChanges } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
-import { faBrain, faClock, faEdit, faPlusCircle, faRotateRight, IconDefinition } from '@fortawesome/free-solid-svg-icons';
+import { faNoteSticky, faCalendar } from '@fortawesome/free-regular-svg-icons';
+import { faBrain, faCaretLeft, faClock, faEdit, faPlusCircle, faRotateRight, IconDefinition } from '@fortawesome/free-solid-svg-icons';
 import { Subscription } from 'rxjs';
 import { Memo, ParamsFilterMemo } from 'src/app/models/memo.model';
 import { ParamsFilterSchedule, Schedule } from 'src/app/models/schedule.model';
@@ -27,7 +28,9 @@ export class TopicDetailComponent implements OnInit, OnDestroy, OnChanges {
   faPlusCircle = faPlusCircle;
   faRotateRight = faRotateRight;
   faEdit = faEdit;
-
+  faCalendar = faCalendar;
+  faNoteSticky = faNoteSticky;
+  faCaretLeft = faCaretLeft;
   memos?: Memo[];
   id?: string;
   topic?: Topic;
@@ -41,6 +44,8 @@ export class TopicDetailComponent implements OnInit, OnDestroy, OnChanges {
   error?: string;
   tabs: ITab[] = [{ name: "schedules", icon: this.faClock }, { name: "memos", icon: this.faBrain }]
   currentTab: ITab = this.tabs[0];
+  selectedTab: "Memo" | "Schedule" = "Schedule";
+
 
   constructor(
     private topicSelectingService: TopicSelectingService,
@@ -51,6 +56,10 @@ export class TopicDetailComponent implements OnInit, OnDestroy, OnChanges {
       this.filter = filter;
       this.schduleSubscription = this.invokeSchedules({ topic_id: this.route.snapshot.params['id'], ...this.filter?.value })
     })
+  }
+
+  onSelectCategory(tab: "Memo" | "Schedule") {
+    this.selectedTab = tab;
   }
 
   onChangeCurrentTab(tabName: string) {
@@ -102,11 +111,10 @@ export class TopicDetailComponent implements OnInit, OnDestroy, OnChanges {
     this.id = this.route.snapshot.params['id'];
     if (this.id) this.topicSubscription = this.invokeSingleTopic(this.id);
     if (this.id) this.memosSubscription = this.invokeAllMemo(this.id);
-    console.log("this.schedules ", this.schedules)
+    if (this.id) this.schduleSubscription = this.invokeSchedules({ topic_id: this.id, ...this.filter?.value })
   }
 
   ngOnChanges(changes: any): void {
-    console.log("this.schedules ", changes)
   }
 
   ngOnDestroy(): void {

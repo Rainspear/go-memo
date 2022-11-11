@@ -34,6 +34,7 @@ import { MemoDetailModalComponent } from './share/lightbox/memo-detail-modal/mem
 import { CalendarComponent } from './components/calendar/calendar.component';
 import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
+import { TooltipDirective } from './directives/tooltip.directive';
 
 @NgModule({
   declarations: [
@@ -62,6 +63,7 @@ import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
     MemoCreatingModalComponent,
     MemoDetailModalComponent,
     CalendarComponent,
+    TooltipDirective,
   ],
   imports: [
     BrowserModule,
@@ -72,7 +74,7 @@ import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
     NgScrollbarModule,
     CalendarModule.forRoot({ provide: DateAdapter, useFactory: adapterFactory }),
   ],
-  providers: [{provide: HTTP_INTERCEPTORS, useClass: AuthInterceptorService, multi: true}],
+  providers: [{ provide: HTTP_INTERCEPTORS, useClass: AuthInterceptorService, multi: true }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

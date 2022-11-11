@@ -9,6 +9,7 @@ export interface Schedule {
   time: number;
   level: string;
   status: string;
+  time_date?: Date; // custom field not from api
 }
 
 export interface ParamsFilterSchedule {

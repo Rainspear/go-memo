@@ -74,14 +74,13 @@ func getSchedulesByFilter(ctx context.Context, pipeline mongo.Pipeline) ([]Sched
 
 func getSchedules(w http.ResponseWriter, req *http.Request) {
 	loggedUser := (req.Context().Value(USER_CONTEXT_KEY)).(User)
-	// params := mux.Vars(req)
 	from_date, err := strconv.ParseInt(req.FormValue("from_date"), 10, 64)
 	if err != nil {
 		from_date = 0
 	}
 	to_date, err := strconv.ParseInt(req.FormValue("to_date"), 10, 64)
 	if err != nil {
-		to_date = time.Now().Unix()
+		to_date = time.Date(100000, 12, 31, 11, 59, 59, 999, time.UTC).Unix()
 	}
 	matchDateAndAuthorStage := bson.D{{Key: "$match", Value: bson.D{{Key: "author_id", Value: loggedUser.Id.(primitive.ObjectID)}, {Key: "$and",
 		Value: bson.A{

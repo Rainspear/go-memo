@@ -1,21 +1,21 @@
-<div class="p-8">
+<div class="">
   <div class="Calendar-Control py-4 flex justify-between">
-    <div class="text-center text-5xl font-semibold w-full flex items-center justify-between">
-      <span>{{selectedDate | date:'fullDate'}}</span>
+    <div class="text-center font-semibold w-full flex items-center justify-between">
+      <span class="text-5xl">{{selectedDate | date:'fullDate'}}</span>
       <div class="flex">
         <div (click)="backToCurrentDate()"
-          class="p-4 cursor-pointer w-24 border text-blue-500 text-2xl hover:bg-blue-500 hover:text-white bg-white rounded-xl">
-          <fa-icon class="text-3xl" [icon]="faRotateLeft"></fa-icon>
+          class="ml-4 cursor-pointer p-4 border text-gray-900 hover:bg-gray-900 hover:text-white bg-white rounded-xl">
+          <fa-icon size="lg" [icon]="faRotateLeft"></fa-icon>
         </div>
         <div
-          class="p-4 ml-4 cursor-pointer w-24 border text-blue-500 text-2xl hover:bg-blue-500 hover:text-white bg-white rounded-xl"
+          class="ml-4 cursor-pointer p-4 px-6 border text-gray-900 hover:bg-gray-900 hover:text-white bg-white rounded-xl"
           (click)="onPreviousMonthHandler()">
-          <fa-icon class="text-4xl" [icon]="faSquareCaretLeft"></fa-icon>
+          <fa-icon size="xl" [icon]="faCaretLeft"></fa-icon>
         </div>
         <div
-          class="p-4 ml-4 cursor-pointer w-24 border text-blue-500 text-2xl hover:bg-blue-500 hover:text-white bg-white rounded-xl"
+          class="ml-4 cursor-pointer p-4 px-6 border text-gray-900 hover:bg-gray-900 hover:text-white bg-white rounded-xl"
           (click)="onNextMonthHandler()">
-          <fa-icon class="text-4xl" [icon]="faSquareCaretRight"></fa-icon>
+          <fa-icon size="xl" [icon]="faCaretRight"></fa-icon>
         </div>
       </div>
     </div>
@@ -24,11 +24,20 @@
     <div class="WeekDays bg-gray-200 flex justify-center items-center" *ngFor="let day of daysInWeek">
       <span class="font-bold">{{day.name}}</span>
     </div>
-    <div *ngFor="let day of daysInView" class="Calendar-Table-Body  MonthDays flex justify-center items-center "
-      [ngClass]="day.value === selectedDay && day.fromMonth === 0 ? 'bg-blue-500 text-white': 'bg-gray-50 hover:bg-gray-100 active:bg-gray-200'"
+    <div *ngFor="let day of daysInView"
+      class="Calendar-Table-Body MonthDays flex justify-center items-end relative p-4"
+      [ngClass]="day.value === selectedDay && day.fromMonth === 0 ? 'bg-gray-800 text-white': 'bg-gray-50 hover:bg-gray-100 active:bg-gray-200'"
       (click)="onClickDay(day)">
-      <span class=""
-        [ngClass]="day.fromMonth === 0 ? day.value === selectedDay ? 'text-white' : 'text-black' : 'text-gray-300'">{{day.value}}</span>
+      <span class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-semibold"
+        [ngClass]="day.fromMonth === 0 ? day.value === selectedDay ? 'text-white' : 'text-black' : 'text-gray-300'">
+        {{day.value}}
+      </span>
+      <div class="flex justify-center w-full">
+        <span *ngFor="let schedule of day.schedules" class="mr-2 last:mr-0 w-4 h-4 rounded-full bg-slate-500"
+        appTooltip [tooltip]="schedule.topic.title">
+        </span>
+      </div>
+
     </div>
   </div>
 </div>
