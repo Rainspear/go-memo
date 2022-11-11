@@ -29,7 +29,6 @@ export class DropdownComponent implements OnInit {
 
   @HostListener("document:click", ['$event'])
   clickedOutside(e: MouseEvent) {
-    e.preventDefault();
     e.stopPropagation();
     if (e.target !== this.toggleDropdownButton.nativeElement && e.target !== this.menuDropdown.nativeElement) {
       // this.menuDropdown = false;

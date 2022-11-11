@@ -12,6 +12,7 @@ import { TopicSelectingService } from '../../services/topic-selecting.service';
 export class TopicsComponent implements OnInit {
   selectedTopic?: Topic;
   topics: Topic[] = [];
+  date: Date = new Date();
 
   constructor(private apiSerivce : ApiService, private topicSelectingService : TopicSelectingService) {
     this.topicSelectingService.selectedTopic.subscribe((topic) => {

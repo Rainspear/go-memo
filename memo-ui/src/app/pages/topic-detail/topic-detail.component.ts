@@ -51,6 +51,7 @@ export class TopicDetailComponent implements OnInit, OnDestroy {
   selectedTab: "Memo" | "Schedule" = "Schedule";
 
   error?: string;
+  date: Date = new Date();
 
   constructor(
     private topicSelectingService: TopicSelectingService,

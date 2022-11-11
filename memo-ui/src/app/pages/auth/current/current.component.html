@@ -14,36 +14,49 @@
   <hr />
   <div class="flex" *ngIf="user">
     <div class="Left-User mr-12">
-      <div class="User-Square w-72 h-72 border-collapse border rounded-lg border-zinc-200 flex justify-center items-center">
+      <div
+        class="User-Square w-72 h-72 border-collapse border rounded-lg border-zinc-200 flex justify-center items-center">
         <img class="rounded-full w-56 h-56" *ngIf="user.avatar else NoUserAvatar" [src]="user.avatar"
           alt="user-avatar" />
         <ng-template #NoUserAvatar>
-          <div class="rounded-full w-56 h-56 bg-slate-600">
-
-          </div>
+          <div class="rounded-full w-56 h-56 bg-slate-600"></div>
         </ng-template>
       </div>
     </div>
-    <div class="Right-User">
-      <div class="mb-12">
-        <div class="flex justify-between">
-          <label for="topicDescription">Name</label>
-          <fa-icon [icon]="faPen"></fa-icon>
+    <div class="Right-User flex grow">
+      <div class="flex flex-col mr-8">
+        <div class="mb-12">
+          <div class="flex justify-between">
+            <label for="userName">Name</label>
+            <fa-icon [icon]="faPen"></fa-icon>
+          </div>
+          <input name="userName" id="userName" type="text" [value]="user.name" [(ngModel)]="user.name"
+            class="w-full outline-0 p-4 border border-gray-100 bg-gray-100 rounded-xl" />
         </div>
-        <input name="topicDescription" id="topicDescription" type="text" [value]="user.name" [(ngModel)]="user.name"
-          class="w-full outline-0 p-4 border border-gray-100 bg-gray-100 rounded-xl" />
+        <div class="mb-12">
+          <div class="flex justify-between">
+            <label class="" for="userEmail">
+              Email
+            </label>
+            <fa-icon [icon]="faLock"></fa-icon>
+          </div>
+          <input name="userEmail" id="userEmail" type="text" [value]="user.email" disabled
+            class="w-full outline-0 p-4 border disabled:bg-zinc-200 border-gray-100 bg-gray-100 rounded-xl" />
+        </div>
       </div>
-      <div class="mb-12">
-        <div class="flex justify-between">
-          <label class="" for="topicDescription">
-            Email
-          </label>
-          <fa-icon [icon]="faLock"></fa-icon>
+      <div class="flex">
+        <div class="mb-12">
+          <div class="flex justify-between">
+            <label for="userCreateDate">Created Date</label>
+            <fa-icon [icon]="faLock"></fa-icon>
+          </div>
+          <input name="userCreateDate" id="userCreateDate" type="date" [ngModel]="user.created_date | date:'yyyy-MM-dd'"
+          disabled
+           class="w-full outline-0 p-4 border border-gray-100 bg-gray-100 rounded-xl" />
         </div>
-        <input name="topicDescription" id="topicDescription" type="text" [value]="user.email" disabled
-          class="w-full outline-0 p-4 border disabled:bg-zinc-200 border-gray-100 bg-gray-100 rounded-xl" />
       </div>
     </div>
+
   </div>
   <hr />
   <div class="flex">

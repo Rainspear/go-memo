@@ -23,12 +23,20 @@ export class CurrentComponent implements OnInit {
     if (!this.user) {
       this.authService.loggedUser.subscribe(user => {
         this.user = { ...user };
+        this.user.created_date = new Date(user.created_date * 1000)
       })
+
     }
+    console.log("this.user", this.user)
   }
 
   ngOnInit(): void {
+    if (this.authService.user) {
     this.user = this.authService.user;
+      this.user.created_date = new Date(this.authService.user.created_date * 1000)
+    }
+    console.log("this.user", this.user)
+
   }
 
   onSave(): void {

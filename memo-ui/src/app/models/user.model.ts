@@ -2,7 +2,7 @@ export interface User {
   email: string;
   name: string;
   avatar?: string;
-  created_at: number;
+  created_date: number;
 }
 
 export interface UpdateUser {
@@ -10,7 +10,7 @@ export interface UpdateUser {
   name?: string;
   avatar?: string;
   password?: string;
-  created_at: number;
+  created_date?: number | Date; // for display purposes only
 }
 
 export interface ParamsCreateUser {

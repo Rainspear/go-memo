@@ -19,8 +19,9 @@
     <div class="">
       <label for="TimeSchedule">Time</label>
       <input name="TimeSchedule" id="TimeSchedule" type="date"
-        class="w-full outline-0 p-4 cursor-pointer border border-gray-100 bg-gray-100 rounded-xl"
-        [ngModel]="date | date:'yyyy-MM-dd'" (ngModelChange)="date = $event" />
+      class="w-full outline-0 p-4 cursor-pointer border border-gray-100 bg-gray-100 rounded-xl"
+        [ngModel]="date | date:'yyyy-MM-dd'" (ngModelChange)="date = $event" 
+        />
       <!-- <input name="TimeSchedule" id="TimeSchedule" type="date" [(ngModel)]="schedule.time | date:'yyyy-MM-dd'" /> -->
     </div>
   </div>
