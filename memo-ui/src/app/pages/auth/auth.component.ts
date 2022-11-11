@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { ParamsCreateUser, User } from '../models/user.model';
-import { ApiService } from '../services/api.service';
-import { AuthUserService } from '../services/auth-user.service';
+import { ParamsCreateUser, User } from '../../models/user.model';
+import { ApiService } from '../../services/api.service';
+import { AuthUserService } from '../../services/auth-user.service';
 @Component({
   selector: 'app-auth',
   templateUrl: './auth.component.html',

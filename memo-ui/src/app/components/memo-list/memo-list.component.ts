@@ -7,7 +7,7 @@ import { Memo } from 'src/app/models/memo.model';
   styleUrls: ['./memo-list.component.scss']
 })
 export class MemoListComponent implements OnInit {
-  @Input() memos: Memo[] = [];
+  @Input() memos?: Memo[] ;
   @Output() clickDeleteMemo = new EventEmitter<string>();
 
   onClickDeleteMemo(id: string): void {

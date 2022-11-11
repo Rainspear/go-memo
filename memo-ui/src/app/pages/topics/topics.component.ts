@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { ApiService } from '../services/api.service';
-import { Topic } from '../models/topic.model';
-import { ResponseAPI } from '../models/response.model';
-import { TopicSelectingService } from '../services/topic-selecting.service';
+import { ApiService } from '../../services/api.service';
+import { Topic } from '../../models/topic.model';
+import { ResponseAPI } from '../../models/response.model';
+import { TopicSelectingService } from '../../services/topic-selecting.service';
 
 @Component({
   selector: 'app-topics',

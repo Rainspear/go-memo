@@ -8,33 +8,32 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
-import { TopicsComponent } from './topics/topics.component';
-import { TopicListComponent } from './topics/topic-list/topic-list.component';
-import { MemosComponent } from './memos/memos.component';
-import { MemoListComponent } from './memos/memo-list/memo-list.component';
-import { MemoDetailComponent } from './memos/memo-detail/memo-detail.component';
-import { TopicDetailComponent } from './topics/topic-detail/topic-detail.component';
-import { TopicItemComponent } from './topics/topic-list/topic-item/topic-item.component';
-import { MemoEditingComponent } from './memos/memo-editing/memo-editing.component';
-import { MemoItemComponent } from './memos/memo-list/memo-item/memo-item.component';
+import { TopicsComponent } from './pages/topics/topics.component';
+import { TopicListComponent } from './components/topic-list/topic-list.component';
+import { MemoListComponent } from './components/memo-list/memo-list.component';
+import { TopicDetailComponent } from './pages/topic-detail/topic-detail.component';
+import { TopicItemComponent } from './components/topic-list/topic-item/topic-item.component';
+import { MemoItemComponent } from './components/memo-list/memo-item/memo-item.component';
 import { HighlightDirective } from './directives/highlight.directive';
 import { UnlessDirective } from './directives/unless.directive';
 import { DropdownDirective } from './directives/dropdown.directive';
-import { AuthComponent } from './auth/auth.component';
-import { SigninComponent } from './auth/signin/signin.component';
-import { SignupComponent } from './auth/signup/signup.component';
-import { HomeComponent } from './home/home.component';
+import { AuthComponent } from './pages/auth/auth.component';
+import { SigninComponent } from './pages/auth/signin/signin.component';
+import { SignupComponent } from './pages/auth/signup/signup.component';
+import { HomeComponent } from './pages/home/home.component';
 import { ShareHeaderComponent } from './share/share-header/share-header.component';
-import { CurrentComponent } from './auth/current/current.component';
+import { CurrentComponent } from './pages/auth/current/current.component';
 import { AuthInterceptorService } from './services/auth-interceptor.service';
-import { JobCardComponent } from './jobs/job-card/job-card.component';
-import { JobCardListComponent } from './jobs/job-card/job-card-list/job-card-list.component';
-import { JobCardItemComponent } from './jobs/job-card/job-card-list/job-card-item/job-card-item.component';
+import { JobCardListComponent } from './components/job-card-list/job-card-list.component';
+import { JobCardItemComponent } from './components/job-card-list/job-card-item/job-card-item.component';
 import { ScrollBarComponent } from './share/scroll-bar/scroll-bar.component';
-import { LightboxComponent } from './lightbox/lightbox.component';
-import { TopicCreatingModalComponent } from './lightbox/topic-creating-modal/topic-creating-modal.component';
-import { MemoCreatingModalComponent } from './lightbox/memo-creating-modal/memo-creating-modal.component';
-import { MemoDetailModalComponent } from './lightbox/memo-detail-modal/memo-detail-modal.component';
+import { LightboxComponent } from './share/lightbox/lightbox.component';
+import { TopicCreatingModalComponent } from './share/lightbox/topic-creating-modal/topic-creating-modal.component';
+import { MemoCreatingModalComponent } from './share/lightbox/memo-creating-modal/memo-creating-modal.component';
+import { MemoDetailModalComponent } from './share/lightbox/memo-detail-modal/memo-detail-modal.component';
+import { CalendarComponent } from './components/calendar/calendar.component';
+import { CalendarModule, DateAdapter } from 'angular-calendar';
+import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 
 @NgModule({
   declarations: [
@@ -42,12 +41,9 @@ import { MemoDetailModalComponent } from './lightbox/memo-detail-modal/memo-deta
     HeaderComponent,
     TopicsComponent,
     TopicListComponent,
-    MemosComponent,
     MemoListComponent,
-    MemoDetailComponent,
     TopicDetailComponent,
     TopicItemComponent,
-    MemoEditingComponent,
     MemoItemComponent,
     HighlightDirective,
     UnlessDirective,
@@ -58,7 +54,6 @@ import { MemoDetailModalComponent } from './lightbox/memo-detail-modal/memo-deta
     HomeComponent,
     ShareHeaderComponent,
     CurrentComponent,
-    JobCardComponent,
     JobCardListComponent,
     JobCardItemComponent,
     ScrollBarComponent,
@@ -66,6 +61,7 @@ import { MemoDetailModalComponent } from './lightbox/memo-detail-modal/memo-deta
     TopicCreatingModalComponent,
     MemoCreatingModalComponent,
     MemoDetailModalComponent,
+    CalendarComponent,
   ],
   imports: [
     BrowserModule,
@@ -74,6 +70,7 @@ import { MemoDetailModalComponent } from './lightbox/memo-detail-modal/memo-deta
     FormsModule,
     FontAwesomeModule,
     NgScrollbarModule,
+    CalendarModule.forRoot({ provide: DateAdapter, useFactory: adapterFactory }),
   ],
   providers: [{provide: HTTP_INTERCEPTORS, useClass: AuthInterceptorService, multi: true}],
   bootstrap: [AppComponent]

@@ -1,4 +1,4 @@
-<div class="Job-Card mx-auto max-w-6xl rounded-2xl bg-white">
+<div class="Job-Card mx-auto rounded-2xl bg-white">
   <div class="Job-Header p-8 border-b-4 border-gray-200">
     <h3 class="Job-Header-Title font-semibold mt-0">Scheduled Jobs ({{schedules?.length || 0}})</h3>
     <div class="Job-Header-Filter min-w-fit">
@@ -14,6 +14,15 @@
   </div>
   <div class="Job-Body p-4 min-w-fit">
     <app-scroll-bar>
-      <app-job-card-list [schedules]="schedules"></app-job-card-list>
+      <div>
+        <ng-template [ngIf]="schedules && schedules.length > 0" [ngIfElse]="NoJob">
+          <app-job-card-item *ngFor="let job of schedules; let i = index;" [job]="job" [index]="i"></app-job-card-item>
+        </ng-template>
+        <ng-template #NoJob>
+          <div class="p-4 font-bold">
+            No Jobs were scheduled
+          </div>
+        </ng-template>
+      </div>
     </app-scroll-bar>
-</div>
+  </div>

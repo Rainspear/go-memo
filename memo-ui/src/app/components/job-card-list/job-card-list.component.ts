@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, OnChanges, SimpleChanges } from '@angular/core';
 import { TIME_ONE_DAY_IN_SECONDS, TIME_ONE_MONTH_IN_SECONDS, TIME_ONE_WEEK_IN_SECONDS } from 'src/app/constant/time';
 import { Schedule } from 'src/app/models/schedule.model';
 import { IFilterTopic, Topic } from 'src/app/models/topic.model';
@@ -6,12 +6,11 @@ import { ApiService } from 'src/app/services/api.service';
 import { TopicSelectingService } from 'src/app/services/topic-selecting.service';
 
 @Component({
-  selector: 'app-job-card',
-  templateUrl: './job-card.component.html',
-  styleUrls: ['./job-card.component.scss']
+  selector: 'app-job-card-list',
+  templateUrl: './job-card-list.component.html',
+  styleUrls: ['./job-card-list.component.scss']
 })
-export class JobCardComponent implements OnInit {
-
+export class JobCardListComponent implements OnInit, OnChanges {
   @Input() topic?: Topic;
   @Input() schedules?: Schedule[]
 
@@ -35,5 +34,15 @@ export class JobCardComponent implements OnInit {
   ngOnInit(): void {
     this.topicSelectingService.selectedFilter.next(this.currentFilter)
   }
+
+  // @Input() schedules?: Schedule[] = undefined
+  // constructor() { }
+
+  ngOnChanges(changes: any): void {
+    console.log("changes ", changes)
+  }
+
+  // ngOnInit(): void {
+  // }
 
 }
