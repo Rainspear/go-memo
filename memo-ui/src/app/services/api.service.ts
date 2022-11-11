@@ -5,7 +5,7 @@ import { Memo, ParamsCreateMemo, ParamsFilterMemo } from '../models/memo.model';
 import { ParamsCreateTopic, Topic } from '../models/topic.model';
 import { ResponseAPI } from '../models/response.model';
 import { ParamsCreateUser, ParamsLoginUser, User } from '../models/user.model';
-import { Schedule, ParamsFilterSchedule } from '../models/schedule.model';
+import { Schedule, ParamsFilterSchedule, ParamsCreateSchedule } from '../models/schedule.model';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'Application/json' })
@@ -71,7 +71,11 @@ export class ApiService implements OnInit {
     return this.httpClient.post<ResponseAPI<User>>(`${apiUrl}/signin`, user).pipe()
   }
 
-  getScheduleByFilter(filter ?: ParamsFilterSchedule): Observable<ResponseAPI<Schedule[]>> {
+  getScheduleByFilter(filter?: ParamsFilterSchedule): Observable<ResponseAPI<Schedule[]>> {
     return this.httpClient.get<ResponseAPI<Schedule[]>>(`${apiUrl}/schedules`, { params: { ...filter } }).pipe()
+  }
+
+  createSchedule(schedule: ParamsCreateSchedule): Observable<ResponseAPI<Schedule[]>> {
+    return this.httpClient.post<ResponseAPI<Schedule[]>>(`${apiUrl}/schedules`, schedule).pipe()
   }
 }

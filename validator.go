@@ -6,7 +6,7 @@ type Enum interface {
 
 func (l Level) IsValid() bool {
 	switch l {
-	case LevelEssential, LevelImportant, LevelSemi, LevelLess, LevelMinor:
+	case LevelEssential, LevelImportant, LevelCritical, LevelMajor, LevelMinor:
 		return true
 	default:
 		return false

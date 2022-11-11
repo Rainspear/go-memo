@@ -21,17 +21,17 @@ type Level string
 
 const (
 	LevelEssential Level = "essential"
+	LevelCritical  Level = "critical"
 	LevelImportant Level = "important"
-	LevelSemi      Level = "semi-important"
-	LevelLess      Level = "less-important"
+	LevelMajor     Level = "major"
 	LevelMinor     Level = "minor"
 )
 
 const (
 	StatusSuccess Status = "success"
 	StatusUntouch Status = "untouch"
-	StatusFailure Status = "failure"
 	StatusSkipped Status = "skipped"
+	StatusFailure Status = "failure"
 )
 
 type ScheduleParams struct {

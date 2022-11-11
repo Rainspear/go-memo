@@ -35,6 +35,8 @@ import { CalendarComponent } from './components/calendar/calendar.component';
 import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { TooltipDirective } from './directives/tooltip.directive';
+import { ScheduleCreatingModalComponent } from './share/lightbox/schedule-creating-modal/schedule-creating-modal.component';
+import { DropdownComponent } from './share/dropdown/dropdown.component';
 
 @NgModule({
   declarations: [
@@ -64,6 +66,8 @@ import { TooltipDirective } from './directives/tooltip.directive';
     MemoDetailModalComponent,
     CalendarComponent,
     TooltipDirective,
+    ScheduleCreatingModalComponent,
+    DropdownComponent,
   ],
   imports: [
     BrowserModule,

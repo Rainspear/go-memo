@@ -21,12 +21,16 @@ export class LightboxComponent implements OnInit, OnChanges, OnDestroy {
     this.toggle.emit(!this.show);
   }
 
-  ngOnChanges(changes: any): void {
+  ngOnChanges(changes: SimpleChanges): void {
+    // let show = changes['show'].currentValue
+    if (this.show) { document.body.style.overflow = 'hidden' }
+    else {
+      document.body.style.overflow = 'auto'
+    }
 
   }
 
   ngOnInit(): void {
-
   }
 
   ngOnDestroy(): void {

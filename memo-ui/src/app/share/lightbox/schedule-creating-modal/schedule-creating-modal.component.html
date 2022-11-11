@@ -1,19 +1,27 @@
 <app-lightbox [show]="show" (toggle)="onToggleHandler($event)">
   <div header class="py-4">
-    <h3 class="font-semibold m-0 mb-4 text-gray-900 dark:text-white">Topic</h3>
-    <div class="text-gray-500">Submit to create your topic for memorization</div>
+    <h3 class="font-semibold m-0 mb-4 text-gray-900 dark:text-white">Schedule</h3>
+    <div class="text-gray-500">Submit to create remider schedule for topic</div>
   </div>
   <div class="p-8">
-    <div class="">
-      <label for="topicTitle">Title</label>
-      <input name="topicTitle" id="topicTitle" type="text"
-        class="w-full outline-0 p-4 border border-gray-100 bg-gray-100 rounded-xl" [(ngModel)]="topic.title" />
+    <div class="flex justify-between">
+      <label for="LevelSchedule">Level</label>
+      <app-dropdown (select)="onSelectLevel($event)" [options]="levelDropdownOptions" [value]="levelDropdownOptions[0]">
+      </app-dropdown>
+    </div>
+    <hr />
+    <div class="flex justify-between">
+      <label for="StatusSchedule">Status</label>
+      <app-dropdown (select)="onSelectStatus($event)" [options]="statusDropdownOptions"
+        [value]="statusDropdownOptions[0]"></app-dropdown>
     </div>
     <hr />
     <div class="">
-      <label for="topicDescription">Description</label>
-      <input name="topicDescription" id="topicDescription" type="text"
-        class="w-full outline-0 p-4 border border-gray-100 bg-gray-100 rounded-xl" [(ngModel)]="topic.description" />
+      <label for="TimeSchedule">Time</label>
+      <input name="TimeSchedule" id="TimeSchedule" type="date"
+        class="w-full outline-0 p-4 cursor-pointer border border-gray-100 bg-gray-100 rounded-xl"
+        [ngModel]="date | date:'yyyy-MM-dd'" (ngModelChange)="date = $event" />
+      <!-- <input name="TimeSchedule" id="TimeSchedule" type="date" [(ngModel)]="schedule.time | date:'yyyy-MM-dd'" /> -->
     </div>
   </div>
   <div footer class="flex items-center px-8 py-12 space-x-2 rounded-b border-t border-gray-200 dark:border-gray-600">

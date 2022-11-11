@@ -14,7 +14,6 @@ export interface Topic {
 export interface ParamsCreateTopic {
   title: string;
   description: string;
-
 }
 
 export interface IFilterTopic {

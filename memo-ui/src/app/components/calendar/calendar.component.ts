@@ -70,7 +70,7 @@ export class CalendarComponent implements OnInit, OnChanges {
   },
   ];
   scheduleDateInMonth?: Date[];
-  @Input() schedules: Schedule[] = [];
+  @Input() schedules?: Schedule[] = [];
 
   // firstDayOfMonth = startOfMonth(new Date());
   constructor() {
@@ -131,7 +131,7 @@ export class CalendarComponent implements OnInit, OnChanges {
   refreshNewValue() {
     this.selectedDate = this.generateDate();
     this.daysInView = this.generateDaysInView();
-    this.mergeSchedulesToDays(this.schedules);
+    if (this.schedules) this.mergeSchedulesToDays(this.schedules);
   }
 
   onNextMonthHandler() {

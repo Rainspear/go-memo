@@ -176,6 +176,7 @@
 <!-- Ver 3 -->
 <div class="Topic-Detail pb-4 px-16 mx-auto my-0">
   <h2 class="font-bold my-12">Topic: {{topic?.title || ""}}</h2>
+  <hr />
   <div class="Navigation py-4 flex justify-start">
     <div class="mr-4 p-4 border bg-white text-gray-900 hover:bg-gray-900 hover:text-white cursor-pointer rounded-xl"
       [routerLink]="['/topic']">
@@ -183,6 +184,7 @@
       Back to Topics
     </div>
   </div>
+  <hr />
   <div class="Memo-Control mb-4 flex justify-between">
     <div class="Left-Control flex">
       <div class="mr-4 p-4 border hover:bg-gray-900 hover:text-white cursor-pointer rounded-xl "
@@ -199,18 +201,29 @@
       </div>
     </div>
     <div class="Right-Control flex">
-      <div class="ml-4 p-4 border hover:bg-gray-900 hover:text-white cursor-pointer rounded-xl bg-white text-gray-900 "
+      <div *ngIf="selectedTab === 'Memo' else ScheduleControl"
+        class="ml-4 p-4 border hover:bg-gray-900 hover:text-white cursor-pointer rounded-xl bg-white text-gray-900 "
         (click)="onToggleCreatingMemo(true)">
         <fa-icon [icon]="faPlusCircle"></fa-icon>
-        Add
+        Add Memo
       </div>
+      <ng-template #ScheduleControl>
+        <div
+          class="ml-4 p-4 border hover:bg-gray-900 hover:text-white cursor-pointer rounded-xl bg-white text-gray-900 "
+          (click)="onToggleCreatingSchedule(true)">
+          <fa-icon [icon]="faPlusCircle"></fa-icon>
+          Add Schedule
+        </div>
+      </ng-template>
     </div>
   </div>
+  <hr />
   <app-memo-list *ngIf="selectedTab === 'Memo'" [topic]="topic" [memos]="memos"></app-memo-list>
-  <app-calendar *ngIf="selectedTab === 'Schedule' && schedules" [schedules]="schedules"></app-calendar>
-
+  <app-calendar *ngIf="selectedTab === 'Schedule'" [schedules]="schedules"></app-calendar>
 </div>
 
 <app-memo-creating-modal [show]="showCreatingMemo" (toggle)="onToggleCreatingMemo($event)"
   (submit)="onSubmitCreatingMemo()"></app-memo-creating-modal>
 <app-memo-detail-modal [show]="showDetailMemo" (toggle)="onToggleDetailMemo($event)"></app-memo-detail-modal>
+<app-schedule-creating-modal [show]="showCreatingSchedule" (toggle)="onToggleCreatingSchedule($event)">
+</app-schedule-creating-modal>

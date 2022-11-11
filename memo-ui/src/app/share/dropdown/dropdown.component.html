@@ -1,0 +1,22 @@
+<div id="dropdownDefault" data-dropdown-toggle="dropdown"
+  class="text-white relative w-44 cursor-pointer bg-gray-700 hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-gray-500 font-medium rounded-lg px-4 py-2.5 text-center inline-flex items-center dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-800"
+  (click)="onToggleDropdown()" #toggleDropdownButton>
+  {{value?.title || "Select to choose"}}
+  <svg class="ml-2 w-4 h-4" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+    xmlns="http://www.w3.org/2000/svg">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+  </svg>
+  <div id="dropdown" #menuDropdown
+    class="z-10 w-44 absolute top-full left-0 bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700"
+    [ngClass]="!showDropdown ? 'hidden' : ''">
+    <ul class="py-1 text-gray-900 dark:text-gray-200" aria-labelledby="dropdownDefault">
+      <li 
+      (click)="onSelectOption(opt)"
+      *ngFor="let opt of options"
+        class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600  dark:hover:text-white">
+        {{opt.title}}
+      </li>
+    </ul>
+  </div>
+</div>
+<!-- Dropdown menu -->

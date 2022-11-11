@@ -17,3 +17,10 @@ export interface ParamsFilterSchedule {
   to_date?: number;
   topic_id: string;
 }
+
+export interface ParamsCreateSchedule {
+  time: number;
+  level: "essential" | "important" | "critical" | "major" | "minor";
+  status: "success" | "untouch" | "failure" | "skipped";
+  topic_id: string;
+}
