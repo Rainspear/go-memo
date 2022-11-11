@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"strconv"
 	"time"
 
 	"github.com/gorilla/mux"
@@ -74,7 +75,21 @@ func getSchedulesByFilter(ctx context.Context, pipeline mongo.Pipeline) ([]Sched
 func getSchedules(w http.ResponseWriter, req *http.Request) {
 	loggedUser := (req.Context().Value(USER_CONTEXT_KEY)).(User)
 	// params := mux.Vars(req)
-	matchStage := bson.D{{Key: "$match", Value: bson.D{{Key: "author_id", Value: loggedUser.Id.(primitive.ObjectID)}}}}
+	from_date, err := strconv.ParseInt(req.FormValue("from_date"), 10, 64)
+	if err != nil {
+		from_date = 0
+	}
+	to_date, err := strconv.ParseInt(req.FormValue("to_date"), 10, 64)
+	if err != nil {
+		to_date = time.Now().Unix()
+	}
+	matchDateAndAuthorStage := bson.D{{Key: "$match", Value: bson.D{{Key: "author_id", Value: loggedUser.Id.(primitive.ObjectID)}, {Key: "$and",
+		Value: bson.A{
+			bson.D{{Key: "time", Value: bson.D{{Key: "$gte", Value: from_date}}}},
+			bson.D{{Key: "time", Value: bson.D{{Key: "$lte", Value: to_date}}}},
+		},
+	}}}}
+	pipe := mongo.Pipeline{matchDateAndAuthorStage}
 	topicId, err := primitive.ObjectIDFromHex(req.FormValue("topic_id"))
 	if err == nil {
 		topic, err := getTopicById(req.Context(), topicId)
@@ -86,9 +101,10 @@ func getSchedules(w http.ResponseWriter, req *http.Request) {
 			return
 		}
 		fmt.Println("matchStage reach here")
-		matchStage = bson.D{{Key: "$match", Value: bson.D{{Key: "author_id", Value: loggedUser.Id.(primitive.ObjectID)}, {Key: "topic_id", Value: topicId}}}}
+		matchTopicStage := bson.D{{Key: "$match", Value: bson.D{{Key: "topic_id", Value: topicId}}}}
+		pipe = mongo.Pipeline{matchDateAndAuthorStage, matchTopicStage}
 	}
-	s, err := getSchedulesByFilter(req.Context(), mongo.Pipeline{matchStage})
+	s, err := getSchedulesByFilter(req.Context(), pipe)
 	if handleResponseError(err, w, http.StatusInternalServerError) {
 		return
 	}
