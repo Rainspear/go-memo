@@ -1,15 +1,15 @@
+import { User } from "./user.model";
+
 export interface Topic {
   id: string;
   title: string;
+  author_id: string;
+  author: User;
   description: string;
-  repetition?: Repetition[];
+  // repetition?: Schedule[];
 }
 
-export interface Repetition {
-  time: number;
-  level: string;
-  status: string;
-}
+
 
 export interface FilterParamsTopic {
   from_date: number;

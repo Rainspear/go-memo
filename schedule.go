@@ -34,7 +34,9 @@ const (
 )
 
 type ScheduleParams struct {
-	Id interface{} `json:"id,omitempty" bson:"_id,omitempty"`
+	Id       interface{} `json:"id,omitempty" bson:"_id,omitempty"`
+	FromDate int64       `json:"from_date,omitempty" bson:"from_date"`
+	ToDate   int64       `json:"to_date,omitempty" bson:"to_date"`
 }
 
 type Schedule struct {
@@ -58,14 +60,10 @@ type ScheduleResponse struct {
 	LastUpdate  int64  `json:"last_update" bson:"last_update"`
 }
 
-func getSchedulesByAuthorId(ctx context.Context, authorId primitive.ObjectID) ([]Schedule, error) {
+func getSchedulesByFilter(ctx context.Context, pipeline mongo.Pipeline) ([]Schedule, error) {
 	var schedules []Schedule
 	coll := client.Database(database).Collection(SCHEDULE_COLLECTION)
-	if authorId.IsZero() {
-		return nil, fmt.Errorf("author_id is required")
-	}
-	matchStage := bson.D{{Key: "$match", Value: bson.D{{Key: "author_id", Value: authorId}}}}
-	cursor, err := coll.Aggregate(ctx, mongo.Pipeline{matchStage})
+	cursor, err := coll.Aggregate(ctx, pipeline)
 	err = cursor.All(ctx, &schedules)
 	if err != nil {
 		return nil, err
@@ -75,7 +73,22 @@ func getSchedulesByAuthorId(ctx context.Context, authorId primitive.ObjectID) ([
 
 func getSchedules(w http.ResponseWriter, req *http.Request) {
 	loggedUser := (req.Context().Value(USER_CONTEXT_KEY)).(User)
-	s, err := getSchedulesByAuthorId(req.Context(), (loggedUser.Id).(primitive.ObjectID))
+	// params := mux.Vars(req)
+	matchStage := bson.D{{Key: "$match", Value: bson.D{{Key: "author_id", Value: loggedUser.Id.(primitive.ObjectID)}}}}
+	topicId, err := primitive.ObjectIDFromHex(req.FormValue("topic_id"))
+	if err == nil {
+		topic, err := getTopicById(req.Context(), topicId)
+		if handleResponseError(err, w, http.StatusBadRequest) {
+			return
+		}
+		if topic.AuthorId != loggedUser.Id {
+			handleResponseError(fmt.Errorf("topic was not belong to this user"), w, http.StatusUnauthorized)
+			return
+		}
+		fmt.Println("matchStage reach here")
+		matchStage = bson.D{{Key: "$match", Value: bson.D{{Key: "author_id", Value: loggedUser.Id.(primitive.ObjectID)}, {Key: "topic_id", Value: topicId}}}}
+	}
+	s, err := getSchedulesByFilter(req.Context(), mongo.Pipeline{matchStage})
 	if handleResponseError(err, w, http.StatusInternalServerError) {
 		return
 	}
@@ -99,6 +112,10 @@ func createSchedule(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 	topic, err := getTopicById(req.Context(), topicId)
+	if topic.AuthorId != loggedUser.Id {
+		handleResponseError(fmt.Errorf("topic was not belong to this user"), w, http.StatusUnauthorized)
+		return
+	}
 	// filter field before response
 	var topicResponse TopicResponse
 	err = copier.Copy(&topicResponse, topic)
@@ -107,12 +124,14 @@ func createSchedule(w http.ResponseWriter, req *http.Request) {
 	t := time.Now().Unix()
 	if err != nil {
 		handleResponseError(err, w, http.StatusInternalServerError)
+		return
 	}
 	// insert to db
 	data.CreatedDate = t
 	data.LastUpdate = t
 	data.AuthorId = loggedUser.Id
 	data.Author = ur
+	data.TopicId = topicId
 	data.Topic = topicResponse
 	collSchedule := client.Database(database).Collection(SCHEDULE_COLLECTION)
 	result, err := collSchedule.InsertOne(req.Context(), &data)

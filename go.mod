@@ -9,7 +9,7 @@ require (
 	github.com/gorilla/mux v1.8.0
 	github.com/jinzhu/copier v0.3.5
 	github.com/joho/godotenv v1.4.0
-	go.mongodb.org/mongo-driver v1.11.0
+	go.mongodb.org/mongo-driver v1.10.3
 	golang.org/x/crypto v0.1.0
 )
 

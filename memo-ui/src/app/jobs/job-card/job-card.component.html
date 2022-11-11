@@ -1,6 +1,6 @@
 <div class="Job-Card mx-auto max-w-6xl rounded-2xl bg-white">
   <div class="Job-Header p-8 border-b-4 border-gray-200">
-    <h3 class="Job-Header-Title font-bold">Scheduled Jobs ({{topic?.repetition?.length || 0}})</h3>
+    <h3 class="Job-Header-Title font-bold">Scheduled Jobs ({{schedules?.length || 0}})</h3>
     <div class="Job-Header-Filter min-w-fit">
       <div class="Filter-Left flex flex-row ">
         <div *ngFor="let filter of filters" [ngClass]="currentFilter.name === filter.name ? 'Active': ''"
@@ -12,9 +12,9 @@
       <div class="Filter-Right"></div>
     </div>
   </div>
-  <div class="Job-Body p-8 min-w-fit" *ngIf="topic && topic?.repetition">
+  <div class="Job-Body p-8 min-w-fit" *ngIf="schedules">
     <app-scroll-bar>
-      <app-job-card-list [jobs]="topic.repetition"></app-job-card-list>
+      <app-job-card-list [jobs]="schedules"></app-job-card-list>
     </app-scroll-bar>
   </div>
 </div>

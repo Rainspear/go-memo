@@ -6,6 +6,7 @@ import { FilterParamsTopic, Topic } from '../models/topic.model';
 import { ResponseAPI } from '../models/response.model';
 import { ParamsCreateUser, ParamsLoginUser, User } from '../models/user.model';
 import { AuthComponent } from '../auth/auth.component';
+import { Schedule } from '../models/schedule.model';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'Application/json' })
@@ -66,5 +67,9 @@ export class ApiService implements OnInit {
 
   login(user: ParamsLoginUser): Observable<ResponseAPI<User>> {
     return this.httpClient.post<ResponseAPI<User>>(`${apiUrl}/signin`, user).pipe()
+  }
+
+  getScheduleByTopicId(topicId: string): Observable<ResponseAPI<Schedule[]>> {
+    return this.httpClient.get<ResponseAPI<Schedule[]>>(`${apiUrl}/schedules`, { params: { topic_id: topicId } }).pipe()
   }
 }

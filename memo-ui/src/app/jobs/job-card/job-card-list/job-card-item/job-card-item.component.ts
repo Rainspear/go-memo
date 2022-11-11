@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Repetition } from 'src/app/models/topic.model';
+import { Schedule } from 'src/app/models/schedule.model';
 
 @Component({
   selector: 'app-job-card-item',
@@ -7,8 +7,8 @@ import { Repetition } from 'src/app/models/topic.model';
   styleUrls: ['./job-card-item.component.scss']
 })
 export class JobCardItemComponent implements OnInit {
-
-  @Input() job?: Repetition
+  @Input() index: number = 0;
+  @Input() job?: Schedule
   constructor() { }
 
   ngOnInit(): void {

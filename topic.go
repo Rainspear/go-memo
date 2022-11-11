@@ -46,7 +46,7 @@ func getTopicById(ctx context.Context, topicId primitive.ObjectID) (*Topic, erro
 }
 
 func getTopics(w http.ResponseWriter, req *http.Request) {
-	coll := client.Database(database).Collection(TOPIC_COLLECTION)
+	// coll := client.Database(database).Collection(TOPIC_COLLECTION)
 	// from_date, err := strconv.ParseInt(req.FormValue("from_date"), 10, 64)
 	// if err != nil {
 	// 	from_date = 0
@@ -111,7 +111,9 @@ func getTopics(w http.ResponseWriter, req *http.Request) {
 	// 		},
 	// 	},
 	// }
-	matchStage := bson.D{{Key: "$match", Value: bson.D{}}}
+	loggedUser := req.Context().Value(USER_CONTEXT_KEY).(User)
+	coll := client.Database(database).Collection(TOPIC_COLLECTION)
+	matchStage := bson.D{{Key: "$match", Value: bson.D{{Key: "author_id", Value: loggedUser.Id}}}}
 	cursor, err := coll.Aggregate(req.Context(), mongo.Pipeline{matchStage})
 	if handleResponseError(err, w, http.StatusInternalServerError) {
 		return

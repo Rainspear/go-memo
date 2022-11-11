@@ -10,6 +10,7 @@ import { TopicSelectingService } from 'src/app/services/topic-selecting.service'
 })
 export class TopicItemComponent implements OnInit {
   @Input() topic?: Topic;
+  @Input() index: number = 0;
   @Output() selectedTopic = new EventEmitter<Topic>();
 
   constructor(private topicSelectingService: TopicSelectingService, private apiService: ApiService, private router: Router) { }

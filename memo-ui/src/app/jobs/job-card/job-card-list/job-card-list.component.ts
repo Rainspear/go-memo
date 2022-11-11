@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Repetition } from 'src/app/models/topic.model';
+import { Schedule } from 'src/app/models/schedule.model';
 
 @Component({
   selector: 'app-job-card-list',
@@ -8,7 +8,7 @@ import { Repetition } from 'src/app/models/topic.model';
 })
 export class JobCardListComponent implements OnInit {
 
-  @Input() jobs?: Repetition[] = []
+  @Input() jobs?: Schedule[] = []
   constructor() { }
 
   ngOnInit(): void {

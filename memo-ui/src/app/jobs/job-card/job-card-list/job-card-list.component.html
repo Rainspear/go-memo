@@ -1,7 +1,7 @@
 <div>
 
   <ng-template [ngIf]="jobs && jobs.length > 0" [ngIfElse]="NoJob">
-    <app-job-card-item *ngFor="let job of jobs" [job]="job"></app-job-card-item>
+    <app-job-card-item *ngFor="let job of jobs; let i = index;" [job]="job" [index]="i"></app-job-card-item>
   </ng-template>
 
   <ng-template #NoJob>

@@ -1,14 +1,18 @@
-<a class="list-group-item clearfix cursor-pointer" *ngIf="topic" (click)="onSelectTopic()">
-  <div class="pull-left">
-    <h4 class="list-group-item-heading"> {{topic.title}} - {{topic.id}}</h4>
-    <p class="list-group-item-text">Description: {{topic.description}} </p>
+<div class="cursor-pointer flex flex-row" 
+*ngIf="topic"  
+[ngClass]="(index + 1) % 2 === 0 ? 'bg-gray-100' : ''"
+(click)="onSelectTopic()">
+  <div class="Cell p-4 flex items-center pl-8 w-4/12">
+    <span>{{topic.id}}</span>
   </div>
-  <span class="pull-right">
-    <!-- <img src="/" alt="" class="img-responsive" style="max-height: 50px;"> -->
-    <div class="flex flex-row">
-      <button (click)="onClickDeleteTopic($event)" class="mr-4 inline-block btn btn-danger">Delete</button>
-      <div class="img-responsive" [ngStyle]="{backgroundColor:'#123123', width: '3.5rem', height: '3.5rem'}"></div>
-
-    </div>
-  </span>
-</a>
+  <div class="Cell p-4 flex items-center pl-8 w-2/12">
+    <span>{{topic.title}}</span>
+  </div>
+  <div class="Cell p-4 flex items-center pl-8 w-4/12">
+    <span>{{topic.description}}</span>
+  </div>
+  <div class="Cell p-4 flex items-center pl-8 w-2/12">
+    <button (click)="onClickDeleteTopic($event)" class="mr-4 inline-block btn btn-danger">Delete</button>
+    <!-- <div class="img-responsive" [ngStyle]="{backgroundColor:'#123123', width: '3.5rem', height: '3.5rem'}"></div> -->
+  </div>
+</div>

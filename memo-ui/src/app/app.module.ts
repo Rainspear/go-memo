@@ -31,6 +31,7 @@ import { JobCardComponent } from './jobs/job-card/job-card.component';
 import { JobCardListComponent } from './jobs/job-card/job-card-list/job-card-list.component';
 import { JobCardItemComponent } from './jobs/job-card/job-card-list/job-card-item/job-card-item.component';
 import { ScrollBarComponent } from './share/scroll-bar/scroll-bar.component';
+import { LightboxComponent } from './lightbox/lightbox.component';
 
 @NgModule({
   declarations: [
@@ -58,6 +59,7 @@ import { ScrollBarComponent } from './share/scroll-bar/scroll-bar.component';
     JobCardListComponent,
     JobCardItemComponent,
     ScrollBarComponent,
+    LightboxComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,4 +1,9 @@
-<div *ngIf="job" class="Job-Card-Item p-8 bg-teal-700 rounded-2xl text-white flex flex-row justify-between mb-4">
+<div *ngIf="job" [ngClass]="(index + 1) % 4 === 0 
+? 'bg-teal-600' 
+: (index + 1) % 4 === 1 ? 'bg-orange-400' 
+: (index + 1) % 4 === 2 ? 'bg-indigo-500'
+: (index + 1) % 4 === 3 ? 'bg-red-500' : 'bg-green-600'"
+  class="Job-Card-Item p-8 rounded-2xl text-white flex flex-row justify-between mb-4">
   <div class="Left">
     <div class="text-xl mb-2">Job Status</div>
     <div class="text-4xl font-bold mb-4">{{job.status | titlecase}}</div>
