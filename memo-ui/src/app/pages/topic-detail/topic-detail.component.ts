@@ -1,7 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { faNoteSticky, faCalendar } from '@fortawesome/free-regular-svg-icons';
-import { faBrain, faCaretLeft, faClock, faEdit,  faPlusCircle, faRotateRight, IconDefinition } from '@fortawesome/free-solid-svg-icons';
+import { faBrain, faCaretLeft, faClock, faEdit, faPlusCircle, faRotateRight, IconDefinition } from '@fortawesome/free-solid-svg-icons';
+import { sub } from 'date-fns';
 import { Subscription } from 'rxjs';
 import { Memo } from 'src/app/models/memo.model';
 import { ParamsFilterSchedule, Schedule } from 'src/app/models/schedule.model';
@@ -30,7 +31,7 @@ export class TopicDetailComponent implements OnInit, OnDestroy {
   faCalendar = faCalendar;
   faNoteSticky = faNoteSticky;
   faCaretLeft = faCaretLeft;
-  
+
   id?: string;
 
   memos?: Memo[];
@@ -39,7 +40,7 @@ export class TopicDetailComponent implements OnInit, OnDestroy {
   filter?: IFilterTopic
 
   topicSubscription?: Subscription;
-  schduleSubscription?: Subscription;
+  scheduleSubscription?: Subscription;
   memosSubscription?: Subscription;
 
   showCreatingMemo: boolean = false;
@@ -61,7 +62,7 @@ export class TopicDetailComponent implements OnInit, OnDestroy {
   ) {
     this.topicSelectingService.selectedFilter.subscribe((filter: IFilterTopic) => {
       this.filter = filter;
-      this.schduleSubscription = this.invokeSchedules({ topic_id: this.route.snapshot.params['id'], ...this.filter?.value })
+      this.scheduleSubscription = this.invokeSchedules({ topic_id: this.route.snapshot.params['id'], ...this.filter?.value })
     })
   }
 
@@ -96,7 +97,7 @@ export class TopicDetailComponent implements OnInit, OnDestroy {
 
   invokeSchedules(filter: ParamsFilterSchedule): Subscription {
     return this.apiService.getScheduleByFilter(filter).subscribe((res: any) => {
-      this.schedules = res.data
+      this.schedules = res.data;
     })
   }
 
@@ -122,7 +123,7 @@ export class TopicDetailComponent implements OnInit, OnDestroy {
     this.id = this.route.snapshot.params['id'];
     if (this.id) this.topicSubscription = this.invokeSingleTopic(this.id);
     if (this.id) this.memosSubscription = this.invokeAllMemo(this.id);
-    if (this.id) this.schduleSubscription = this.invokeSchedules({ topic_id: this.id, ...this.filter?.value })
+    if (this.id) this.scheduleSubscription = this.invokeSchedules({ topic_id: this.id, ...this.filter?.value })
   }
 
   ngOnDestroy(): void {
@@ -133,8 +134,8 @@ export class TopicDetailComponent implements OnInit, OnDestroy {
     if (this.memosSubscription) {
       this.memosSubscription.unsubscribe();
     }
-    if (this.schduleSubscription) {
-      this.schduleSubscription.unsubscribe();
+    if (this.scheduleSubscription) {
+      this.scheduleSubscription.unsubscribe();
     }
   }
 

@@ -28,7 +28,7 @@ interface DayInView {
   templateUrl: './calendar.component.html',
   styleUrls: ['./calendar.component.scss']
 })
-export class CalendarComponent implements OnInit, OnChanges {
+export class CalendarComponent implements OnChanges {
   faSquareCaretLeft = faSquareCaretLeft;
   faSquareCaretRight = faSquareCaretRight;
   faRotateLeft = faRotateLeft;
@@ -70,11 +70,8 @@ export class CalendarComponent implements OnInit, OnChanges {
   },
   ];
   scheduleDateInMonth?: Date[];
+  countSchedulesInMonth: number = 0
   @Input() schedules?: Schedule[] = [];
-
-  // firstDayOfMonth = startOfMonth(new Date());
-  constructor() {
-  }
 
   convertScheduleToDate(schedules: Schedule[]): Schedule[] {
     return schedules.map(s => {
@@ -99,13 +96,11 @@ export class CalendarComponent implements OnInit, OnChanges {
     })
   }
 
-  ngOnInit(): void {
-  }
-
   ngOnChanges(changes: SimpleChanges): void {
     let newSchedules = changes['schedules'].currentValue
     if (newSchedules) {
       this.mergeSchedulesToDays(newSchedules)
+      this.countScheduleInMonth();
     }
   }
 
@@ -131,7 +126,18 @@ export class CalendarComponent implements OnInit, OnChanges {
   refreshNewValue() {
     this.selectedDate = this.generateDate();
     this.daysInView = this.generateDaysInView();
-    if (this.schedules) this.mergeSchedulesToDays(this.schedules);
+    if (this.schedules) {
+      this.mergeSchedulesToDays(this.schedules);
+      this.countScheduleInMonth();
+    };
+  }
+
+  countScheduleInMonth() {
+    if (this.schedules) {
+      this.countSchedulesInMonth = this.schedules.filter((s: Schedule) => {
+        return new Date(s.time * 1000).getMonth() === this.selectedMonth;
+      }).length;
+    }
   }
 
   onNextMonthHandler() {
@@ -160,7 +166,6 @@ export class CalendarComponent implements OnInit, OnChanges {
 
   generateDaysInMonth(year: number = this.selectedYear, month: number = this.selectedMonth, fromMonth: FromMonth = FromMonth.CurrentMonth) {
     let days: DayInView[] = [];
-    let today = new Date();
     for (let i = 1; i <= getDaysInMonth(this.generateDate()); i++) {
       days.push({ value: i, fromMonth, date: this.generateDate(year, month, i) })
     }

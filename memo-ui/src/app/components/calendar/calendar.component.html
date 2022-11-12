@@ -6,8 +6,8 @@
         <span class="p-4 ml-8 bg-gray-200" *ngIf="!schedules || schedules.length < 1 else CountSchedule">No schedule
           with this topic</span>
         <ng-template #CountSchedule>
-          <span class="p-4 ml-8 bg-gray-200">This topic has <strong class="font-black">{{schedules?.length}}</strong>
-            schedule(s)</span>
+          <span class="p-4 ml-8 bg-gray-200">Has <strong class="font-black">{{schedules?.length}}</strong>
+            schedule(s) - <strong class="font-black">{{countSchedulesInMonth}}</strong> in this month</span>
         </ng-template>
       </div>
       <div class="flex">
@@ -28,11 +28,11 @@
       </div>
     </div>
   </div>
-  <div class="Calendar-Table-Header grid grid-cols-7 gap-2 cursor-pointer">
+  <div class="Calendar-Table-Header grid grid-cols-7 gap-2 border-collapse border border-gray-300 cursor-pointer">
     <div class="WeekDays bg-gray-200 flex justify-center text-3xl items-center" *ngFor="let day of daysInWeek">
       <span class="font-bold">{{day.name}}</span>
     </div>
-    <div *ngFor="let day of daysInView" class="Calendar-Table-Body MonthDays flex justify-center items-end relative p-4"
+    <div *ngFor="let day of daysInView" class="Calendar-Table-Body MonthDays flex justify-center items-end relative p-2"
       [ngClass]="day.value === selectedDay && day.fromMonth === 0 ? 'bg-gray-800 text-white': 'bg-gray-50 hover:bg-gray-100 active:bg-gray-200'"
       (click)="onClickDay(day)">
       <span class="absolute top-1/2 left-1/2 -translate-x-1/2 text-3xl -translate-y-1/2 font-semibold"
@@ -40,7 +40,7 @@
         {{day.value}}
       </span>
       <div class="flex justify-center w-full">
-        <span *ngFor="let schedule of day.schedules" class="mr-2 last:mr-0 w-6 h-6 border rounded-full "
+        <span *ngFor="let schedule of day.schedules" class="mr-2 last:mr-0 w-4 h-4 border rounded-full "
           [ngClass]="day.value === selectedDay && day.fromMonth === 0 ? 'bg-gray-100 hover:bg-white' : 'bg-slate-500 hover:bg-slate-700'"
           [appTooltip]="schedule.topic.title">
         </span>
